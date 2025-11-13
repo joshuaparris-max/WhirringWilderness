@@ -28,7 +28,11 @@ export function createInitialState(): GameState {
         status: 'not_started',
       },
     ],
-    flags: {},
+    flags: {
+      groveHealed: false,
+      npcMemory: {},
+      reputation: { forest: 0 },
+    },
     log: [],
     gather: {
       wildsHerbs: 0,

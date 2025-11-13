@@ -323,6 +323,20 @@ export function GameScreen() {
 
         <div>
           <h2 className="ww-section-title">Shop</h2>
+          {(() => {
+            const forestRep = gameState.flags.reputation?.forest ?? 0;
+            const label =
+              forestRep > 0
+                ? `favour +${forestRep}`
+                : forestRep < 0
+                ? `unease ${forestRep}`
+                : 'neutral';
+            return (
+              <p style={{ fontSize: '0.8rem', color: '#888' }}>
+                Forest regard: {label}
+              </p>
+            );
+          })()}
           {!atTraderPost ? (
             <p className="ww-empty-state">Find the Trader's Post to make deals.</p>
           ) : (
@@ -330,17 +344,23 @@ export function GameScreen() {
               {availableTrades.length === 0 && (
                 <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
               )}
-              {availableTrades.map(({ trade, affordable, usable }) => (
+              {availableTrades.map(({ trade, affordable, usable }) => {
+                const forestRep = gameState.flags.reputation?.forest ?? 0;
+                const friendlyLabel =
+                  forestRep >= 10
+                    ? `${trade.label} (the Ranger gives you a small discount from gratitude)`
+                    : trade.label;
+                return (
                 <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
                   <button
                     onClick={() => handleTrade(trade.id)}
                     disabled={!affordable || !usable || inEncounter}
                     className="ww-button ww-button-primary ww-button-small"
                   >
-                    {trade.label}{!usable ? ' (exhausted)' : ''}
+                    {friendlyLabel}{!usable ? ' (exhausted)' : ''}
                   </button>
                 </div>
-              ))}
+              );})}
             </>
           )}
         </div>

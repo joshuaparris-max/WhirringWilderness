@@ -309,6 +309,11 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
   const logEntries: LogEntry[] = [];
   let newState = state;
 
+  // NPC memory
+  const npcMemory = state.flags.npcMemory ?? {};
+  const memoryForNpc = npcMemory[npc.id] ?? { timesSpoken: 0 };
+  const firstTime = memoryForNpc.timesSpoken === 0;
+
   // Branching dialogue for Caretaker
   if (npcId === 'caretaker') {
     const healQuest = getQuestState(state, 'heal_the_grove');
@@ -343,20 +348,43 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
 
     // Branch 2: Quest active, gathering ingredients, grove not healed yet
     if (healQuest.status === 'active' && healQuest.step === 'gather_ingredients' && !groveHealed) {
-      logEntries.push(
-        {
+      if (firstTime) {
+        logEntries.push(
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: You've sensed it too, haven't you? The grove is still unsettled.`,
+            timestamp: Date.now(),
+          },
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: Gather herbs from the Wilds and water from the Lake, then perform the ritual out there. Only then will it ease.`,
+            timestamp: Date.now(),
+          },
+        );
+      } else {
+        logEntries.push({
           id: generateLogId(),
           type: 'narration',
-          text: `${npc.name}: You've sensed it too, haven't you? The grove is still unsettled.`,
+          text: `${npc.name} gives you a small nod, already familiar with your presence.`,
           timestamp: Date.now(),
+        });
+      }
+      // write back memory and return
+      const updatedNpcMemory = {
+        ...npcMemory,
+        [npc.id]: {
+          timesSpoken: memoryForNpc.timesSpoken + 1,
         },
-        {
-          id: generateLogId(),
-          type: 'narration',
-          text: `${npc.name}: Gather herbs from the Wilds and water from the Lake, then perform the ritual out there. Only then will it ease.`,
-          timestamp: Date.now(),
+      };
+      newState = {
+        ...newState,
+        flags: {
+          ...newState.flags,
+          npcMemory: updatedNpcMemory,
         },
-      );
+      };
       return { state: newState, logEntries };
     }
 
@@ -370,37 +398,95 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
       });
       newState = setQuestStep(newState, 'heal_the_grove', 'grove_healed');
       newState = setQuestStatus(newState, 'heal_the_grove', 'completed');
+      const updatedNpcMemory = {
+        ...npcMemory,
+        [npc.id]: {
+          timesSpoken: memoryForNpc.timesSpoken + 1,
+        },
+      };
+      newState = {
+        ...newState,
+        flags: {
+          ...newState.flags,
+          npcMemory: updatedNpcMemory,
+        },
+      };
       return { state: newState, logEntries };
     }
 
     // Branch 4: Quest completed
     if (healQuest.status === 'completed') {
-      logEntries.push(
-        {
+      if (firstTime) {
+        logEntries.push(
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: Welcome back, traveler. The Sanctum breathes easier now.`,
+            timestamp: Date.now(),
+          },
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: The grove is calm again. Whatever you did, it mattered.`,
+            timestamp: Date.now(),
+          },
+        );
+      } else {
+        logEntries.push({
           id: generateLogId(),
           type: 'narration',
-          text: `${npc.name}: Welcome back, traveler. The Sanctum breathes easier now.`,
+          text: `${npc.name} gives you a small nod, already familiar with your presence.`,
           timestamp: Date.now(),
+        });
+      }
+      const updatedNpcMemory = {
+        ...npcMemory,
+        [npc.id]: {
+          timesSpoken: memoryForNpc.timesSpoken + 1,
         },
-        {
-          id: generateLogId(),
-          type: 'narration',
-          text: `${npc.name}: The grove is calm again. Whatever you did, it mattered.`,
-          timestamp: Date.now(),
+      };
+      newState = {
+        ...newState,
+        flags: {
+          ...newState.flags,
+          npcMemory: updatedNpcMemory,
         },
-      );
+      };
       return { state: newState, logEntries };
     }
   }
 
-  // Default: Add regular intro lines for other NPCs
-  const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
-    id: generateLogId(),
-    type: 'narration' as const,
-    text: `${npc.name}: ${line}`,
-    timestamp: Date.now(),
-  }));
-  logEntries.push(...introLogEntries);
+  // Default: first time = intro lines, repeat = short loop
+  if (firstTime) {
+    const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
+      id: generateLogId(),
+      type: 'narration' as const,
+      text: `${npc.name}: ${line}`,
+      timestamp: Date.now(),
+    }));
+    logEntries.push(...introLogEntries);
+  } else {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: `${npc.name} gives you a small nod, already familiar with your presence.`,
+      timestamp: Date.now(),
+    });
+  }
+
+  const updatedNpcMemory = {
+    ...npcMemory,
+    [npc.id]: {
+      timesSpoken: memoryForNpc.timesSpoken + 1,
+    },
+  };
+  newState = {
+    ...newState,
+    flags: {
+      ...newState.flags,
+      npcMemory: updatedNpcMemory,
+    },
+  };
 
   return { state: newState, logEntries };
 }
@@ -648,12 +734,22 @@ export function performGroveRitual(state: GameState): ActionResult {
   newState = activateQuestIfNeeded(newState, 'heal_the_grove');
   newState = setQuestStep(newState, 'heal_the_grove', 'return_to_caretaker');
 
-  // Set groveHealed flag (keep quest status as 'active')
+  // Track pre-heal to determine first-time effects
+  const wasHealed = !!state.flags.groveHealed;
+
+  // Set groveHealed flag (keep quest status as 'active') and adjust reputation on first heal
+  const currentRep = newState.flags.reputation ?? { forest: 0 };
   newState = {
     ...newState,
     flags: {
       ...newState.flags,
       groveHealed: true,
+      reputation: wasHealed
+        ? currentRep
+        : {
+            ...currentRep,
+            forest: currentRep.forest + 10,
+          },
     },
   };
 
@@ -678,6 +774,15 @@ export function performGroveRitual(state: GameState): ActionResult {
       timestamp: Date.now(),
     },
   );
+
+  if (!wasHealed) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'You sense the Wilds regard you differently now.',
+      timestamp: Date.now(),
+    });
+  }
 
   return { state: newState, logEntries };
 }

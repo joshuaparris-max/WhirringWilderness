@@ -66,6 +66,24 @@ export interface NarrativeFlags {
   lakeTreatment?: boolean;
   mineTreatment?: boolean;
   [key: string]: boolean | string | undefined;
+  npcMemory?: NpcMemory;
+  reputation?: ReputationState;
+}
+
+/**
+ * Tracks simple per-NPC memory.
+ */
+export interface NpcMemory {
+  [npcId: string]: {
+    timesSpoken: number;
+  };
+}
+
+/**
+ * Simple reputation state scaffold.
+ */
+export interface ReputationState {
+  forest: number;
 }
 
 /**
