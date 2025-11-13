@@ -65,7 +65,6 @@ export interface NarrativeFlags {
   groveHealed?: boolean;
   lakeTreatment?: boolean;
   mineTreatment?: boolean;
-  [key: string]: boolean | string | undefined;
   npcMemory?: NpcMemory;
   reputation?: ReputationState;
   /**
@@ -73,6 +72,12 @@ export interface NarrativeFlags {
    * Used by the UI to show a summary screen and freeze inputs.
    */
   runEnded?: boolean;
+  [key: string]:
+    | boolean
+    | string
+    | NpcMemory
+    | ReputationState
+    | undefined;
 }
 
 /**
