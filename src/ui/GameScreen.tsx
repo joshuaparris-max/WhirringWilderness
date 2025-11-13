@@ -12,9 +12,13 @@ import { RANGER_TRADES, type TradeId } from '../content/shop';
 import { canAffordTrade, canUseTrade } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
+import { loadState, saveState, clearState } from '../engine/persistence';
 
 export function GameScreen() {
-  const [gameState, setGameState] = useState<GameState>(() => createInitialState());
+  const [gameState, setGameState] = useState<GameState>(() => {
+    const loaded = loadState();
+    return loaded ?? createInitialState();
+  });
   const logRef = useRef<HTMLDivElement | null>(null);
   const [isLogPinnedToBottom, setIsLogPinnedToBottom] = useState(true);
 
@@ -115,6 +119,21 @@ export function GameScreen() {
     setGameState(newState);
   };
 
+  useEffect(() => {
+    saveState(gameState);
+  }, [gameState]);
+
+  function handleNewRun() {
+    const confirmReset = window.confirm(
+      'Start a new run? Your current progress in the Wilds will be lost.',
+    );
+    if (!confirmReset) return;
+
+    const fresh = createInitialState();
+    clearState();
+    setGameState(fresh);
+  }
+
   const currentLocation = getLocation(gameState.currentLocation);
   const availableExits = getAvailableExits(gameState.currentLocation);
   const npcsAtLocation = Object.values(npcs).filter(
@@ -163,6 +182,15 @@ export function GameScreen() {
         <p className="ww-header-stats">
           HP: {gameState.player.hp} / {gameState.player.maxHp}
         </p>
+        <div style={{ marginTop: '0.5rem' }}>
+          <button
+            type="button"
+            onClick={handleNewRun}
+            className="ww-button ww-button-small ww-button-secondary"
+          >
+            New Run
+          </button>
+        </div>
       </header>
 
       <div className="ww-main">
