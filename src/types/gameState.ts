@@ -72,13 +72,6 @@ export interface NarrativeFlags {
    * Used by the UI to show a summary screen and freeze inputs.
    */
   runEnded?: boolean;
-  [key: string]:
-    | boolean
-    | string
-    | number
-    | NpcMemory
-    | ReputationState
-    | undefined;
 }
 
 /**
