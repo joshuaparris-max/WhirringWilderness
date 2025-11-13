@@ -75,6 +75,7 @@ export interface NarrativeFlags {
   [key: string]:
     | boolean
     | string
+    | number
     | NpcMemory
     | ReputationState
     | undefined;
