@@ -15,7 +15,8 @@ const XP_THRESHOLDS = [0, 10, 30, 60, 100];
 export function getLevelForXp(xp: number): number {
   let level = 1;
   for (let i = XP_THRESHOLDS.length - 1; i >= 0; i--) {
-    if (xp >= XP_THRESHOLDS[i]) {
+    const threshold = XP_THRESHOLDS[i];
+    if (threshold !== undefined && xp >= threshold) {
       level = i + 1;
       break;
     }
@@ -30,7 +31,7 @@ export function getLevelForXp(xp: number): number {
 export function getNextLevelXp(level: number): number | null {
   const index = level;
   if (index < 0 || index >= XP_THRESHOLDS.length) return null;
-  return XP_THRESHOLDS[index];
+  return XP_THRESHOLDS[index] ?? null;
 }
 
 /**

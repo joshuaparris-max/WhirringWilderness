@@ -6,6 +6,7 @@
  */
 
 import type { LocationId, Biome } from './gameState';
+export type { LocationId, Biome };
 
 /**
  * Direction identifiers for location exits.

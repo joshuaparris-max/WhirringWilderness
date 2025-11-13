@@ -4,7 +4,8 @@
  * Helper functions for handling trades and bartering.
  */
 
-import type { GameState, LogEntry } from '../types/gameState';
+import type { GameState } from '../types/gameState';
+import type { LogEntry } from '../types/log';
 import type { TradeOffer, TradeId } from '../content/shop';
 import { RANGER_TRADES } from '../content/shop';
 import { countItem, removeItems, addItemToInventory } from './actions';

@@ -4,7 +4,7 @@
  * Static location definitions for the game world.
  */
 
-import type { LocationId, LocationData, Biome, Direction } from '../types/content';
+import type { LocationId, LocationData, Direction } from '../types/content';
 import type { GameState } from '../types/gameState';
 
 export const locations: Record<LocationId, LocationData> = {

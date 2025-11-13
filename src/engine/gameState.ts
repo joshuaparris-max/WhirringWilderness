@@ -4,7 +4,8 @@
  * Functions for creating and manipulating game state.
  */
 
-import type { GameState, PlayerStats, LogEntry } from '../types/gameState';
+import type { GameState } from '../types/gameState';
+import type { LogEntry } from '../types/log';
 
 /**
  * Creates the initial game state.

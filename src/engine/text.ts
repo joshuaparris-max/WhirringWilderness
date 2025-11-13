@@ -10,7 +10,10 @@ import type { LocationId } from '../types/gameState';
  * Picks a random element from an array.
  */
 export function pick<T>(options: T[]): T {
-  return options[Math.floor(Math.random() * options.length)];
+  if (options.length === 0) throw new Error('pick() requires at least one option');
+  const selected = options[Math.floor(Math.random() * options.length)];
+  if (selected === undefined) throw new Error('Selected undefined option');
+  return selected;
 }
 
 /**

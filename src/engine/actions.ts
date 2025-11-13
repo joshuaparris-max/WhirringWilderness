@@ -4,7 +4,8 @@
  * Functions that perform game actions and return updated state with log entries.
  */
 
-import type { GameState, LocationId, LogEntry, InventoryItemInstance } from '../types/gameState';
+import type { GameState, LocationId, InventoryItemInstance } from '../types/gameState';
+import type { LogEntry } from '../types/log';
 import { getLocation, getLocationDescription } from './locations';
 import type { NpcId } from '../content/npcs';
 import { npcs } from '../content/npcs';
@@ -12,7 +13,6 @@ import { getRandomCreatureForLocation, createEncounterState, createEncounterLog,
 import { creatures } from '../content/creatures';
 import { applyXp } from './progression';
 import { activateQuestIfNeeded, setQuestStep, setQuestStatus, getQuestState } from './quests';
-import type { QuestState } from '../types/gameState';
 import { canAffordTrade, applyTrade, getTradeById } from './trading';
 import type { TradeId } from '../content/shop';
 import {
@@ -339,9 +339,9 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
   }
 
   // Default: Add regular intro lines for other NPCs
-  const introLogEntries = npc.introLines.map((line) => ({
+  const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
     id: generateLogId(),
-    type: 'narration',
+    type: 'narration' as const,
     text: `${npc.name}: ${line}`,
     timestamp: Date.now(),
   }));

@@ -4,7 +4,7 @@
  * Static creature definitions for the game.
  */
 
-import type { CreatureData, Biome } from '../types/content';
+import type { CreatureData } from '../types/content';
 
 export const creatures: Record<string, CreatureData> = {
   wild_spirit: {
