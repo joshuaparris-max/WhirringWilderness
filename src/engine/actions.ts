@@ -675,7 +675,7 @@ export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
 /**
  * Uses a healing tonic to restore HP.
  */
-export function useHealingTonic(state: GameState): ActionResult {
+export function consumeHealingTonic(state: GameState): ActionResult {
   const logEntries: LogEntry[] = [];
 
   // Check if player has a healing tonic

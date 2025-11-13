@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createInitialState, appendLog } from '../engine/gameState';
-import { moveTo, sense, gather, talkTo, attack, attemptEscape, performGroveRitual, performTrade, useHealingTonic } from '../engine/actions';
+import { moveTo, sense, gather, talkTo, attack, attemptEscape, performGroveRitual, performTrade, consumeHealingTonic } from '../engine/actions';
 import { getLocation, getAvailableExits } from '../engine/locations';
 import { items } from '../content/items';
 import { npcs, type NpcId } from '../content/npcs';
@@ -89,7 +89,7 @@ export function GameScreen() {
   };
 
   const handleUseHealingTonic = () => {
-    const result = useHealingTonic(gameState);
+    const result = consumeHealingTonic(gameState);
     let newState = result.state;
     for (const entry of result.logEntries) {
       newState = appendLog(newState, entry);
