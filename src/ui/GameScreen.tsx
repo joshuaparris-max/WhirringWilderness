@@ -267,17 +267,18 @@ export function GameScreen() {
       </header>
 
       <div className="ww-main">
-        <div className="ww-left-column">
+        <div className="ww-column ww-primary">
           {currentCreature && (
-            <div className="ww-encounter">
-              <h2>Encounter</h2>
+            <section className="ww-panel ww-encounter">
+              <h2 className="ww-panel-title">Encounter</h2>
               <p>
                 {currentCreature.name} — HP {currentEncounter?.hp} / {currentCreature.stats.hp}
               </p>
-            </div>
+            </section>
           )}
-          <div className="ww-journal">
-            <strong>Journal</strong>
+
+          <section className="ww-panel ww-journal">
+            <h2 className="ww-panel-title">Journal</h2>
             {mainQuestState ? (
               <div className="ww-journal-content">
                 <div>
@@ -291,228 +292,224 @@ export function GameScreen() {
             ) : (
               <div className="ww-journal-content">No active quests.</div>
             )}
-          </div>
-          <div
-            className="ww-log"
-            ref={logRef}
-            onScroll={handleLogScroll}
-            style={{ overflowY: 'auto' }}
-          >
-            {gameState.log.length === 0 ? (
-              <p className="ww-log-empty">The log is empty.</p>
-            ) : (
-              gameState.log.map((entry) => (
-                <p key={entry.id} className="ww-log-entry">
-                  {entry.text}
-                </p>
-              ))
-            )}
-          </div>
-        </div>
+          </section>
 
-        <div className="ww-inventory">
-          <h2 className="ww-panel-title">Inventory</h2>
-          {gameState.player.inventory.length === 0 ? (
-            <p className="ww-inventory-empty">You are carrying very little.</p>
-          ) : (
-            <div className="ww-inventory-list">
-              {gameState.player.inventory.map((item) => {
-                const itemData = items[item.itemId];
-                const itemName = itemData?.name ?? item.itemId;
-                return (
-                  <p key={item.itemId} className="ww-inventory-item">
-                    {itemName} ×{item.quantity}
+          <section className="ww-panel ww-log-panel">
+            <h2 className="ww-panel-title">Log</h2>
+            <div className="ww-log" ref={logRef} onScroll={handleLogScroll}>
+              {gameState.log.length === 0 ? (
+                <p className="ww-log-empty">The log is empty.</p>
+              ) : (
+                gameState.log.map((entry) => (
+                  <p key={entry.id} className="ww-log-entry">
+                    {entry.text}
                   </p>
-                );
-              })}
+                ))
+              )}
             </div>
+          </section>
+
+          {availableExits.length > 0 && (
+            <section className="ww-panel ww-section ww-movement">
+              <h2 className="ww-section-title">Movement</h2>
+              <div className="ww-actions-row">
+                {availableExits.map((exit) => {
+                  const destinationLocation = getLocation(exit.to);
+                  const directionLabel = exit.direction.charAt(0).toUpperCase() + exit.direction.slice(1);
+                  return (
+                    <button
+                      key={`${exit.direction}-${exit.to}`}
+                      onClick={() => handleMove(exit.to)}
+                      disabled={inEncounter || runEnded}
+                      className="ww-button ww-button-primary"
+                    >
+                      Go {directionLabel} to {destinationLocation.name}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
           )}
-        </div>
-      </div>
 
-      <div className="ww-section">
-        {availableExits.length > 0 && (
-          <div>
-            <h2 className="ww-section-title">Movement</h2>
+          <section className="ww-panel ww-section ww-actions">
+            <h2 className="ww-section-title">Actions</h2>
             <div className="ww-actions-row">
-              {availableExits.map((exit) => {
-                const destinationLocation = getLocation(exit.to);
-                const directionLabel = exit.direction.charAt(0).toUpperCase() + exit.direction.slice(1);
-                return (
-                  <button
-                    key={`${exit.direction}-${exit.to}`}
-                    onClick={() => handleMove(exit.to)}
-                    disabled={inEncounter || runEnded}
-                    className="ww-button ww-button-primary"
-                  >
-                    Go {directionLabel} to {destinationLocation.name}
+              {inEncounter && (
+                <>
+                  <button onClick={handleAttack} disabled={runEnded} className="ww-button ww-button-danger">
+                    Attack
                   </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        <div>
-          <h2 className="ww-section-title">Actions</h2>
-          <div className="ww-actions-row">
-            {inEncounter && (
-              <>
-                <button onClick={handleAttack} disabled={runEnded} className="ww-button ww-button-danger">
-                  Attack
-                </button>
-                <button onClick={handleEscape} disabled={runEnded} className="ww-button ww-button-secondary">
-                  Flee
-                </button>
-              </>
-            )}
-            <button
-              onClick={handleSense}
-              disabled={inEncounter || runEnded}
-              className="ww-button ww-button-primary"
-            >
-              Sense
-            </button>
-            <button
-              onClick={handleGather}
-              disabled={inEncounter || runEnded}
-              className="ww-button ww-button-primary"
-            >
-              Gather
-            </button>
-            {hasHealingTonic && (
+                  <button onClick={handleEscape} disabled={runEnded} className="ww-button ww-button-secondary">
+                    Flee
+                  </button>
+                </>
+              )}
               <button
-                onClick={handleUseHealingTonic}
+                onClick={handleSense}
                 disabled={inEncounter || runEnded}
-                className="ww-button ww-button-success"
+                className="ww-button ww-button-primary"
               >
-                Use Healing Tonic
+                Sense
               </button>
-            )}
-            {ritualAvailable && (
-              <button onClick={handlePerformRitual} disabled={runEnded} className="ww-button ww-button-success">
-                Perform Grove Ritual
+              <button
+                onClick={handleGather}
+                disabled={inEncounter || runEnded}
+                className="ww-button ww-button-primary"
+              >
+                Gather
               </button>
-            )}
+              {hasHealingTonic && (
+                <button
+                  onClick={handleUseHealingTonic}
+                  disabled={inEncounter || runEnded}
+                  className="ww-button ww-button-success"
+                >
+                  Use Healing Tonic
+                </button>
+              )}
+              {ritualAvailable && (
+                <button onClick={handlePerformRitual} disabled={runEnded} className="ww-button ww-button-success">
+                  Perform Grove Ritual
+                </button>
+              )}
+            </div>
             {gameState.currentLocation === 'wilds' && !ritualAvailable && groveAtPeace && (
               <p className="ww-ritual-note">The grove is already at peace.</p>
             )}
-          </div>
-        </div>
+          </section>
 
-        {npcsAtLocation.length > 0 && (
-          <div>
+          <section className="ww-panel ww-section ww-talk">
             <h2 className="ww-section-title">Talk</h2>
-            <div className="ww-actions-row">
-              {npcsAtLocation.map((npc) => (
-                <button
-                  key={npc.id}
-                  onClick={() => handleTalk(npc.id)}
-                  disabled={inEncounter || runEnded}
-                  className="ww-button ww-button-primary"
-                >
-                  Talk to {npc.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {npcsAtLocation.length === 0 && (
-          <div>
-            <h2 className="ww-section-title">Talk</h2>
-            <p className="ww-empty-state">No one to talk to here.</p>
-          </div>
-        )}
-
-        <div>
-          <h2 className="ww-section-title">Shop</h2>
-          {(() => {
-            const forestRep = gameState.flags.reputation?.forest ?? 0;
-            const label =
-              forestRep > 0
-                ? `favour +${forestRep}`
-                : forestRep < 0
-                ? `unease ${forestRep}`
-                : 'neutral';
-            return (
-              <p style={{ fontSize: '0.8rem', color: '#888' }}>
-                Forest regard: {label}
-              </p>
-            );
-          })()}
-          {!atTraderPost ? (
-            <p className="ww-empty-state">Find the Trader's Post to make deals.</p>
-          ) : (
-            <>
-              {availableTrades.length === 0 && (
-                <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
-              )}
-              {availableTrades.map(({ trade, affordable, usable, limit, used }) => {
-                const forestRep = gameState.flags.reputation?.forest ?? 0;
-                const friendlyLabel =
-                  forestRep >= 10
-                    ? `${trade.label} (the Ranger quietly sets aside a little extra for you)`
-                    : trade.label;
-                return (
-                <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
+            {npcsAtLocation.length > 0 ? (
+              <div className="ww-actions-row">
+                {npcsAtLocation.map((npc) => (
                   <button
-                    onClick={() => handleTrade(trade.id)}
-                    disabled={!affordable || !usable || inEncounter || runEnded}
-                    className="ww-button ww-button-primary ww-button-small"
+                    key={npc.id}
+                    onClick={() => handleTalk(npc.id)}
+                    disabled={inEncounter || runEnded}
+                    className="ww-button ww-button-primary"
                   >
-                    {friendlyLabel}{!usable ? ' (exhausted)' : ''}
+                    Talk to {npc.name}
                   </button>
-                  {limit !== undefined && (
-                    <div style={{ fontSize: '0.75rem', color: '#888' }}>
-                      Uses: {used}/{limit}
+                ))}
+              </div>
+            ) : (
+              <p className="ww-empty-state">No one to talk to here.</p>
+            )}
+          </section>
+
+          <section className="ww-panel ww-section ww-shop">
+            <h2 className="ww-section-title">Shop</h2>
+            {(() => {
+              const forestRep = gameState.flags.reputation?.forest ?? 0;
+              const label =
+                forestRep > 0
+                  ? `favour +${forestRep}`
+                  : forestRep < 0
+                  ? `unease ${forestRep}`
+                  : 'neutral';
+              return (
+                <p className="ww-shop-reputation">
+                  Forest regard: {label}
+                </p>
+              );
+            })()}
+            {!atTraderPost ? (
+              <p className="ww-empty-state">Find the Trader's Post to make deals.</p>
+            ) : (
+              <>
+                {availableTrades.length === 0 && (
+                  <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
+                )}
+                {availableTrades.map(({ trade, affordable, usable, limit, used }) => {
+                  const forestRep = gameState.flags.reputation?.forest ?? 0;
+                  const friendlyLabel =
+                    forestRep >= 10
+                      ? `${trade.label} (the Ranger quietly sets aside a little extra for you)`
+                      : trade.label;
+                  return (
+                    <div key={trade.id} className="ww-shop-trade">
+                      <button
+                        onClick={() => handleTrade(trade.id)}
+                        disabled={!affordable || !usable || inEncounter || runEnded}
+                        className="ww-button ww-button-primary ww-button-small"
+                      >
+                        {friendlyLabel}
+                        {!usable ? ' (exhausted)' : ''}
+                      </button>
+                      {limit !== undefined && (
+                        <div className="ww-shop-trade-uses">
+                          Uses: {used}/{limit}
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              );})}
-            </>
-          )}
+                  );
+                })}
+              </>
+            )}
+          </section>
         </div>
 
-        {runEnded && (
-          <div className="ww-overlay ww-overlay-center">
-            <div className="ww-panel">
-              <h2>You fell in the Whispering Wilds</h2>
-              <p>Your journey in this run is over.</p>
-              <ul className="ww-run-summary">
-                <li>
-                  <strong>Level:</strong> {level} (XP: {xp})
-                </li>
-                <li>
-                  <strong>Forest regard:</strong>{' '}
-                  {forestRep > 0
-                    ? `favour +${forestRep}`
-                    : forestRep < 0
-                    ? `unease ${forestRep}`
-                    : 'neutral'}
-                </li>
-                <li>
-                  <strong>Sanctum ritual:</strong>{' '}
-                  {groveHealed ? 'the grove has been healed' : 'the grove remains wounded'}
-                </li>
-                <li>
-                  <strong>Items carried:</strong> {totalItems}
-                </li>
-              </ul>
-              <button
-                type="button"
-                onClick={handleNewRun}
-                className="ww-button ww-button-primary"
-              >
-                Start New Run
-              </button>
-              <p className="ww-run-summary-note">
-                (You can still scroll the log to reread your final moments.)
-              </p>
-            </div>
-          </div>
-        )}
+        <aside className="ww-column ww-secondary">
+          <section className="ww-panel ww-inventory">
+            <h2 className="ww-panel-title">Inventory</h2>
+            {gameState.player.inventory.length === 0 ? (
+              <p className="ww-inventory-empty">You are carrying very little.</p>
+            ) : (
+              <div className="ww-inventory-list">
+                {gameState.player.inventory.map((item) => {
+                  const itemData = items[item.itemId];
+                  const itemName = itemData?.name ?? item.itemId;
+                  return (
+                    <p key={item.itemId} className="ww-inventory-item">
+                      {itemName} ×{item.quantity}
+                    </p>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        </aside>
       </div>
+
+      {runEnded && (
+        <div className="ww-run-overlay">
+          <div className="ww-run-overlay-content">
+            <h2>You fell in the Whispering Wilds</h2>
+            <p>Your journey in this run is over.</p>
+            <ul className="ww-run-summary">
+              <li>
+                <strong>Level:</strong> {level} (XP: {xp})
+              </li>
+              <li>
+                <strong>Forest regard:</strong>{' '}
+                {forestRep > 0
+                  ? `favour +${forestRep}`
+                  : forestRep < 0
+                  ? `unease ${forestRep}`
+                  : 'neutral'}
+              </li>
+              <li>
+                <strong>Sanctum ritual:</strong>{' '}
+                {groveHealed ? 'the grove has been healed' : 'the grove remains wounded'}
+              </li>
+              <li>
+                <strong>Items carried:</strong> {totalItems}
+              </li>
+            </ul>
+            <button
+              type="button"
+              onClick={handleNewRun}
+              className="ww-button ww-button-primary"
+            >
+              Start New Run
+            </button>
+            <p className="ww-run-summary-note">
+              (You can still scroll the log to reread your final moments.)
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

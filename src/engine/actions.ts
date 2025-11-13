@@ -920,7 +920,6 @@ export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
   // Note: Import canUseTrade from trading
   // (we import from './trading' at top; extend it)
   // If over limit, block trade
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
   if (!canUseTrade(state, trade.id)) {
     logEntries.push({
       id: generateLogId(),
