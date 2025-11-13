@@ -590,22 +590,28 @@ export function attack(state: GameState): ActionResult {
   });
 
   if (newHp <= 0) {
-    // Player "death" – send back to Sanctum with 1 HP
+    // Player death: clamp to 0 HP, mark run ended, end encounter, add death line
+    const nextHp = 0;
     newState = {
       ...newState,
-      currentLocation: 'sanctum',
       player: {
         ...newState.player,
-        hp: 1,
+        hp: nextHp,
       },
       currentEncounter: null,
+      flags: {
+        ...newState.flags,
+        runEnded: newState.flags.runEnded ? newState.flags.runEnded : true,
+      },
     };
-    logEntries.push({
-      id: generateLogId(),
-      type: 'system',
-      text: 'Darkness closes in. When you wake, you are back in the Sanctum.',
-      timestamp: Date.now(),
-    });
+    if (!state.flags.runEnded) {
+      logEntries.push({
+        id: generateLogId(),
+        type: 'narration',
+        text: 'Your vision blurs and the Whispering Wilds close in. This run has ended.',
+        timestamp: Date.now(),
+      });
+    }
   }
 
   return { state: newState, logEntries };
@@ -674,21 +680,28 @@ export function attemptEscape(state: GameState): ActionResult {
   });
 
   if (newHp <= 0) {
+    // Player death: clamp to 0 HP, mark run ended, end encounter, add death line
+    const nextHp = 0;
     newState = {
       ...newState,
-      currentLocation: 'sanctum',
       player: {
         ...newState.player,
-        hp: 1,
+        hp: nextHp,
       },
       currentEncounter: null,
+      flags: {
+        ...newState.flags,
+        runEnded: newState.flags.runEnded ? newState.flags.runEnded : true,
+      },
     };
-    logEntries.push({
-      id: generateLogId(),
-      type: 'system',
-      text: 'You collapse. When you wake, the Sanctum candles burn low.',
-      timestamp: Date.now(),
-    });
+    if (!state.flags.runEnded) {
+      logEntries.push({
+        id: generateLogId(),
+        type: 'narration',
+        text: 'Your vision blurs and the Whispering Wilds close in. This run has ended.',
+        timestamp: Date.now(),
+      });
+    }
   }
 
   return { state: newState, logEntries };

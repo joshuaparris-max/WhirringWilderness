@@ -68,6 +68,11 @@ export interface NarrativeFlags {
   [key: string]: boolean | string | undefined;
   npcMemory?: NpcMemory;
   reputation?: ReputationState;
+  /**
+   * True when the current run has ended (e.g. player death).
+   * Used by the UI to show a summary screen and freeze inputs.
+   */
+  runEnded?: boolean;
 }
 
 /**

@@ -149,6 +149,15 @@ export function GameScreen() {
   const hasHealingTonic = gameState.player.inventory.some(
     (item) => item.itemId === 'healing_tonic' && item.quantity > 0,
   );
+  const runEnded = gameState.flags.runEnded ?? false;
+  const forestRep = gameState.flags.reputation?.forest ?? 0;
+  const groveHealed = !!gameState.flags.groveHealed;
+  const level = gameState.player.level;
+  const xp = gameState.player.xp;
+  const totalItems = gameState.player.inventory.reduce(
+    (sum, item) => sum + (item.quantity ?? 1),
+    0,
+  );
 
   // Quest/Journal state
   const mainQuestId: QuestId = 'heal_the_grove';
@@ -269,7 +278,7 @@ export function GameScreen() {
                   <button
                     key={`${exit.direction}-${exit.to}`}
                     onClick={() => handleMove(exit.to)}
-                    disabled={inEncounter}
+                    disabled={inEncounter || runEnded}
                     className="ww-button ww-button-primary"
                   >
                     Go {directionLabel} to {destinationLocation.name}
@@ -285,24 +294,24 @@ export function GameScreen() {
           <div className="ww-actions-row">
             {inEncounter && (
               <>
-                <button onClick={handleAttack} className="ww-button ww-button-danger">
+                <button onClick={handleAttack} disabled={runEnded} className="ww-button ww-button-danger">
                   Attack
                 </button>
-                <button onClick={handleEscape} className="ww-button ww-button-secondary">
+                <button onClick={handleEscape} disabled={runEnded} className="ww-button ww-button-secondary">
                   Flee
                 </button>
               </>
             )}
             <button
               onClick={handleSense}
-              disabled={inEncounter}
+              disabled={inEncounter || runEnded}
               className="ww-button ww-button-primary"
             >
               Sense
             </button>
             <button
               onClick={handleGather}
-              disabled={inEncounter}
+              disabled={inEncounter || runEnded}
               className="ww-button ww-button-primary"
             >
               Gather
@@ -310,14 +319,14 @@ export function GameScreen() {
             {hasHealingTonic && (
               <button
                 onClick={handleUseHealingTonic}
-                disabled={inEncounter}
+                disabled={inEncounter || runEnded}
                 className="ww-button ww-button-success"
               >
                 Use Healing Tonic
               </button>
             )}
             {canPerformRitual && (
-              <button onClick={handlePerformRitual} className="ww-button ww-button-success">
+              <button onClick={handlePerformRitual} disabled={runEnded} className="ww-button ww-button-success">
                 Perform Grove Ritual
               </button>
             )}
@@ -332,7 +341,7 @@ export function GameScreen() {
                 <button
                   key={npc.id}
                   onClick={() => handleTalk(npc.id)}
-                  disabled={inEncounter}
+                  disabled={inEncounter || runEnded}
                   className="ww-button ww-button-primary"
                 >
                   Talk to {npc.name}
@@ -382,7 +391,7 @@ export function GameScreen() {
                 <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
                   <button
                     onClick={() => handleTrade(trade.id)}
-                    disabled={!affordable || !usable || inEncounter}
+                    disabled={!affordable || !usable || inEncounter || runEnded}
                     className="ww-button ww-button-primary ww-button-small"
                   >
                     {friendlyLabel}{!usable ? ' (exhausted)' : ''}
@@ -392,6 +401,45 @@ export function GameScreen() {
             </>
           )}
         </div>
+
+        {runEnded && (
+          <div className="ww-overlay ww-overlay-center">
+            <div className="ww-panel">
+              <h2>You fell in the Whispering Wilds</h2>
+              <p>Your journey in this run is over.</p>
+              <ul className="ww-run-summary">
+                <li>
+                  <strong>Level:</strong> {level} (XP: {xp})
+                </li>
+                <li>
+                  <strong>Forest regard:</strong>{' '}
+                  {forestRep > 0
+                    ? `favour +${forestRep}`
+                    : forestRep < 0
+                    ? `unease ${forestRep}`
+                    : 'neutral'}
+                </li>
+                <li>
+                  <strong>Sanctum ritual:</strong>{' '}
+                  {groveHealed ? 'the grove has been healed' : 'the grove remains wounded'}
+                </li>
+                <li>
+                  <strong>Items carried:</strong> {totalItems}
+                </li>
+              </ul>
+              <button
+                type="button"
+                onClick={handleNewRun}
+                className="ww-button ww-button-primary"
+              >
+                Start New Run
+              </button>
+              <p className="ww-run-summary-note">
+                (You can still scroll the log to reread your final moments.)
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

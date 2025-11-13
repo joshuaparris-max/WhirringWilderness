@@ -32,6 +32,7 @@ export function createInitialState(): GameState {
       groveHealed: false,
       npcMemory: {},
       reputation: { forest: 0 },
+      runEnded: false,
     },
     log: [],
     gather: {
