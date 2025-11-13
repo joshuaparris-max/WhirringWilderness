@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import { createInitialState, appendLog } from '../engine/gameState';
-import { moveTo, sense, gather, talkTo } from '../engine/actions';
+import { moveTo, sense, gather, talkTo, attack, attemptEscape, performGroveRitual, performTrade, useHealingTonic } from '../engine/actions';
 import { getLocation, getAvailableExits } from '../engine/locations';
 import { items } from '../content/items';
 import { npcs, type NpcId } from '../content/npcs';
+import { isInEncounter } from '../engine/encounters';
+import { creatures } from '../content/creatures';
+import { getNextLevelXp } from '../engine/progression';
+import { QUESTS, type QuestId } from '../content/quests';
+import { RANGER_TRADES, type TradeId } from '../content/shop';
+import { canAffordTrade } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
 
@@ -46,104 +52,150 @@ export function GameScreen() {
     setGameState(newState);
   };
 
+  const handleAttack = () => {
+    const result = attack(gameState);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
+  const handleEscape = () => {
+    const result = attemptEscape(gameState);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
+  const handlePerformRitual = () => {
+    const result = performGroveRitual(gameState);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
+  const handleTrade = (tradeId: TradeId) => {
+    const result = performTrade(gameState, tradeId);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
+  const handleUseHealingTonic = () => {
+    const result = useHealingTonic(gameState);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
   const currentLocation = getLocation(gameState.currentLocation);
   const availableExits = getAvailableExits(gameState.currentLocation);
   const npcsAtLocation = Object.values(npcs).filter(
     (npc) => npc.location === gameState.currentLocation
   );
+  const inEncounter = isInEncounter(gameState);
+  const currentEncounter = gameState.currentEncounter ?? null;
+  const currentCreature = currentEncounter ? creatures[currentEncounter.creatureId] : null;
+  const nextLevelXp = getNextLevelXp(gameState.player.level);
+  const canPerformRitual =
+    gameState.currentLocation === 'wilds' && !isInEncounter(gameState);
+  const atTraderPost = gameState.currentLocation === 'trader_post';
+  const hasHealingTonic = gameState.player.inventory.some(
+    (item) => item.itemId === 'healing_tonic' && item.quantity > 0,
+  );
+
+  // Quest/Journal state
+  const mainQuestId: QuestId = 'heal_the_grove';
+  const mainQuestState = gameState.quests.find((q) => q.id === mainQuestId);
+  const mainQuestDefinition = QUESTS[mainQuestId];
+
+  let mainQuestStepSummary = '';
+  if (mainQuestState && mainQuestDefinition) {
+    const stepDef = mainQuestDefinition.steps.find(
+      (step) => step.id === mainQuestState.step,
+    );
+    mainQuestStepSummary = stepDef ? stepDef.summary : '';
+  }
+
+  // Trading
+  const availableTrades = RANGER_TRADES.map((trade) => {
+    const affordable = canAffordTrade(gameState, trade);
+    return { trade, affordable };
+  });
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        padding: '1rem',
-        fontFamily: 'system-ui, sans-serif',
-        backgroundColor: '#ffffff',
-        color: '#000000',
-      }}
-    >
-      <header
-        style={{
-          marginBottom: '1rem',
-          paddingBottom: '1rem',
-          borderBottom: '2px solid #333',
-        }}
-      >
-        <h1 style={{ margin: '0 0 0.5rem 0', color: '#000000', fontSize: '2rem' }}>
-          {currentLocation.name}
-        </h1>
-        <p style={{ margin: 0, color: '#000000', fontSize: '1.1rem', fontWeight: '500' }}>
+    <div className="ww-root">
+      <header className="ww-header">
+        <h1 className="ww-header-title">{currentLocation.name}</h1>
+        <p className="ww-header-stats">
+          Level {gameState.player.level}{' '}
+          — XP {gameState.player.xp}
+          {nextLevelXp !== null ? ` / ${nextLevelXp}` : ' (max)'}
+        </p>
+        <p className="ww-header-stats">
           HP: {gameState.player.hp} / {gameState.player.maxHp}
         </p>
       </header>
 
-      <div style={{ display: 'flex', gap: '1rem', flex: 1, minHeight: 0 }}>
-        <div
-          style={{
-            flex: 1,
-            overflowY: 'auto',
-            marginBottom: '1rem',
-            padding: '1.5rem',
-            backgroundColor: '#ffffff',
-            border: '2px solid #333',
-            borderRadius: '4px',
-            minHeight: 0,
-          }}
-        >
-          {gameState.log.length === 0 ? (
-            <p style={{ color: '#666', fontStyle: 'italic', fontSize: '1rem' }}>
-              The log is empty.
-            </p>
-          ) : (
-            gameState.log.map((entry) => (
-              <p
-                key={entry.id}
-                style={{
-                  margin: '0 0 1rem 0',
-                  color: '#000000',
-                  fontSize: '1rem',
-                  lineHeight: '1.6',
-                }}
-              >
-                {entry.text}
+      <div className="ww-main">
+        <div className="ww-left-column">
+          {currentCreature && (
+            <div className="ww-encounter">
+              <h2>Encounter</h2>
+              <p>
+                {currentCreature.name} — HP {currentEncounter?.hp} / {currentCreature.stats.hp}
               </p>
-            ))
+            </div>
           )}
+          <div className="ww-journal">
+            <strong>Journal</strong>
+            {mainQuestState ? (
+              <div className="ww-journal-content">
+                <div>
+                  <span className="ww-journal-quest-name">{mainQuestState.name}</span>{' '}
+                  <span className="ww-journal-quest-status">({mainQuestState.status})</span>
+                </div>
+                {mainQuestStepSummary && (
+                  <div className="ww-journal-step">{mainQuestStepSummary}</div>
+                )}
+              </div>
+            ) : (
+              <div className="ww-journal-content">No active quests.</div>
+            )}
+          </div>
+          <div className="ww-log">
+            {gameState.log.length === 0 ? (
+              <p className="ww-log-empty">The log is empty.</p>
+            ) : (
+              gameState.log.map((entry) => (
+                <p key={entry.id} className="ww-log-entry">
+                  {entry.text}
+                </p>
+              ))
+            )}
+          </div>
         </div>
 
-        <div
-          style={{
-            width: '250px',
-            padding: '1rem',
-            backgroundColor: '#f9f9f9',
-            border: '2px solid #333',
-            borderRadius: '4px',
-            overflowY: 'auto',
-          }}
-        >
-          <h2 style={{ margin: '0 0 0.75rem 0', fontSize: '1.2rem', fontWeight: '600' }}>
-            Inventory
-          </h2>
+        <div className="ww-inventory">
+          <h2 className="ww-panel-title">Inventory</h2>
           {gameState.player.inventory.length === 0 ? (
-            <p style={{ color: '#666', fontStyle: 'italic', fontSize: '0.9rem', margin: 0 }}>
-              You are carrying very little.
-            </p>
+            <p className="ww-inventory-empty">You are carrying very little.</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div className="ww-inventory-list">
               {gameState.player.inventory.map((item) => {
                 const itemData = items[item.itemId];
                 const itemName = itemData?.name ?? item.itemId;
                 return (
-                  <p
-                    key={item.itemId}
-                    style={{
-                      margin: 0,
-                      color: '#000000',
-                      fontSize: '0.9rem',
-                    }}
-                  >
+                  <p key={item.itemId} className="ww-inventory-item">
                     {itemName} ×{item.quantity}
                   </p>
                 );
@@ -153,13 +205,11 @@ export function GameScreen() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="ww-section">
         {availableExits.length > 0 && (
           <div>
-            <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: '600' }}>
-              Movement
-            </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <h2 className="ww-section-title">Movement</h2>
+            <div className="ww-actions-row">
               {availableExits.map((exit) => {
                 const destinationLocation = getLocation(exit.to);
                 const directionLabel = exit.direction.charAt(0).toUpperCase() + exit.direction.slice(1);
@@ -167,16 +217,8 @@ export function GameScreen() {
                   <button
                     key={`${exit.direction}-${exit.to}`}
                     onClick={() => handleMove(exit.to)}
-                    style={{
-                      padding: '0.75rem 1.5rem',
-                      fontSize: '1rem',
-                      fontWeight: '500',
-                      cursor: 'pointer',
-                      backgroundColor: '#333',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '4px',
-                    }}
+                    disabled={inEncounter}
+                    className="ww-button ww-button-primary"
                   >
                     Go {directionLabel} to {destinationLocation.name}
                   </button>
@@ -187,63 +229,59 @@ export function GameScreen() {
         )}
 
         <div>
-          <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: '600' }}>
-            Actions
-          </h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <h2 className="ww-section-title">Actions</h2>
+          <div className="ww-actions-row">
+            {inEncounter && (
+              <>
+                <button onClick={handleAttack} className="ww-button ww-button-danger">
+                  Attack
+                </button>
+                <button onClick={handleEscape} className="ww-button ww-button-secondary">
+                  Flee
+                </button>
+              </>
+            )}
             <button
               onClick={handleSense}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontSize: '1rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                backgroundColor: '#333',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '4px',
-              }}
+              disabled={inEncounter}
+              className="ww-button ww-button-primary"
             >
               Sense
             </button>
             <button
               onClick={handleGather}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontSize: '1rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                backgroundColor: '#333',
-                color: '#ffffff',
-                border: 'none',
-                borderRadius: '4px',
-              }}
+              disabled={inEncounter}
+              className="ww-button ww-button-primary"
             >
               Gather
             </button>
+            {hasHealingTonic && (
+              <button
+                onClick={handleUseHealingTonic}
+                disabled={inEncounter}
+                className="ww-button ww-button-success"
+              >
+                Use Healing Tonic
+              </button>
+            )}
+            {canPerformRitual && (
+              <button onClick={handlePerformRitual} className="ww-button ww-button-success">
+                Perform Grove Ritual
+              </button>
+            )}
           </div>
         </div>
 
         {npcsAtLocation.length > 0 && (
           <div>
-            <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: '600' }}>
-              Talk
-            </h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <h2 className="ww-section-title">Talk</h2>
+            <div className="ww-actions-row">
               {npcsAtLocation.map((npc) => (
                 <button
                   key={npc.id}
                   onClick={() => handleTalk(npc.id)}
-                  style={{
-                    padding: '0.75rem 1.5rem',
-                    fontSize: '1rem',
-                    fontWeight: '500',
-                    cursor: 'pointer',
-                    backgroundColor: '#333',
-                    color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '4px',
-                  }}
+                  disabled={inEncounter}
+                  className="ww-button ww-button-primary"
                 >
                   Talk to {npc.name}
                 </button>
@@ -254,14 +292,34 @@ export function GameScreen() {
 
         {npcsAtLocation.length === 0 && (
           <div>
-            <h2 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', fontWeight: '600' }}>
-              Talk
-            </h2>
-            <p style={{ color: '#666', fontStyle: 'italic', fontSize: '0.9rem', margin: 0 }}>
-              No one to talk to here.
-            </p>
+            <h2 className="ww-section-title">Talk</h2>
+            <p className="ww-empty-state">No one to talk to here.</p>
           </div>
         )}
+
+        <div>
+          <h2 className="ww-section-title">Shop</h2>
+          {!atTraderPost ? (
+            <p className="ww-empty-state">Find the Trader's Post to make deals.</p>
+          ) : (
+            <>
+              {availableTrades.length === 0 && (
+                <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
+              )}
+              {availableTrades.map(({ trade, affordable }) => (
+                <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
+                  <button
+                    onClick={() => handleTrade(trade.id)}
+                    disabled={!affordable || inEncounter}
+                    className="ww-button ww-button-primary ww-button-small"
+                  >
+                    {trade.label}
+                  </button>
+                </div>
+              ))}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

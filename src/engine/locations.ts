@@ -5,6 +5,7 @@
  */
 
 import type { LocationId, LocationData, Biome, Direction } from '../types/content';
+import type { GameState } from '../types/gameState';
 
 export const locations: Record<LocationId, LocationData> = {
   sanctum: {
@@ -79,5 +80,28 @@ export function getAvailableExits(id: LocationId): Array<{ direction: Direction;
     direction: direction as Direction,
     to,
   }));
+}
+
+/**
+ * Gets the location description, which may change based on game state flags.
+ */
+export function getLocationDescription(state: GameState): string {
+  const location = getLocation(state.currentLocation);
+
+  // Default to baseDescription
+  let description = location.baseDescription;
+
+  // If the grove is healed and we are in or near the Wilds, tweak the description
+  if (state.flags.groveHealed) {
+    if (state.currentLocation === 'wilds') {
+      description =
+        'The forest here feels looser and kinder now, as if something heavy has been lifted.';
+    } else if (state.currentLocation === 'gate') {
+      description =
+        'Even from here, the air beyond the gate feels calmer than before.';
+    }
+  }
+
+  return description;
 }
 

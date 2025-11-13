@@ -22,8 +22,8 @@ export const npcs: Record<NpcId, NpcData> = {
     location: 'sanctum',
     introLines: [
       'Welcome back, traveler. The Sanctum has been quiet.',
-      'The forest beyond these walls needs help—there are places that have grown sick, places that need tending.',
-      'If you venture out, be careful. The Wilds are not what they once were.',
+      'The Wilds feel uneasy. The grove near the forest edge is… wrong somehow.',
+      'If you feel called, you could help heal it. Start by gathering herbs from the Wilds and water from the Lake.',
     ],
   },
   hermit: {

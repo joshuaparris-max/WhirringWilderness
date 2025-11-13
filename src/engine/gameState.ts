@@ -19,7 +19,14 @@ export function createInitialState(): GameState {
       level: 1,
       inventory: [],
     },
-    quests: [],
+    quests: [
+      {
+        id: 'heal_the_grove',
+        name: 'Heal the Grove',
+        step: 'speak_to_caretaker',
+        status: 'not_started',
+      },
+    ],
     flags: {},
     log: [],
   };

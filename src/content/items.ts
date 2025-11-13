@@ -25,5 +25,12 @@ export const items: Record<string, ItemData> = {
     description: 'Heavy ore chipped from the mine wall.',
     category: 'resource',
   },
+  healing_tonic: {
+    id: 'healing_tonic',
+    name: 'Healing Tonic',
+    description: 'A sharp, bitter draught that knits shallow wounds.',
+    category: 'consumable',
+    effectDescription: 'Restore a small amount of HP when used (effect to be implemented later).',
+  },
 };
 
