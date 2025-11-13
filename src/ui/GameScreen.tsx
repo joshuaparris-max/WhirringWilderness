@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createInitialState, appendLog } from '../engine/gameState';
 import { moveTo, sense, gather, talkTo, attack, attemptEscape, performGroveRitual, performTrade, consumeHealingTonic } from '../engine/actions';
 import { getLocation, getAvailableExits } from '../engine/locations';
@@ -15,6 +15,24 @@ import type { LocationId } from '../types/gameState';
 
 export function GameScreen() {
   const [gameState, setGameState] = useState<GameState>(() => createInitialState());
+  const logRef = useRef<HTMLDivElement | null>(null);
+  const [isLogPinnedToBottom, setIsLogPinnedToBottom] = useState(true);
+
+  const handleLogScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
+    const target = event.currentTarget;
+    const threshold = 24; // px from bottom counts as "pinned"
+    const distanceFromBottom =
+      target.scrollHeight - target.scrollTop - target.clientHeight;
+    setIsLogPinnedToBottom(distanceFromBottom < threshold);
+  };
+
+  useEffect(() => {
+    if (!logRef.current) return;
+    if (!isLogPinnedToBottom) return;
+
+    const el = logRef.current;
+    el.scrollTop = el.scrollHeight;
+  }, [gameState.log.length, isLogPinnedToBottom]);
 
   const handleMove = (destination: LocationId) => {
     const result = moveTo(gameState, destination);
@@ -172,7 +190,12 @@ export function GameScreen() {
               <div className="ww-journal-content">No active quests.</div>
             )}
           </div>
-          <div className="ww-log">
+          <div
+            className="ww-log"
+            ref={logRef}
+            onScroll={handleLogScroll}
+            style={{ overflowY: 'auto' }}
+          >
             {gameState.log.length === 0 ? (
               <p className="ww-log-empty">The log is empty.</p>
             ) : (
