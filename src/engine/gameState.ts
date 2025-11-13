@@ -27,9 +27,22 @@ export function createInitialState(): GameState {
         step: 'speak_to_caretaker',
         status: 'not_started',
       },
+      {
+        id: 'echoes_at_the_lake',
+        name: 'Echoes at the Lake',
+        step: 'unlocked',
+        status: 'not_started',
+      },
+      {
+        id: 'hermits_glow',
+        name: "Hermit's Glow",
+        step: 'unlocked',
+        status: 'not_started',
+      },
     ],
     flags: {
       groveHealed: false,
+      lakeEchoesFound: false,
       npcMemory: {},
       reputation: { forest: 0 },
       runEnded: false,

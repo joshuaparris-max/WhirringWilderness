@@ -65,6 +65,7 @@ export interface NarrativeFlags {
   groveHealed?: boolean;
   lakeTreatment?: boolean;
   mineTreatment?: boolean;
+  lakeEchoesFound?: boolean;
   npcMemory?: NpcMemory;
   reputation?: ReputationState;
   /**

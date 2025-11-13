@@ -35,11 +35,35 @@ export function upsertQuestState(state: GameState, quest: QuestState): GameState
   };
 }
 
+function ensureQuestStateExists(state: GameState, id: QuestId): { state: GameState; quest: QuestState | null } {
+  const existing = getQuestState(state, id);
+  if (existing) {
+    return { state, quest: existing };
+  }
+
+  const questDef = QUESTS[id];
+  if (!questDef) {
+    return { state, quest: null };
+  }
+
+  const initialStep = questDef.steps[0]?.id ?? 'unlocked';
+  const newQuest: QuestState = {
+    id: questDef.id,
+    name: questDef.name,
+    step: initialStep,
+    status: 'not_started',
+  };
+
+  const updatedState = upsertQuestState(state, newQuest);
+  return { state: updatedState, quest: newQuest };
+}
+
 /**
  * Sets the status of a quest.
  */
 export function setQuestStatus(state: GameState, id: QuestId, status: QuestStatus): GameState {
-  const quest = getQuestState(state, id);
+  const ensured = ensureQuestStateExists(state, id);
+  const quest = ensured.quest;
   if (!quest) {
     return state;
   }
@@ -49,14 +73,15 @@ export function setQuestStatus(state: GameState, id: QuestId, status: QuestStatu
     status,
   };
 
-  return upsertQuestState(state, updatedQuest);
+  return upsertQuestState(ensured.state, updatedQuest);
 }
 
 /**
  * Sets the current step of a quest.
  */
 export function setQuestStep(state: GameState, id: QuestId, step: string): GameState {
-  const quest = getQuestState(state, id);
+  const ensured = ensureQuestStateExists(state, id);
+  const quest = ensured.quest;
   if (!quest) {
     return state;
   }
@@ -66,7 +91,7 @@ export function setQuestStep(state: GameState, id: QuestId, step: string): GameS
     step,
   };
 
-  return upsertQuestState(state, updatedQuest);
+  return upsertQuestState(ensured.state, updatedQuest);
 }
 
 /**
@@ -74,14 +99,15 @@ export function setQuestStep(state: GameState, id: QuestId, step: string): GameS
  * Sets status to 'active' and step to the first step ID from the quest definition.
  */
 export function activateQuestIfNeeded(state: GameState, id: QuestId): GameState {
-  const quest = getQuestState(state, id);
+  const ensured = ensureQuestStateExists(state, id);
+  const quest = ensured.quest;
   if (!quest) {
     return state;
   }
 
   // If quest is already active or completed, return unchanged
   if (quest.status === 'active' || quest.status === 'completed') {
-    return state;
+    return ensured.state;
   }
 
   // If quest is not_started, activate it
@@ -89,7 +115,7 @@ export function activateQuestIfNeeded(state: GameState, id: QuestId): GameState 
     const questDef = QUESTS[id];
     const firstStepId = questDef.steps[0]?.id;
     if (!firstStepId) {
-      return state;
+      return ensured.state;
     }
 
     const updatedQuest: QuestState = {
@@ -98,9 +124,9 @@ export function activateQuestIfNeeded(state: GameState, id: QuestId): GameState 
       step: firstStepId,
     };
 
-    return upsertQuestState(state, updatedQuest);
+    return upsertQuestState(ensured.state, updatedQuest);
   }
 
-  return state;
+  return ensured.state;
 }
 

@@ -189,20 +189,48 @@ export function moveTo(state: GameState, destination: LocationId): ActionResult 
  * Performs a sense action, revealing sensory information about the current location.
  */
 export function sense(state: GameState): ActionResult {
-  const senseText = senseAt(state.currentLocation, state.flags.groveHealed);
+  const logEntries: LogEntry[] = [
+    {
+      id: generateLogId(),
+      type: 'narration',
+      text: senseAt(state.currentLocation, state.flags.groveHealed),
+      timestamp: Date.now(),
+    },
+  ];
 
-  const logEntry: LogEntry = {
-    id: generateLogId(),
-    type: 'narration',
-    text: senseText,
-    timestamp: Date.now(),
-  };
+  let newState = state;
+
+  const echoesQuest = getQuestState(newState, 'echoes_at_the_lake');
+  const shouldRevealEcho =
+    echoesQuest &&
+    echoesQuest.status === 'active' &&
+    echoesQuest.step === 'investigate_lake' &&
+    state.currentLocation === 'lake' &&
+    !state.flags.lakeEchoesFound;
+
+  if (shouldRevealEcho) {
+    newState = setQuestStep(newState, 'echoes_at_the_lake', 'return_to_hermit');
+    newState = {
+      ...newState,
+      flags: {
+        ...newState.flags,
+        lakeEchoesFound: true,
+      },
+    };
+
+    logEntries.push({
+      id: generateLogId(),
+      type: 'quest',
+      text: 'The water mirrors someplace you have never stood. The Hermit should hear of this.',
+      timestamp: Date.now(),
+    });
+  }
 
   audioManager.playSFX('sense');
 
   return {
-    state,
-    logEntries: [logEntry],
+    state: newState,
+    logEntries,
   };
 }
 
@@ -474,6 +502,126 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
         },
       };
       return { state: newState, logEntries };
+    }
+  }
+
+  if (npc.id === 'hermit') {
+    const echoesQuest = getQuestState(newState, 'echoes_at_the_lake');
+    const hermitsGlowQuest = getQuestState(newState, 'hermits_glow');
+    const questMemoryUpdate = () => ({
+      ...npcMemory,
+      [npc.id]: {
+        timesSpoken: memoryForNpc.timesSpoken + 1,
+      },
+    });
+
+    if (echoesQuest && echoesQuest.status === 'active' && echoesQuest.step === 'return_to_hermit') {
+      logEntries.push(
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "You felt it too, didn't you? The lake humming with somewhere else."`,
+          timestamp: Date.now(),
+        },
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "Those echoes do not belong to the Wilds. Thank you for telling me."`,
+          timestamp: Date.now(),
+        },
+      );
+
+      let updatedState = setQuestStep(newState, 'echoes_at_the_lake', 'completed');
+      updatedState = setQuestStatus(updatedState, 'echoes_at_the_lake', 'completed');
+
+      const currentRep = updatedState.flags.reputation ?? { forest: 0 };
+      updatedState = {
+        ...updatedState,
+        flags: {
+          ...updatedState.flags,
+          reputation: {
+            ...currentRep,
+            forest: currentRep.forest + 3,
+          },
+          npcMemory: questMemoryUpdate(),
+        },
+      };
+
+      logEntries.push(
+        {
+          id: generateLogId(),
+          type: 'quest',
+          text: 'Quest completed: Echoes at the Lake.',
+          timestamp: Date.now(),
+        },
+        {
+          id: generateLogId(),
+          type: 'system',
+          text: 'Forest regard increases. (+3 favour)',
+          timestamp: Date.now(),
+        },
+      );
+
+      return { state: updatedState, logEntries };
+    }
+
+    if (echoesQuest && echoesQuest.status === 'completed') {
+      if (!hermitsGlowQuest || hermitsGlowQuest.status === 'not_started') {
+        logEntries.push(
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: "Since the echoes, I've seen a pale glow deeper in the Wilds."`,
+            timestamp: Date.now(),
+          },
+          {
+            id: generateLogId(),
+            type: 'narration',
+            text: `${npc.name}: "If you still have the patience for mysteries, you might seek it out soon."`,
+            timestamp: Date.now(),
+          },
+        );
+
+        let updatedState = activateQuestIfNeeded(newState, 'hermits_glow');
+        updatedState = setQuestStatus(updatedState, 'hermits_glow', 'active');
+        updatedState = setQuestStep(updatedState, 'hermits_glow', 'unlocked');
+        updatedState = {
+          ...updatedState,
+          flags: {
+            ...updatedState.flags,
+            npcMemory: questMemoryUpdate(),
+          },
+        };
+
+        logEntries.push({
+          id: generateLogId(),
+          type: 'quest',
+          text: "Quest started: Hermit's Glow.",
+          timestamp: Date.now(),
+        });
+
+        return { state: updatedState, logEntries };
+      }
+
+      if (hermitsGlowQuest.status === 'active') {
+        logEntries.push({
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "Those lights are still out there. When you’re ready, follow them."`,
+          timestamp: Date.now(),
+        });
+
+        const updatedNpcMemory = questMemoryUpdate();
+        newState = {
+          ...newState,
+          flags: {
+            ...newState.flags,
+            npcMemory: updatedNpcMemory,
+          },
+        };
+
+        return { state: newState, logEntries };
+      }
     }
   }
 
@@ -836,12 +984,17 @@ export function performGroveRitual(state: GameState): ActionResult {
     flags: {
       ...newState.flags,
       groveHealed: true,
+      lakeEchoesFound: false,
       reputation: {
         ...currentRep,
         forest: currentRep.forest + 10,
       },
     },
   };
+
+  newState = activateQuestIfNeeded(newState, 'echoes_at_the_lake');
+  newState = setQuestStatus(newState, 'echoes_at_the_lake', 'active');
+  newState = setQuestStep(newState, 'echoes_at_the_lake', 'investigate_lake');
 
   // Add narrative log entries
   logEntries.push(
@@ -869,6 +1022,12 @@ export function performGroveRitual(state: GameState): ActionResult {
     id: generateLogId(),
     type: 'system',
     text: 'You sense the Wilds regard you differently now.',
+    timestamp: Date.now(),
+  });
+  logEntries.push({
+    id: generateLogId(),
+    type: 'quest',
+    text: 'Far off, the Lake seems to shiver with new echoes.',
     timestamp: Date.now(),
   });
 

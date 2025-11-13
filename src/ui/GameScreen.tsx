@@ -15,6 +15,10 @@ import type { LocationId } from '../types/gameState';
 import { loadState, saveState, clearState } from '../engine/persistence';
 import { audioManager } from '../audio/audioManager';
 
+function isQuestId(id: string): id is QuestId {
+  return Object.prototype.hasOwnProperty.call(QUESTS, id);
+}
+
 export function GameScreen() {
   const [gameState, setGameState] = useState<GameState>(() => {
     const loaded = loadState();
@@ -168,20 +172,11 @@ export function GameScreen() {
   );
 
   // Quest/Journal state
-  const mainQuestId: QuestId = 'heal_the_grove';
-  const mainQuestState = gameState.quests.find((q) => q.id === mainQuestId);
-  const mainQuestDefinition = QUESTS[mainQuestId];
+  const getQuest = (id: QuestId) => gameState.quests.find((q) => q.id === id);
+  const healQuestState = getQuest('heal_the_grove');
 
-  let mainQuestStepSummary = '';
-  if (mainQuestState && mainQuestDefinition) {
-    const stepDef = mainQuestDefinition.steps.find(
-      (step) => step.id === mainQuestState.step,
-    );
-    mainQuestStepSummary = stepDef ? stepDef.summary : '';
-  }
-
-  const healQuestStatus = mainQuestState?.status ?? 'not_started';
-  const healQuestStep = mainQuestState?.step ?? '';
+  const healQuestStatus = healQuestState?.status ?? 'not_started';
+  const healQuestStep = healQuestState?.step ?? '';
   const ritualStepReady =
     healQuestStatus === 'active' &&
     (healQuestStep === 'gather_ingredients' || healQuestStep === 'perform_ritual');
@@ -279,19 +274,53 @@ export function GameScreen() {
 
           <section className="ww-panel ww-journal">
             <h2 className="ww-panel-title">Journal</h2>
-            {mainQuestState ? (
-              <div className="ww-journal-content">
-                <div>
-                  <span className="ww-journal-quest-name">{mainQuestState.name}</span>{' '}
-                  <span className="ww-journal-quest-status">({mainQuestState.status})</span>
+            {(() => {
+              const activeQuests = gameState.quests.filter((quest) => quest.status === 'active');
+              const fallbackQuests =
+                activeQuests.length > 0
+                  ? activeQuests
+                  : (() => {
+                      const completed = gameState.quests.filter((quest) => quest.status === 'completed');
+                      if (completed.length > 0) {
+                        return [completed[completed.length - 1]];
+                      }
+                      return gameState.quests.slice(0, 1);
+                    })();
+
+              const prioritizedQuests = fallbackQuests.filter(
+                (quest): quest is (typeof gameState.quests)[number] => quest !== undefined,
+              );
+
+              const journalEntries: Array<{
+                quest: (typeof gameState.quests)[number];
+                definition: (typeof QUESTS)[keyof typeof QUESTS];
+                stepSummary: string;
+              }> = [];
+
+              prioritizedQuests.forEach((quest) => {
+                if (!isQuestId(quest.id)) {
+                  return;
+                }
+                const definition = QUESTS[quest.id];
+                const stepSummary =
+                  definition.steps.find((step) => step.id === quest.step)?.summary ?? '';
+                journalEntries.push({ quest, definition, stepSummary });
+              });
+
+              if (journalEntries.length === 0) {
+                return <div className="ww-journal-content">No active quests.</div>;
+              }
+
+              return journalEntries.map(({ quest, definition, stepSummary }) => (
+                <div key={quest.id} className="ww-journal-content">
+                  <div>
+                    <span className="ww-journal-quest-name">{definition.name}</span>{' '}
+                    <span className="ww-journal-quest-status">({quest.status})</span>
+                  </div>
+                  {stepSummary && <div className="ww-journal-step">{stepSummary}</div>}
                 </div>
-                {mainQuestStepSummary && (
-                  <div className="ww-journal-step">{mainQuestStepSummary}</div>
-                )}
-              </div>
-            ) : (
-              <div className="ww-journal-content">No active quests.</div>
-            )}
+              ));
+            })()}
           </section>
 
           <section className="ww-panel ww-log-panel">
