@@ -16,105 +16,128 @@ export function pick<T>(options: T[]): T {
   return selected;
 }
 
+const DEFAULT_SENSE_LINES = [
+  'You take in your surroundings, quiet and watchful.',
+  'You pause, letting the air settle around you.',
+];
+
+const SENSE_LINES: Partial<Record<LocationId, string[]>> = {
+  sanctum: [
+    'The candles breathe quietly; beyond the walls, the forest waits.',
+    'Stillness here. The Sanctum holds its breath while the Wilds watch.',
+    'Candlelight flickers. Outside, something listens.',
+    'Ancient wards murmur softly, the Sanctum sheltering every exhale.',
+    'You feel the stone cradle you, humming with memory.',
+  ],
+  gate: [
+    'Wind worries the old wood. The Wilds feel close.',
+    'The gate creaks softly. Beyond it, the forest presses near.',
+    'Old timber groans. The threshold between safety and the unknown.',
+    'The hinges whisper; the path beyond waits for your step.',
+  ],
+  wilds: [
+    "For a moment everything is still, as if listening back.",
+    'The forest holds its breath. Something is watching.',
+    'A hush falls. The trees seem to lean closer.',
+    'The Wilds feel charged, like lightning about to strike.',
+    'Leaves rustle where there is no wind, whispering your name.',
+  ],
+  lake: [
+    'Water laps quietly at the shore. The surface reflects nothing quite right.',
+    'The lake is still, too still. Its surface refuses to show you clearly.',
+    'Ripples move without wind. Something stirs beneath.',
+    'The air tastes of iron and mist. Something old dreams under the water.',
+  ],
+  mine: [
+    'Darkness pools in the entrance. The mine holds its secrets close.',
+    'Cold air drifts from the tunnel. Old stone remembers.',
+    'The mine mouth gapes. Something waits in the deep.',
+    'Dust motes hang unmoving, as if the mine is holding its breath.',
+  ],
+  hermit_hut: [
+    'A small hut, quiet and closed. Someone lives here, but they keep to themselves.',
+    'The hut sits among the trees, door shut. Privacy respected.',
+    'Smoke curls from a small chimney. The hermit is home, but not welcoming.',
+    'You sense guarded patience within; this is someone else’s solitude.',
+  ],
+  trader_post: [
+    'A trading post, busy with quiet commerce. The Ranger keeps watch.',
+    'Goods line the shelves. A place of exchange in the Wilds.',
+    'The post feels safer than the forest. Business, not mystery.',
+    'Ledger ink and dried herbs mingle; the Ranger weighs every deal.',
+  ],
+};
+
+const WILDS_HEALED_SENSE_LINES = [
+  'The Wilds breathe easy. Leaves murmur, but the edge has gone from the silence.',
+  'A gentler quiet now. The tension has lifted, leaving only the forest’s natural hush.',
+  'The air feels lighter here. Whatever was wrong has been soothed.',
+  'Birdsong returns in hesitant notes; the Wilds seem thankful.',
+];
+
+const DEFAULT_GATHER_LINES = [
+  'You search around, but there is nothing here you can safely gather.',
+  'Nothing here calls to be collected. You move on.',
+  'The place offers nothing for gathering. You leave it as you found it.',
+];
+
+const GATHER_LINES: Partial<Record<LocationId, string[]>> = {
+  sanctum: [
+    'There is nothing here to take; the Sanctum itself is your shelter.',
+    'You run your hand along carved stone. It offers reassurance, not resources.',
+  ],
+  wilds: [
+    'You move slowly, hands careful on bark and moss, and gather a handful of forest herbs.',
+    'Fingers trace the undergrowth, finding bitter green leaves. You collect what you need.',
+    'Careful not to disturb the quiet, you gather herbs from the forest floor.',
+    'You trim a sprig of herbs and whisper thanks to the soil beneath it.',
+  ],
+  lake: [
+    'Kneeling at the shore, you fill a small vial with lake water, trying not to disturb the surface.',
+    'You dip a vial into the still water, drawing up what you need while the surface barely ripples.',
+    'Carefully, you collect lake water, mindful of what might be watching from below.',
+    'A gentle scoop gathers clear water; you leave barely a ripple behind.',
+  ],
+  mine: [
+    'You chip away at the rock, freeing a few lumps of raw ore.',
+    'Stone yields to careful strikes. You gather what the mine offers.',
+    'Working quietly, you extract ore from the mine wall.',
+    'You pry loose a shard of ore and let the rest of the seam rest.',
+  ],
+  trader_post: [
+    'You eye the shelves; best to trade rather than pilfer.',
+    'Everything here belongs to fair dealing. You take nothing freely.',
+  ],
+  gate: [
+    'Nothing to gather at the gate — only choices to make.',
+  ],
+  hermit_hut: [
+    'Respecting the hut’s threshold, you gather nothing here.',
+  ],
+};
+
 /**
  * Returns varied sense text for a location.
  */
 export function senseAt(locationId: LocationId, groveHealed: boolean | undefined): string {
-  switch (locationId) {
-    case 'sanctum':
-      return pick([
-        'The candles breathe quietly; beyond the walls, the forest waits.',
-        'Stillness here. The Sanctum holds its breath while the Wilds watch.',
-        'Candlelight flickers. Outside, something listens.',
-      ]);
-
-    case 'gate':
-      return pick([
-        'Wind worries the old wood. The Wilds feel close.',
-        'The gate creaks softly. Beyond it, the forest presses near.',
-        'Old timber groans. The threshold between safety and the unknown.',
-      ]);
-
-    case 'wilds':
-      if (groveHealed) {
-        return pick([
-          'The Wilds breathe easy. Leaves murmur, but the edge has gone from the silence.',
-          'A gentler quiet now. The tension has lifted, leaving only the forest\'s natural hush.',
-          'The air feels lighter here. Whatever was wrong has been soothed.',
-        ]);
-      }
-      return pick([
-        "For a moment everything is still, as if listening back.",
-        'The forest holds its breath. Something is watching.',
-        'A hush falls. The trees seem to lean closer.',
-      ]);
-
-    case 'lake':
-      return pick([
-        'Water laps quietly at the shore. The surface reflects nothing quite right.',
-        'The lake is still, too still. Its surface refuses to show you clearly.',
-        'Ripples move without wind. Something stirs beneath.',
-      ]);
-
-    case 'mine':
-      return pick([
-        'Darkness pools in the entrance. The mine holds its secrets close.',
-        'Cold air drifts from the tunnel. Old stone remembers.',
-        'The mine mouth gapes. Something waits in the deep.',
-      ]);
-
-    case 'hermit_hut':
-      return pick([
-        'A small hut, quiet and closed. Someone lives here, but they keep to themselves.',
-        'The hut sits among the trees, door shut. Privacy respected.',
-        'Smoke curls from a small chimney. The hermit is home, but not welcoming.',
-      ]);
-
-    case 'trader_post':
-      return pick([
-        'A trading post, busy with quiet commerce. The Ranger keeps watch.',
-        'Goods line the shelves. A place of exchange in the Wilds.',
-        'The post feels safer than the forest. Business, not mystery.',
-      ]);
-
-    default:
-      return 'You take in your surroundings, quiet and watchful.';
+  const baseLines = SENSE_LINES[locationId] ?? DEFAULT_SENSE_LINES;
+  if (locationId === 'wilds' && groveHealed) {
+    const pool = [...baseLines, ...WILDS_HEALED_SENSE_LINES];
+    return pick(pool);
   }
+  return pick(baseLines);
 }
 
 /**
  * Returns varied gather text for a location.
  */
 export function gatherAt(locationId: LocationId): string {
-  switch (locationId) {
-    case 'wilds':
-      return pick([
-        'You move slowly, hands careful on bark and moss, and gather a handful of forest herbs.',
-        'Fingers trace the undergrowth, finding bitter green leaves. You collect what you need.',
-        'Careful not to disturb the quiet, you gather herbs from the forest floor.',
-      ]);
-
-    case 'lake':
-      return pick([
-        'Kneeling at the shore, you fill a small vial with lake water, trying not to disturb the surface.',
-        'You dip a vial into the still water, drawing up what you need while the surface barely ripples.',
-        'Carefully, you collect lake water, mindful of what might be watching from below.',
-      ]);
-
-    case 'mine':
-      return pick([
-        'You chip away at the rock, freeing a few lumps of raw ore.',
-        'Stone yields to careful strikes. You gather what the mine offers.',
-        'Working quietly, you extract ore from the mine wall.',
-      ]);
-
-    default:
-      return pick([
-        'You search around, but there is nothing here you can safely gather.',
-        'Nothing here calls to be collected. You move on.',
-        'The place offers nothing for gathering. You leave it as you found it.',
-      ]);
+  const lines = GATHER_LINES[locationId];
+  if (!lines || lines.length === 0) {
+    return pick(DEFAULT_GATHER_LINES);
   }
+
+  return pick(lines);
 }
 
 /**

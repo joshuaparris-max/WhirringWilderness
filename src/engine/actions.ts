@@ -343,6 +343,19 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
       );
       newState = activateQuestIfNeeded(newState, 'heal_the_grove');
       newState = setQuestStep(newState, 'heal_the_grove', 'gather_ingredients');
+      const updatedNpcMemory = {
+        ...npcMemory,
+        [npc.id]: {
+          timesSpoken: memoryForNpc.timesSpoken + 1,
+        },
+      };
+      newState = {
+        ...newState,
+        flags: {
+          ...newState.flags,
+          npcMemory: updatedNpcMemory,
+        },
+      };
       return { state: newState, logEntries };
     }
 
@@ -456,22 +469,49 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
     }
   }
 
-  // Default: first time = intro lines, repeat = short loop
-  if (firstTime) {
-    const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
-      id: generateLogId(),
-      type: 'narration' as const,
-      text: `${npc.name}: ${line}`,
-      timestamp: Date.now(),
-    }));
-    logEntries.push(...introLogEntries);
+  // Default / other NPCs, with a special case for the Ranger
+  if (npc.id === 'ranger') {
+    if (firstTime) {
+      const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
+        id: generateLogId(),
+        type: 'narration' as const,
+        text: `${npc.name}: ${line}`,
+        timestamp: Date.now(),
+      }));
+      logEntries.push(...introLogEntries);
+    } else {
+      logEntries.push(
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name} glances up, already familiar with your needs here.`,
+          timestamp: Date.now(),
+        },
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "Supplies are as before. Take what you need — within reason."`,
+          timestamp: Date.now(),
+        },
+      );
+    }
   } else {
-    logEntries.push({
-      id: generateLogId(),
-      type: 'narration',
-      text: `${npc.name} gives you a small nod, already familiar with your presence.`,
-      timestamp: Date.now(),
-    });
+    if (firstTime) {
+      const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
+        id: generateLogId(),
+        type: 'narration' as const,
+        text: `${npc.name}: ${line}`,
+        timestamp: Date.now(),
+      }));
+      logEntries.push(...introLogEntries);
+    } else {
+      logEntries.push({
+        id: generateLogId(),
+        type: 'narration',
+        text: `${npc.name} gives you a small nod, already familiar with your presence.`,
+        timestamp: Date.now(),
+      });
+    }
   }
 
   const updatedNpcMemory = {

@@ -9,7 +9,7 @@ import { creatures } from '../content/creatures';
 import { getNextLevelXp } from '../engine/progression';
 import { QUESTS, type QuestId } from '../content/quests';
 import { RANGER_TRADES, type TradeId } from '../content/shop';
-import { canAffordTrade, canUseTrade } from '../engine/trading';
+import { canAffordTrade, canUseTrade, getEffectiveTradeLimit } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
 import { loadState, saveState, clearState } from '../engine/persistence';
@@ -176,7 +176,9 @@ export function GameScreen() {
   const availableTrades = RANGER_TRADES.map((trade) => {
     const affordable = canAffordTrade(gameState, trade);
     const usable = canUseTrade(gameState, trade.id);
-    return { trade, affordable, usable };
+    const limit = getEffectiveTradeLimit(gameState, trade.id);
+    const used = gameState.tradeUsage[trade.id] ?? 0;
+    return { trade, affordable, usable, limit, used };
   });
 
   return (
@@ -381,11 +383,11 @@ export function GameScreen() {
               {availableTrades.length === 0 && (
                 <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
               )}
-              {availableTrades.map(({ trade, affordable, usable }) => {
+              {availableTrades.map(({ trade, affordable, usable, limit, used }) => {
                 const forestRep = gameState.flags.reputation?.forest ?? 0;
                 const friendlyLabel =
                   forestRep >= 10
-                    ? `${trade.label} (the Ranger gives you a small discount from gratitude)`
+                    ? `${trade.label} (the Ranger quietly sets aside a little extra for you)`
                     : trade.label;
                 return (
                 <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
@@ -396,6 +398,11 @@ export function GameScreen() {
                   >
                     {friendlyLabel}{!usable ? ' (exhausted)' : ''}
                   </button>
+                  {limit !== undefined && (
+                    <div style={{ fontSize: '0.75rem', color: '#888' }}>
+                      Uses: {used}/{limit}
+                    </div>
+                  )}
                 </div>
               );})}
             </>

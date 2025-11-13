@@ -13,13 +13,33 @@ import { countItem, removeItems, addItemToInventory } from './actions';
 /**
  * Per-trade usage limits to avoid infinite conversions.
  */
-const TRADE_LIMITS: Partial<Record<TradeId, number>> = {
+const BASE_TRADE_LIMITS: Partial<Record<TradeId, number>> = {
   herbs_for_tonic: 3,
   ore_for_tonic: 3,
 };
 
+export function getEffectiveTradeLimit(state: GameState, tradeId: TradeId): number | undefined {
+  const baseLimit = BASE_TRADE_LIMITS[tradeId];
+  if (baseLimit === undefined) return undefined;
+
+  const forestRep = state.flags.reputation?.forest ?? 0;
+  let modifier = 0;
+
+  if (forestRep >= 20) {
+    modifier = 2;
+  } else if (forestRep >= 10) {
+    modifier = 1;
+  } else if (forestRep <= -15) {
+    modifier = -2;
+  } else if (forestRep <= -5) {
+    modifier = -1;
+  }
+
+  return Math.max(1, baseLimit + modifier);
+}
+
 export function canUseTrade(state: GameState, tradeId: TradeId): boolean {
-  const limit = TRADE_LIMITS[tradeId];
+  const limit = getEffectiveTradeLimit(state, tradeId);
   if (limit === undefined) return true;
   const used = state.tradeUsage[tradeId] ?? 0;
   return used < limit;
