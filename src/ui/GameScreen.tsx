@@ -13,6 +13,7 @@ import { canAffordTrade, canUseTrade, getEffectiveTradeLimit } from '../engine/t
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
 import { loadState, saveState, clearState } from '../engine/persistence';
+import { audioManager } from '../audio/audioManager';
 
 export function GameScreen() {
   const [gameState, setGameState] = useState<GameState>(() => {
@@ -21,6 +22,8 @@ export function GameScreen() {
   });
   const logRef = useRef<HTMLDivElement | null>(null);
   const [isLogPinnedToBottom, setIsLogPinnedToBottom] = useState(true);
+  const [audioEnabled, setAudioEnabled] = useState(audioManager.isEnabled());
+  const audioSupported = audioManager.isSupported();
 
   const handleLogScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
     const target = event.currentTarget;
@@ -37,6 +40,11 @@ export function GameScreen() {
     const el = logRef.current;
     el.scrollTop = el.scrollHeight;
   }, [gameState.log.length, isLogPinnedToBottom]);
+
+  useEffect(() => {
+    if (!audioSupported) return;
+    audioManager.init().catch(() => undefined);
+  }, [audioSupported]);
 
   const handleMove = (destination: LocationId) => {
     const result = moveTo(gameState, destination);
@@ -129,6 +137,7 @@ export function GameScreen() {
     );
     if (!confirmReset) return;
 
+    audioManager.fadeOutAmbient();
     const fresh = createInitialState();
     clearState();
     setGameState(fresh);
@@ -142,9 +151,8 @@ export function GameScreen() {
   const inEncounter = isInEncounter(gameState);
   const currentEncounter = gameState.currentEncounter ?? null;
   const currentCreature = currentEncounter ? creatures[currentEncounter.creatureId] : null;
+  const currentBiome = currentLocation.biome;
   const nextLevelXp = getNextLevelXp(gameState.player.level);
-  const canPerformRitual =
-    gameState.currentLocation === 'wilds' && !isInEncounter(gameState);
   const atTraderPost = gameState.currentLocation === 'trader_post';
   const hasHealingTonic = gameState.player.inventory.some(
     (item) => item.itemId === 'healing_tonic' && item.quantity > 0,
@@ -172,6 +180,19 @@ export function GameScreen() {
     mainQuestStepSummary = stepDef ? stepDef.summary : '';
   }
 
+  const healQuestStatus = mainQuestState?.status ?? 'not_started';
+  const healQuestStep = mainQuestState?.step ?? '';
+  const ritualStepReady =
+    healQuestStatus === 'active' &&
+    (healQuestStep === 'gather_ingredients' || healQuestStep === 'perform_ritual');
+  const ritualAvailable =
+    gameState.currentLocation === 'wilds' &&
+    ritualStepReady &&
+    !inEncounter &&
+    !runEnded &&
+    !groveHealed;
+  const groveAtPeace = groveHealed || healQuestStatus === 'completed';
+
   // Trading
   const availableTrades = RANGER_TRADES.map((trade) => {
     const affordable = canAffordTrade(gameState, trade);
@@ -180,6 +201,36 @@ export function GameScreen() {
     const used = gameState.tradeUsage[trade.id] ?? 0;
     return { trade, affordable, usable, limit, used };
   });
+
+  useEffect(() => {
+    if (!audioEnabled) return;
+    audioManager.playAmbient(currentBiome);
+  }, [audioEnabled, currentBiome]);
+
+  useEffect(() => {
+    if (runEnded) {
+      audioManager.fadeOutAmbient();
+    }
+  }, [runEnded]);
+
+  const handleToggleAudio = async () => {
+    if (!audioSupported) return;
+    if (audioEnabled) {
+      audioManager.disable();
+      setAudioEnabled(false);
+    } else {
+      try {
+        await audioManager.enable();
+      } catch (error) {
+        console.warn('Unable to enable audio', error);
+      }
+      const enabledNow = audioManager.isEnabled();
+      setAudioEnabled(enabledNow);
+      if (enabledNow) {
+        audioManager.playAmbient(currentBiome);
+      }
+    }
+  };
 
   return (
     <div className="ww-root">
@@ -193,7 +244,18 @@ export function GameScreen() {
         <p className="ww-header-stats">
           HP: {gameState.player.hp} / {gameState.player.maxHp}
         </p>
-        <div style={{ marginTop: '0.5rem' }}>
+        <div className="ww-header-controls">
+          {audioSupported && (
+            <button
+              type="button"
+              onClick={() => {
+                void handleToggleAudio();
+              }}
+              className="ww-button ww-button-small ww-button-secondary"
+            >
+              Audio: {audioEnabled ? 'On' : 'Off'}
+            </button>
+          )}
           <button
             type="button"
             onClick={handleNewRun}
@@ -327,10 +389,13 @@ export function GameScreen() {
                 Use Healing Tonic
               </button>
             )}
-            {canPerformRitual && (
+            {ritualAvailable && (
               <button onClick={handlePerformRitual} disabled={runEnded} className="ww-button ww-button-success">
                 Perform Grove Ritual
               </button>
+            )}
+            {gameState.currentLocation === 'wilds' && !ritualAvailable && groveAtPeace && (
+              <p className="ww-ritual-note">The grove is already at peace.</p>
             )}
           </div>
         </div>

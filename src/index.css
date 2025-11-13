@@ -36,7 +36,7 @@ html, body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem;
@@ -50,6 +50,13 @@ html, body {
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid #3a3a3a;
+}
+
+.ww-header-controls {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .ww-header-title {
@@ -352,4 +359,114 @@ html, body {
   font-style: italic;
   font-size: 0.9rem;
   margin: 0;
+}
+
+.ww-ritual-note {
+  color: #888;
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0.25rem 0 0;
+}
+
+.ww-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1000;
+}
+
+.ww-overlay-center {
+  pointer-events: auto;
+}
+
+.ww-panel {
+  background-color: #1f1f1f;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.ww-panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.ww-run-summary {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 1.5rem;
+  color: #d0d0d0;
+  font-size: 0.95rem;
+}
+
+.ww-run-summary li {
+  margin-bottom: 0.5rem;
+}
+
+.ww-run-summary-note {
+  margin-top: 1rem;
+  color: #888;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+@media (max-width: 1024px) {
+  .ww-root {
+    padding: 1rem;
+  }
+
+  .ww-main {
+    flex-direction: column;
+  }
+
+  .ww-inventory {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ww-header-title {
+    font-size: 2rem;
+  }
+
+  .ww-log {
+    padding: 1rem;
+  }
+
+  .ww-inventory {
+    padding: 1rem;
+  }
+
+  .ww-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ww-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .ww-root {
+    padding: 0.75rem;
+  }
+
+  .ww-panel {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+
+  .ww-overlay {
+    padding: 1rem;
+  }
 }

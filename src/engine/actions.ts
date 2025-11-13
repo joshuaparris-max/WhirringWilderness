@@ -23,6 +23,7 @@ import {
   escapeSuccess,
   escapeFail,
 } from './text';
+import { audioManager } from '../audio/audioManager';
 
 /**
  * Result of performing a game action.
@@ -178,7 +179,10 @@ export function moveTo(state: GameState, destination: LocationId): ActionResult 
     timestamp: Date.now(),
   };
 
-  return maybeTriggerEncounter(newState, [logEntry]);
+  const result = maybeTriggerEncounter(newState, [logEntry]);
+  audioManager.playSFX('move');
+  audioManager.playAmbient(destinationLocation.biome);
+  return result;
 }
 
 /**
@@ -193,6 +197,8 @@ export function sense(state: GameState): ActionResult {
     text: senseText,
     timestamp: Date.now(),
   };
+
+  audioManager.playSFX('sense');
 
   return {
     state,
@@ -276,7 +282,9 @@ export function gather(state: GameState): ActionResult {
     timestamp: Date.now(),
   };
 
-  return maybeTriggerEncounter(newState, [logEntry]);
+  const result = maybeTriggerEncounter(newState, [logEntry]);
+  audioManager.playSFX('gather');
+  return result;
 }
 
 /**
@@ -470,7 +478,7 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
   }
 
   // Default / other NPCs, with a special case for the Ranger
-  if (npc.id === 'ranger') {
+  if (npc.id === 'ranger_trader') {
     if (firstTime) {
       const introLogEntries: LogEntry[] = npc.introLines.map((line) => ({
         id: generateLogId(),
@@ -557,13 +565,12 @@ export function attack(state: GameState): ActionResult {
     return { state: { ...state, currentEncounter: null }, logEntries: [logEntry] };
   }
 
-  // Very simple damage model for now
+  const logEntries: LogEntry[] = [];
+  let newState: GameState = { ...state };
+
   const playerDamage = Math.max(1, 4 - creature.stats.defence);
   const creatureDamage = Math.max(0, creature.stats.attack - 1);
-
-  const newCreatureHp = encounter.hp - playerDamage;
-  let newState: GameState = { ...state };
-  const logEntries: LogEntry[] = [];
+  const creatureHpAfter = Math.max(0, encounter.hp - playerDamage);
 
   logEntries.push({
     id: generateLogId(),
@@ -571,9 +578,9 @@ export function attack(state: GameState): ActionResult {
     text: hitCreature(creature.name, playerDamage),
     timestamp: Date.now(),
   });
+  audioManager.playSFX('attack');
 
-  if (newCreatureHp <= 0) {
-    // Creature defeated
+  if (creatureHpAfter <= 0) {
     newState = {
       ...newState,
       currentEncounter: null,
@@ -584,11 +591,11 @@ export function attack(state: GameState): ActionResult {
       text: `${creature.name} unravels and is gone.`,
       timestamp: Date.now(),
     });
-    
-    // Award XP
+
     const xpReward = 10;
     const xpResult = applyXp(newState, xpReward);
     newState = xpResult.state;
+
     if (xpResult.levelledUp) {
       logEntries.push({
         id: generateLogId(),
@@ -604,21 +611,21 @@ export function attack(state: GameState): ActionResult {
         timestamp: Date.now(),
       });
     }
-    
+
     return { state: newState, logEntries };
   }
 
-  // Creature survives and strikes back
-  const newHp = Math.max(0, newState.player.hp - creatureDamage);
+  const playerHpAfter = Math.max(0, newState.player.hp - creatureDamage);
+
   newState = {
     ...newState,
     player: {
       ...newState.player,
-      hp: newHp,
+      hp: playerHpAfter,
     },
     currentEncounter: {
       ...encounter,
-      hp: newCreatureHp,
+      hp: creatureHpAfter,
     },
   };
 
@@ -628,15 +635,16 @@ export function attack(state: GameState): ActionResult {
     text: creatureHitsPlayer(creature.name, creatureDamage),
     timestamp: Date.now(),
   });
+  if (creatureDamage > 0) {
+    audioManager.playSFX('hurt');
+  }
 
-  if (newHp <= 0) {
-    // Player death: clamp to 0 HP, mark run ended, end encounter, add death line
-    const nextHp = 0;
+  if (playerHpAfter <= 0) {
     newState = {
       ...newState,
       player: {
         ...newState.player,
-        hp: nextHp,
+        hp: 0,
       },
       currentEncounter: null,
       flags: {
@@ -644,6 +652,7 @@ export function attack(state: GameState): ActionResult {
         runEnded: newState.flags.runEnded ? newState.flags.runEnded : true,
       },
     };
+
     if (!state.flags.runEnded) {
       logEntries.push({
         id: generateLogId(),
@@ -698,6 +707,7 @@ export function attemptEscape(state: GameState): ActionResult {
       text: escapeSuccess(creature.name),
       timestamp: Date.now(),
     });
+    audioManager.playSFX('move');
     return { state: newState, logEntries };
   }
 
@@ -718,6 +728,9 @@ export function attemptEscape(state: GameState): ActionResult {
     text: escapeFail(creature.name, creatureDamage),
     timestamp: Date.now(),
   });
+  if (creatureDamage > 0) {
+    audioManager.playSFX('hurt');
+  }
 
   if (newHp <= 0) {
     // Player death: clamp to 0 HP, mark run ended, end encounter, add death line
@@ -764,6 +777,35 @@ export function performGroveRitual(state: GameState): ActionResult {
     return { state, logEntries };
   }
 
+  const healQuest = getQuestState(state, 'heal_the_grove');
+  const groveHealedAlready = !!state.flags.groveHealed;
+  const questCompleted = healQuest ? healQuest.status === 'completed' : false;
+
+  if (groveHealedAlready || questCompleted) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: 'The grove already stands in still, luminous peace. There is nothing more to mend here.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  const ritualStepActive =
+    healQuest &&
+    healQuest.status === 'active' &&
+    (healQuest.step === 'gather_ingredients' || healQuest.step === 'perform_ritual');
+
+  if (!ritualStepActive) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: 'You feel the grove watching, waiting. The ritual is not yet ready to be performed.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
   // Check ingredients
   const herbs = countItem(state, 'forest_herb');
   const water = countItem(state, 'lake_water');
@@ -785,24 +827,19 @@ export function performGroveRitual(state: GameState): ActionResult {
 
   // Update quest state: "Heal the Grove"
   newState = activateQuestIfNeeded(newState, 'heal_the_grove');
-  newState = setQuestStep(newState, 'heal_the_grove', 'return_to_caretaker');
+  newState = setQuestStep(newState, 'heal_the_grove', 'grove_healed');
+  newState = setQuestStatus(newState, 'heal_the_grove', 'completed');
 
-  // Track pre-heal to determine first-time effects
-  const wasHealed = !!state.flags.groveHealed;
-
-  // Set groveHealed flag (keep quest status as 'active') and adjust reputation on first heal
   const currentRep = newState.flags.reputation ?? { forest: 0 };
   newState = {
     ...newState,
     flags: {
       ...newState.flags,
       groveHealed: true,
-      reputation: wasHealed
-        ? currentRep
-        : {
-            ...currentRep,
-            forest: currentRep.forest + 10,
-          },
+      reputation: {
+        ...currentRep,
+        forest: currentRep.forest + 10,
+      },
     },
   };
 
@@ -828,14 +865,15 @@ export function performGroveRitual(state: GameState): ActionResult {
     },
   );
 
-  if (!wasHealed) {
-    logEntries.push({
-      id: generateLogId(),
-      type: 'system',
-      text: 'You sense the Wilds regard you differently now.',
-      timestamp: Date.now(),
-    });
-  }
+  logEntries.push({
+    id: generateLogId(),
+    type: 'system',
+    text: 'You sense the Wilds regard you differently now.',
+    timestamp: Date.now(),
+  });
+
+  audioManager.playRitualSwell();
+  audioManager.playAmbient(getLocation('wilds').biome);
 
   return { state: newState, logEntries };
 }
@@ -894,6 +932,7 @@ export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
   }
 
   const result = applyTrade(state, trade, generateLogId);
+  audioManager.playSFX('trade');
   return {
     state: result.state,
     logEntries: result.logEntries,
@@ -957,6 +996,8 @@ export function consumeHealingTonic(state: GameState): ActionResult {
       timestamp: Date.now(),
     });
   }
+
+  audioManager.playSFX('heal');
 
   return { state: newState, logEntries };
 }
