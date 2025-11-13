@@ -30,6 +30,12 @@ export function createInitialState(): GameState {
     ],
     flags: {},
     log: [],
+    gather: {
+      wildsHerbs: 0,
+      lakeWater: 0,
+      mineOre: 0,
+    },
+    tradeUsage: {},
   };
 }
 

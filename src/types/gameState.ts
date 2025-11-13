@@ -88,5 +88,23 @@ export interface GameState {
   flags: NarrativeFlags;
   log: LogEntry[];
   currentEncounter?: EncounterState | null;
+  gather: GatherState;
+  tradeUsage: TradeUsageState;
+}
+
+/**
+ * Tracks soft usage limits for gathering per "run".
+ */
+export interface GatherState {
+  wildsHerbs: number;
+  lakeWater: number;
+  mineOre: number;
+}
+
+/**
+ * Tracks number of times each trade has been used.
+ */
+export interface TradeUsageState {
+  [tradeId: string]: number;
 }
 

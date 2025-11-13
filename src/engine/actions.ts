@@ -9,11 +9,11 @@ import type { LogEntry } from '../types/log';
 import { getLocation, getLocationDescription } from './locations';
 import type { NpcId } from '../content/npcs';
 import { npcs } from '../content/npcs';
-import { getRandomCreatureForLocation, createEncounterState, createEncounterLog, isInEncounter } from './encounters';
+import { getRandomCreatureForLocation, createEncounterState, createEncounterLog, isInEncounter, getEncounterChance } from './encounters';
 import { creatures } from '../content/creatures';
 import { applyXp } from './progression';
 import { activateQuestIfNeeded, setQuestStep, setQuestStatus, getQuestState } from './quests';
-import { canAffordTrade, applyTrade, getTradeById } from './trading';
+import { canAffordTrade, applyTrade, getTradeById, canUseTrade } from './trading';
 import type { TradeId } from '../content/shop';
 import {
   senseAt,
@@ -51,8 +51,8 @@ function maybeTriggerEncounter(state: GameState, logEntries: LogEntry[]): { stat
     return { state, logEntries };
   }
 
-  // Simple 25% chance to trigger an encounter
-  if (Math.random() >= 0.25) {
+  const chance = getEncounterChance(state);
+  if (Math.random() >= chance) {
     return { state, logEntries };
   }
 
@@ -153,10 +153,22 @@ export function moveTo(state: GameState, destination: LocationId): ActionResult 
     };
   }
 
-  const newState: GameState = {
+  let newState: GameState = {
     ...state,
     currentLocation: destination,
   };
+
+  // Reset gather limits when returning to Sanctum (start of a new "run")
+  if (destination === 'sanctum') {
+    newState = {
+      ...newState,
+      gather: {
+        wildsHerbs: 0,
+        lakeWater: 0,
+        mineOre: 0,
+      },
+    };
+  }
 
   const description = getLocationDescription(newState);
   const logEntry: LogEntry = {
@@ -192,17 +204,34 @@ export function sense(state: GameState): ActionResult {
  * Performs a gather action, collecting resources from the current location.
  */
 export function gather(state: GameState): ActionResult {
+  const MAX_HERBS = 5;
+  const MAX_WATER = 3;
+  const MAX_ORE = 4;
+
   let itemId: string | null = null;
+  let overrideText: string | null = null;
 
   switch (state.currentLocation) {
     case 'wilds':
-      itemId = 'forest_herb';
+      if (state.gather.wildsHerbs >= MAX_HERBS) {
+        overrideText = 'You search carefully, but taking more now would feel wrong.';
+      } else {
+        itemId = 'forest_herb';
+      }
       break;
     case 'lake':
-      itemId = 'lake_water';
+      if (state.gather.lakeWater >= MAX_WATER) {
+        overrideText = 'The water lies still. Best not to take more right now.';
+      } else {
+        itemId = 'lake_water';
+      }
       break;
     case 'mine':
-      itemId = 'raw_ore';
+      if (state.gather.mineOre >= MAX_ORE) {
+        overrideText = 'The seams look thin here. You should leave the rest for now.';
+      } else {
+        itemId = 'raw_ore';
+      }
       break;
     default:
       itemId = null;
@@ -211,9 +240,35 @@ export function gather(state: GameState): ActionResult {
   let newState = state;
   if (itemId) {
     newState = addItemToInventory(state, itemId, 1);
+    // Increment gather counters
+    if (itemId === 'forest_herb') {
+      newState = {
+        ...newState,
+        gather: {
+          ...newState.gather,
+          wildsHerbs: newState.gather.wildsHerbs + 1,
+        },
+      };
+    } else if (itemId === 'lake_water') {
+      newState = {
+        ...newState,
+        gather: {
+          ...newState.gather,
+          lakeWater: newState.gather.lakeWater + 1,
+        },
+      };
+    } else if (itemId === 'raw_ore') {
+      newState = {
+        ...newState,
+        gather: {
+          ...newState.gather,
+          mineOre: newState.gather.mineOre + 1,
+        },
+      };
+    }
   }
 
-  const gatherText = gatherAt(state.currentLocation);
+  const gatherText = overrideText ?? gatherAt(state.currentLocation);
   const logEntry: LogEntry = {
     id: generateLogId(),
     type: 'narration',
@@ -660,6 +715,21 @@ export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
       id: generateLogId(),
       type: 'system',
       text: "You don't have what you need for that trade.",
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  // Respect trade usage limits
+  // Note: Import canUseTrade from trading
+  // (we import from './trading' at top; extend it)
+  // If over limit, block trade
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  if (!canUseTrade(state, trade.id)) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'The Ranger shakes their head — that deal is no longer available.',
       timestamp: Date.now(),
     });
     return { state, logEntries };

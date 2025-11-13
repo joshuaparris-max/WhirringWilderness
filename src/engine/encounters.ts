@@ -21,6 +21,26 @@ export function getCreaturesForLocation(locationId: LocationId): CreatureData[] 
 }
 
 /**
+ * Location- and flag-aware encounter chance.
+ */
+export function getEncounterChance(state: GameState): number {
+  const { currentLocation, flags } = state;
+  const groveHealed = !!flags.groveHealed;
+
+  switch (currentLocation) {
+    case 'wilds':
+      return groveHealed ? 0.15 : 0.3;
+    case 'lake':
+    case 'mine':
+      return 0.25;
+    case 'gate':
+      return 0.1;
+    default:
+      return 0.0;
+  }
+}
+
+/**
  * Gets a random creature that can appear in a given location.
  * Returns null if no creatures are available for that biome.
  */

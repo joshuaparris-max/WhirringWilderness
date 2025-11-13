@@ -9,7 +9,7 @@ import { creatures } from '../content/creatures';
 import { getNextLevelXp } from '../engine/progression';
 import { QUESTS, type QuestId } from '../content/quests';
 import { RANGER_TRADES, type TradeId } from '../content/shop';
-import { canAffordTrade } from '../engine/trading';
+import { canAffordTrade, canUseTrade } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
 
@@ -147,7 +147,8 @@ export function GameScreen() {
   // Trading
   const availableTrades = RANGER_TRADES.map((trade) => {
     const affordable = canAffordTrade(gameState, trade);
-    return { trade, affordable };
+    const usable = canUseTrade(gameState, trade.id);
+    return { trade, affordable, usable };
   });
 
   return (
@@ -329,14 +330,14 @@ export function GameScreen() {
               {availableTrades.length === 0 && (
                 <p className="ww-empty-state">The Ranger has no deals to offer right now.</p>
               )}
-              {availableTrades.map(({ trade, affordable }) => (
+              {availableTrades.map(({ trade, affordable, usable }) => (
                 <div key={trade.id} style={{ marginBottom: '0.5rem' }}>
                   <button
                     onClick={() => handleTrade(trade.id)}
-                    disabled={!affordable || inEncounter}
+                    disabled={!affordable || !usable || inEncounter}
                     className="ww-button ww-button-primary ww-button-small"
                   >
-                    {trade.label}
+                    {trade.label}{!usable ? ' (exhausted)' : ''}
                   </button>
                 </div>
               ))}

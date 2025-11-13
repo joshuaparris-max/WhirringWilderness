@@ -11,6 +11,21 @@ import { RANGER_TRADES } from '../content/shop';
 import { countItem, removeItems, addItemToInventory } from './actions';
 
 /**
+ * Per-trade usage limits to avoid infinite conversions.
+ */
+const TRADE_LIMITS: Partial<Record<TradeId, number>> = {
+  herbs_for_tonic: 3,
+  ore_for_tonic: 3,
+};
+
+export function canUseTrade(state: GameState, tradeId: TradeId): boolean {
+  const limit = TRADE_LIMITS[tradeId];
+  if (limit === undefined) return true;
+  const used = state.tradeUsage[tradeId] ?? 0;
+  return used < limit;
+}
+
+/**
  * Checks if the player can afford a trade.
  */
 export function canAffordTrade(state: GameState, trade: TradeOffer): boolean {
@@ -37,6 +52,16 @@ export function applyTrade(
   for (const reward of trade.rewards) {
     newState = addItemToInventory(newState, reward.itemId, reward.quantity);
   }
+
+  // Increment trade usage
+  const used = newState.tradeUsage[trade.id] ?? 0;
+  newState = {
+    ...newState,
+    tradeUsage: {
+      ...newState.tradeUsage,
+      [trade.id]: used + 1,
+    },
+  };
 
   // One simple log entry for now
   logEntries.push({
