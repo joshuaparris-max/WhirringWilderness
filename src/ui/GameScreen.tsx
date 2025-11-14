@@ -471,7 +471,7 @@ export function GameScreen() {
                 <>
                   <button
                     onClick={handleAttack}
-                    disabled={uiLocked}
+                    disabled={!inEncounter}
                     className="ww-button ww-button-danger"
                     title="Attack (Space/Enter)"
                   >
@@ -479,7 +479,7 @@ export function GameScreen() {
                   </button>
                   <button
                     onClick={handleEscape}
-                    disabled={uiLocked}
+                    disabled={!inEncounter}
                     className="ww-button ww-button-secondary"
                     title="Flee (F) - 70% chance to escape"
                   >
