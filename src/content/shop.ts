@@ -9,7 +9,7 @@ export interface TradeCost {
   quantity: number;
 }
 
-export type TradeId = 'herbs_for_tonic' | 'ore_for_tonic';
+export type TradeId = 'herbs_for_tonic' | 'ore_for_tonic' | 'fragment_for_tonic';
 
 export interface TradeOffer {
   id: TradeId;
@@ -29,6 +29,12 @@ export const RANGER_TRADES: TradeOffer[] = [
     id: 'ore_for_tonic',
     label: 'Trade 2x Raw Ore for 1x Healing Tonic',
     costs: [{ itemId: 'raw_ore', quantity: 2 }],
+    rewards: [{ itemId: 'healing_tonic', quantity: 1 }],
+  },
+  {
+    id: 'fragment_for_tonic',
+    label: 'Trade 1x Luminous Fragment for 1x Healing Tonic',
+    costs: [{ itemId: 'luminous_fragment', quantity: 1 }],
     rewards: [{ itemId: 'healing_tonic', quantity: 1 }],
   },
 ];

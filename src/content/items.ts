@@ -32,5 +32,11 @@ export const items: Record<string, ItemData> = {
     category: 'consumable',
     effectDescription: 'Restore a small amount of HP when used (effect to be implemented later).',
   },
+  luminous_fragment: {
+    id: 'luminous_fragment',
+    name: 'Luminous Fragment',
+    description: 'A tiny shard of pale light. It hums faintly and fades if left exposed.',
+    category: 'resource',
+  },
 };
 

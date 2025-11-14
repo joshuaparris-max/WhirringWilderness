@@ -39,5 +39,13 @@ export const creatures: Record<string, CreatureData> = {
     tags: ['beast'],
     biome: 'forest',
   },
+  will_o_wisp: {
+    id: 'will_o_wisp',
+    name: "Will-o'-Wisp",
+    description: 'A bobbing light that taunts and dances among the roots.',
+    stats: { hp: 12, attack: 4, defence: 1 },
+    tags: ['spirit', 'special'],
+    biome: 'deep_forest',
+  },
 };
 

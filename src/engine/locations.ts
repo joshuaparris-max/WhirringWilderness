@@ -27,7 +27,7 @@ export const locations: Record<LocationId, LocationData> = {
     name: 'The Wilds',
     biome: 'forest',
     baseDescription: 'The forest presses close here, quiet and watchful.',
-    exits: { south: 'gate', east: 'lake', west: 'mine', north: 'hermit_hut', down: 'trader_post' },
+    exits: { south: 'gate', east: 'lake', west: 'mine', north: 'hermit_hut', down: 'trader_post', up: 'deep_wilds' },
   },
   lake: {
     id: 'lake',
@@ -57,6 +57,14 @@ export const locations: Record<LocationId, LocationData> = {
     baseDescription: 'A trading post with various goods.',
     exits: { up: 'wilds' },
   },
+  deep_wilds: {
+    id: 'deep_wilds',
+    name: 'Deeper Wilds',
+    biome: 'deep_forest',
+    baseDescription:
+      'The forest closes in here, lit by faint, pulsing motes of light between the roots.',
+    exits: { down: 'wilds' },
+  },
 };
 
 /**
@@ -80,6 +88,27 @@ export function getAvailableExits(id: LocationId): Array<{ direction: Direction;
     direction: direction as Direction,
     to,
   }));
+}
+
+/**
+ * Returns available exits taking game state into account.
+ * Currently used to gate access to certain areas (e.g. 'deep_wilds') behind quests.
+ */
+export function getAvailableExitsForState(state: GameState): Array<{ direction: Direction; to: LocationId }> {
+  const location = getLocation(state.currentLocation);
+  const raw = Object.entries(location.exits).map(([direction, to]) => ({
+    direction: direction as Direction,
+    to,
+  }));
+
+  // Gate deep_wilds behind the Hermit's Glow quest being active
+  return raw.filter((exit) => {
+    if (exit.to === 'deep_wilds') {
+      const hermits = state.quests.find((q) => q.id === 'hermits_glow');
+      if (!hermits || hermits.status !== 'active') return false;
+    }
+    return true;
+  });
 }
 
 /**

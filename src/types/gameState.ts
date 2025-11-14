@@ -17,12 +17,13 @@ export type LocationId =
   | 'lake'
   | 'mine'
   | 'hermit_hut'
-  | 'trader_post';
+  | 'trader_post'
+  | 'deep_wilds';
 
 /**
  * Biome types that locations can belong to.
  */
-export type Biome = 'sanctum' | 'forest' | 'lake' | 'mine' | 'camp';
+export type Biome = 'sanctum' | 'forest' | 'lake' | 'mine' | 'camp' | 'deep_forest';
 
 /**
  * Player character statistics.
@@ -66,8 +67,11 @@ export interface NarrativeFlags {
   lakeTreatment?: boolean;
   mineTreatment?: boolean;
   lakeEchoesFound?: boolean;
+  glowCommuneComplete?: boolean;
   npcMemory?: NpcMemory;
   reputation?: ReputationState;
+  /** Whether the player has dismissed the first-time tutorial overlay */
+  seenTutorial?: boolean;
   /**
    * True when the current run has ended (e.g. player death).
    * Used by the UI to show a summary screen and freeze inputs.
@@ -97,6 +101,7 @@ export interface ReputationState {
 export interface EncounterState {
   creatureId: string;
   hp: number;
+  hasRepFlavourApplied?: boolean;
 }
 
 /**
@@ -122,6 +127,7 @@ export interface GatherState {
   wildsHerbs: number;
   lakeWater: number;
   mineOre: number;
+  luminousFragments?: number;
 }
 
 /**

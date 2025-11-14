@@ -5,6 +5,7 @@
  */
 
 import type { LocationId } from '../types/gameState';
+import type { ForestRepTier } from './encounters';
 
 /**
  * Picks a random element from an array.
@@ -66,6 +67,12 @@ const SENSE_LINES: Partial<Record<LocationId, string[]>> = {
     'The post feels safer than the forest. Business, not mystery.',
     'Ledger ink and dried herbs mingle; the Ranger weighs every deal.',
   ],
+  deep_wilds: [
+    'The light here is not sunlight. Pale motes drift through gnarled roots and hush the air.',
+    'A slow pulse of pale light moves between trunks, and the forest seems to watch with something like curiosity.',
+    'The deeper woods breathe differently here; faint glow threads weave through the undergrowth.',
+    'Something luminous hums just out of reach — the air tastes of old secrets.',
+  ],
 };
 
 const WILDS_HEALED_SENSE_LINES = [
@@ -114,17 +121,40 @@ const GATHER_LINES: Partial<Record<LocationId, string[]>> = {
   hermit_hut: [
     'Respecting the hut’s threshold, you gather nothing here.',
   ],
+  deep_wilds: [
+    'You cup handfuls of the pale motes, but they slip through your fingers like dust of light.',
+    'The deeper grove offers nothing you can carry—only a sense that the place has marked you.',
+    'You find small glowing fragments caught on moss, but they fade as you reach for them.',
+  ],
 };
 
 /**
  * Returns varied sense text for a location.
  */
-export function senseAt(locationId: LocationId, groveHealed: boolean | undefined): string {
+export function senseAt(
+  locationId: LocationId,
+  groveHealed: boolean | undefined,
+  glowCommuneComplete?: boolean,
+): string {
   const baseLines = SENSE_LINES[locationId] ?? DEFAULT_SENSE_LINES;
+
+  // Wilds healed behaviour remains as before
   if (locationId === 'wilds' && groveHealed) {
     const pool = [...baseLines, ...WILDS_HEALED_SENSE_LINES];
     return pick(pool);
   }
+
+  // Deeper Wilds have an alternate, softer palette after communion
+  if (locationId === 'deep_wilds' && glowCommuneComplete) {
+    const softer = [
+      'The pale motes settle around you like a hand on your shoulder. The glow recognizes you now.',
+      'The deeper wood feels quieter, kinder — the light threads seem to hum with a familiar note.',
+      'The glow moves through the roots with a steadier rhythm. The Wilds regard you as one of their own.',
+    ];
+    const pool = [...baseLines, ...softer];
+    return pick(pool);
+  }
+
   return pick(baseLines);
 }
 
@@ -160,6 +190,20 @@ export function creatureHitsPlayer(creatureName: string, damage: number): string
     `${creatureName}'s touch bites cold for ${damage} damage.`,
     `${creatureName} strikes back, and you take ${damage} damage.`,
   ]);
+}
+
+/**
+ * Returns reputation-aware flavour text for the first creature hit in an encounter.
+ * Returns null if no flavour should be added.
+ */
+export function getRepFlavourForCreatureHit(tier: ForestRepTier): string | null {
+  if (tier === 'favour' || tier === 'revered') {
+    return '— the blow feels strangely restrained.';
+  }
+  if (tier === 'hostile') {
+    return '— the strike lands with the weight of the forest\'s anger.';
+  }
+  return null;
 }
 
 /**

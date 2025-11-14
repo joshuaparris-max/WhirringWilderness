@@ -27,23 +27,13 @@ export function createInitialState(): GameState {
         step: 'speak_to_caretaker',
         status: 'not_started',
       },
-      {
-        id: 'echoes_at_the_lake',
-        name: 'Echoes at the Lake',
-        step: 'unlocked',
-        status: 'not_started',
-      },
-      {
-        id: 'hermits_glow',
-        name: "Hermit's Glow",
-        step: 'unlocked',
-        status: 'not_started',
-      },
+      // Other quests are not initialized until unlocked by game events
     ],
     flags: {
       groveHealed: false,
       lakeEchoesFound: false,
       npcMemory: {},
+      seenTutorial: false,
       reputation: { forest: 0 },
       runEnded: false,
     },
@@ -52,6 +42,7 @@ export function createInitialState(): GameState {
       wildsHerbs: 0,
       lakeWater: 0,
       mineOre: 0,
+      luminousFragments: 0,
     },
     tradeUsage: {},
   };

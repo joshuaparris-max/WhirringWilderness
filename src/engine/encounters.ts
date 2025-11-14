@@ -11,6 +11,24 @@ import { getLocation } from './locations';
 import type { LogEntry } from '../types/log';
 
 /**
+ * Forest reputation tiers that affect encounter behavior and flavour.
+ */
+export type ForestRepTier = 'hostile' | 'uneasy' | 'neutral' | 'favour' | 'revered';
+
+/**
+ * Gets the forest reputation tier from game state.
+ */
+export function getForestRepTier(state: GameState): ForestRepTier {
+  const forest = state.flags.reputation?.forest ?? 0;
+
+  if (forest >= 25) return 'revered';
+  if (forest >= 10) return 'favour';
+  if (forest <= -20) return 'hostile';
+  if (forest <= -5) return 'uneasy';
+  return 'neutral';
+}
+
+/**
  * Gets all creatures that can appear in a given location based on biome.
  */
 export function getCreaturesForLocation(locationId: LocationId): CreatureData[] {
@@ -30,6 +48,13 @@ export function getEncounterChance(state: GameState): number {
   switch (currentLocation) {
     case 'wilds':
       return groveHealed ? 0.15 : 0.3;
+    case 'deep_wilds':
+      // Deeper Wilds are slightly more dangerous — higher encounter chance
+      // If the player has communed with the glow, slightly reduce danger
+      if (flags.glowCommuneComplete) {
+        return Math.max(0.2, 0.35 - 0.05);
+      }
+      return 0.35;
     case 'lake':
     case 'mine':
       return 0.25;
@@ -69,6 +94,44 @@ export function createEncounterState(
 }
 
 /**
+ * Generates a unique ID for log entries.
+ */
+function generateLogId(): string {
+  return `log_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+}
+
+/**
+ * Creates reputation-aware flavour text for encounter start.
+ * Returns null if no flavour text should be shown (neutral reputation).
+ */
+export function createForestRepEncounterFlavor(
+  state: GameState,
+  creatureName: string,
+): LogEntry | null {
+  const tier = getForestRepTier(state);
+
+  const text =
+    tier === 'revered'
+      ? `${creatureName} pauses, recognising the quiet care you've shown the Wilds.`
+      : tier === 'favour'
+      ? `The Wilds seem to hold their breath around ${creatureName}, as if reluctant to strike you.`
+      : tier === 'uneasy'
+      ? `The forest feels tense. ${creatureName} watches you with narrowed eyes.`
+      : tier === 'hostile'
+      ? `The air bristles. ${creatureName} lunges as if the forest itself wants you gone.`
+      : null;
+
+  if (!text) return null;
+
+  return {
+    id: generateLogId(),
+    type: 'narration',
+    text,
+    timestamp: Date.now(),
+  };
+}
+
+/**
  * Creates a log entry for when an encounter begins.
  */
 export function createEncounterLog(
@@ -78,7 +141,7 @@ export function createEncounterLog(
   const here = getLocation(state.currentLocation);
 
   return {
-    id: `log_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+    id: generateLogId(),
     type: 'combat',
     text: `Something stirs in ${here.name}. ${creature.name} emerges.`,
     timestamp: Date.now(),

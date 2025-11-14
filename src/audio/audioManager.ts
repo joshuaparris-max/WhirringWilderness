@@ -40,46 +40,64 @@ export class AudioManager {
   }
 
   public async init(): Promise<void> {
-    if (!this.isSupported()) return;
+    if (!this.isSupported()) {
+      console.warn('[AudioManager] AudioContext not supported in this browser');
+      return;
+    }
     if (this.context || this.initializing) return;
 
     this.initializing = true;
-    const AudioCtx = window.AudioContext ?? window.webkitAudioContext;
-    if (!AudioCtx) {
+    try {
+      const AudioCtx = window.AudioContext ?? window.webkitAudioContext;
+      if (!AudioCtx) {
+        console.warn('[AudioManager] AudioContext constructor not available');
+        this.initializing = false;
+        return;
+      }
+
+      const context = new AudioCtx();
+      this.context = context;
+
+      this.masterGain = context.createGain();
+      this.masterGain.gain.value = 0;
+      this.masterGain.connect(context.destination);
+
+      this.ambientBus = context.createGain();
+      this.ambientBus.gain.value = 0.7;
+      this.ambientBus.connect(this.masterGain);
+
+      this.sfxGain = context.createGain();
+      this.sfxGain.gain.value = 0.9;
+      this.sfxGain.connect(this.masterGain);
+    } catch (error) {
+      console.error('[AudioManager] Failed to initialize audio context:', error);
+    } finally {
       this.initializing = false;
-      return;
     }
-
-    const context = new AudioCtx();
-    this.context = context;
-
-    this.masterGain = context.createGain();
-    this.masterGain.gain.value = 0;
-    this.masterGain.connect(context.destination);
-
-    this.ambientBus = context.createGain();
-    this.ambientBus.gain.value = 0.7;
-    this.ambientBus.connect(this.masterGain);
-
-    this.sfxGain = context.createGain();
-    this.sfxGain.gain.value = 0.9;
-    this.sfxGain.connect(this.masterGain);
-
-    this.initializing = false;
   }
 
   public async enable(): Promise<void> {
-    if (!this.isSupported()) return;
-    await this.init();
-    if (!this.context || !this.masterGain) return;
-    if (this.context.state === 'suspended') {
-      try {
-        await this.context.resume();
-      } catch {
-        // ignore
-      }
+    if (!this.isSupported()) {
+      console.warn('[AudioManager] Cannot enable audio: not supported');
+      return;
     }
-    this.setMuted(false);
+    try {
+      await this.init();
+      if (!this.context || !this.masterGain) {
+        console.warn('[AudioManager] Cannot enable audio: context not initialized');
+        return;
+      }
+      if (this.context.state === 'suspended') {
+        try {
+          await this.context.resume();
+        } catch (error) {
+          console.warn('[AudioManager] Failed to resume audio context:', error);
+        }
+      }
+      this.setMuted(false);
+    } catch (error) {
+      console.error('[AudioManager] Failed to enable audio:', error);
+    }
   }
 
   public disable(): void {
@@ -96,6 +114,30 @@ export class AudioManager {
     this.masterGain.gain.setValueAtTime(current, now);
     const target = muted ? SAFE_MIN_GAIN : 1;
     this.masterGain.gain.linearRampToValueAtTime(target, now + 0.6);
+  }
+
+  public setMasterVolume(volume: number): void {
+    if (!this.context || !this.masterGain) return;
+    const now = this.context.currentTime;
+    const target = clamp(volume, 0, 1);
+    this.masterGain.gain.cancelScheduledValues(now);
+    this.masterGain.gain.setValueAtTime(target, now);
+  }
+
+  public setMusicVolume(volume: number): void {
+    if (!this.context || !this.ambientBus) return;
+    const now = this.context.currentTime;
+    const target = clamp(volume, 0, 1);
+    this.ambientBus.gain.cancelScheduledValues(now);
+    this.ambientBus.gain.setValueAtTime(target * 0.7, now); // Base ambient volume is 0.7
+  }
+
+  public setSfxVolume(volume: number): void {
+    if (!this.context || !this.sfxGain) return;
+    const now = this.context.currentTime;
+    const target = clamp(volume, 0, 1);
+    this.sfxGain.gain.cancelScheduledValues(now);
+    this.sfxGain.gain.setValueAtTime(target * 0.9, now); // Base SFX volume is 0.9
   }
 
   public playAmbient(biome: Biome): void {
@@ -157,8 +199,8 @@ export class AudioManager {
     source.connect(this.sfxGain);
     try {
       source.start();
-    } catch {
-      // ignore if start fails
+    } catch (error) {
+      console.warn(`[AudioManager] Failed to play SFX "${type}":`, error);
     }
   }
 
@@ -206,8 +248,11 @@ export class AudioManager {
     gainNode.gain.linearRampToValueAtTime(SAFE_MIN_GAIN, now + duration);
     try {
       source.stop(now + duration + 0.1);
-    } catch {
-      // ignore
+    } catch (error) {
+      // Source may already be stopped, which is fine
+      if (error instanceof Error && !error.message.includes('already stopped')) {
+        console.warn('[AudioManager] Error stopping ambient source:', error);
+      }
     }
     this.currentAmbientSource = null;
     this.currentAmbientGain = null;
@@ -242,6 +287,13 @@ export class AudioManager {
             0.18 * Math.sin(2 * Math.PI * 180 * t) +
             0.1 * Math.sin(2 * Math.PI * 60 * t);
           break;
+        case 'deep_forest':
+          // Slightly more shimmering, higher harmonic content for mysterious glow
+          tone =
+            0.14 * Math.sin(2 * Math.PI * 260 * t) +
+            0.12 * Math.sin(2 * Math.PI * 90 * (t + 0.08)) +
+            0.06 * Math.sin(2 * Math.PI * 660 * t);
+          break;
         case 'lake':
           tone =
             0.2 * Math.sin(2 * Math.PI * 140 * t) +
@@ -274,6 +326,8 @@ export class AudioManager {
         return 600;
       case 'forest':
         return 900;
+      case 'deep_forest':
+        return 1200;
       case 'lake':
         return 750;
       case 'mine':
@@ -290,6 +344,8 @@ export class AudioManager {
         return 0.25;
       case 'forest':
         return 0.35;
+      case 'deep_forest':
+        return 0.38;
       case 'lake':
         return 0.3;
       case 'mine':

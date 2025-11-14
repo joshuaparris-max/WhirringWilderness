@@ -9,7 +9,7 @@ import type { LogEntry } from '../types/log';
 import { getLocation, getLocationDescription } from './locations';
 import type { NpcId } from '../content/npcs';
 import { npcs } from '../content/npcs';
-import { getRandomCreatureForLocation, createEncounterState, createEncounterLog, isInEncounter, getEncounterChance } from './encounters';
+import { getRandomCreatureForLocation, createEncounterState, createEncounterLog, isInEncounter, getEncounterChance, getForestRepTier, createForestRepEncounterFlavor } from './encounters';
 import { creatures } from '../content/creatures';
 import { applyXp } from './progression';
 import { activateQuestIfNeeded, setQuestStep, setQuestStatus, getQuestState } from './quests';
@@ -22,6 +22,7 @@ import {
   creatureHitsPlayer,
   escapeSuccess,
   escapeFail,
+  getRepFlavourForCreatureHit,
 } from './text';
 import { audioManager } from '../audio/audioManager';
 
@@ -44,7 +45,8 @@ function generateLogId(): string {
  * Helper to potentially trigger an encounter after movement or gathering.
  */
 function maybeTriggerEncounter(state: GameState, logEntries: LogEntry[]): { state: GameState; logEntries: LogEntry[] } {
-  if (isInEncounter(state)) {
+  // Don't trigger encounters if run has ended or already in encounter
+  if (isInEncounter(state) || state.flags.runEnded) {
     return { state, logEntries };
   }
   const creature = getRandomCreatureForLocation(state.currentLocation);
@@ -52,16 +54,42 @@ function maybeTriggerEncounter(state: GameState, logEntries: LogEntry[]): { stat
     return { state, logEntries };
   }
 
-  const chance = getEncounterChance(state);
+  // Apply reputation-based encounter chance modifiers
+  const tier = getForestRepTier(state);
+  let chance = getEncounterChance(state);
+
+  if (tier === 'hostile') {
+    chance = Math.min(0.6, chance + 0.15);
+  } else if (tier === 'uneasy') {
+    chance = Math.min(0.5, chance + 0.05);
+  }
+
   if (Math.random() >= chance) {
     return { state, logEntries };
   }
 
+  // Check if forest spares the player (high reputation)
+  const forest = state.flags.reputation?.forest ?? 0;
+  if ((tier === 'favour' || tier === 'revered') && Math.random() < Math.min(0.25, forest / 100)) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: 'Something in the Wilds shifts. Whatever was stalking you lets you pass this time.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  // Create encounter with reputation flavour
   const newState = createEncounterState(state, creature);
+  const flavor = createForestRepEncounterFlavor(state, creature.name);
   const encounterLog = createEncounterLog(state, creature);
+
+  const logsToAdd = flavor ? [flavor, encounterLog] : [encounterLog];
+
   return {
     state: newState,
-    logEntries: [...logEntries, encounterLog],
+    logEntries: [...logEntries, ...logsToAdd],
   };
 }
 
@@ -135,6 +163,17 @@ export function addItemToInventory(
  * Validates that the destination is reachable from the current location.
  */
 export function moveTo(state: GameState, destination: LocationId): ActionResult {
+  // Don't allow movement if run has ended
+  if (state.flags.runEnded) {
+    const logEntry: LogEntry = {
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended. You cannot move.',
+      timestamp: Date.now(),
+    };
+    return { state, logEntries: [logEntry] };
+  }
+
   const currentLocation = getLocation(state.currentLocation);
   const destinationLocation = getLocation(destination);
 
@@ -159,27 +198,56 @@ export function moveTo(state: GameState, destination: LocationId): ActionResult 
     currentLocation: destination,
   };
 
-  // Reset gather limits when returning to Sanctum (start of a new "run")
-  if (destination === 'sanctum') {
-    newState = {
-      ...newState,
-      gather: {
-        wildsHerbs: 0,
-        lakeWater: 0,
-        mineOre: 0,
-      },
-    };
-  }
+  // Note: Gather limits are NOT reset when returning to Sanctum.
+  // They only reset when explicitly starting a new run via handleNewRun.
 
   const description = getLocationDescription(newState);
-  const logEntry: LogEntry = {
+  const moveLog: LogEntry = {
     id: generateLogId(),
     type: 'narration',
     text: `You move to ${destinationLocation.name}. ${description}`,
     timestamp: Date.now(),
   };
 
-  const result = maybeTriggerEncounter(newState, [logEntry]);
+  const logEntries: LogEntry[] = [moveLog];
+
+  // If entering the Deeper Wilds, progress the Hermit's Glow quest if appropriate
+  if (destination === 'deep_wilds') {
+    const hermitsQuest = getQuestState(newState, 'hermits_glow');
+    if (hermitsQuest && hermitsQuest.status === 'active' && hermitsQuest.step === 'unlocked') {
+      // Player has unlocked the Hermit's Glow and now finds the deeper lights
+      newState = setQuestStep(newState, 'hermits_glow', 'found_glow');
+
+      logEntries.push({
+        id: generateLogId(),
+        type: 'quest',
+        text: "Quest updated: Hermit's Glow (you have found the glow).",
+        timestamp: Date.now(),
+      });
+
+      // Small forest regard bump for investigation
+      const currentRep = newState.flags.reputation ?? { forest: 0 };
+      newState = {
+        ...newState,
+        flags: {
+          ...newState.flags,
+          reputation: {
+            ...currentRep,
+            forest: currentRep.forest + 2,
+          },
+        },
+      };
+
+      logEntries.push({
+        id: generateLogId(),
+        type: 'system',
+        text: 'Forest regard increases slightly. (+2)',
+        timestamp: Date.now(),
+      });
+    }
+  }
+
+  const result = maybeTriggerEncounter(newState, logEntries);
   audioManager.playSFX('move');
   audioManager.playAmbient(destinationLocation.biome);
   return result;
@@ -189,11 +257,22 @@ export function moveTo(state: GameState, destination: LocationId): ActionResult 
  * Performs a sense action, revealing sensory information about the current location.
  */
 export function sense(state: GameState): ActionResult {
+  // Don't allow sense if run has ended
+  if (state.flags.runEnded) {
+    const logEntry: LogEntry = {
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    };
+    return { state, logEntries: [logEntry] };
+  }
+
   const logEntries: LogEntry[] = [
     {
       id: generateLogId(),
       type: 'narration',
-      text: senseAt(state.currentLocation, state.flags.groveHealed),
+      text: senseAt(state.currentLocation, state.flags.groveHealed, state.flags.glowCommuneComplete),
       timestamp: Date.now(),
     },
   ];
@@ -238,6 +317,17 @@ export function sense(state: GameState): ActionResult {
  * Performs a gather action, collecting resources from the current location.
  */
 export function gather(state: GameState): ActionResult {
+  // Don't allow gather if run has ended
+  if (state.flags.runEnded) {
+    const logEntry: LogEntry = {
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    };
+    return { state, logEntries: [logEntry] };
+  }
+
   const MAX_HERBS = 5;
   const MAX_WATER = 3;
   const MAX_ORE = 4;
@@ -253,6 +343,17 @@ export function gather(state: GameState): ActionResult {
         itemId = 'forest_herb';
       }
       break;
+    case 'deep_wilds': {
+      // Special gatherable: luminous fragments — rare and limited per run
+      const MAX_LUMINOUS = 2;
+      // Note: gather.luminousFragments may be undefined in older save states, default to 0
+      if ((state.gather.luminousFragments ?? 0) >= MAX_LUMINOUS) {
+        overrideText = 'The pale light here slips away. There are no more fragments to take.';
+      } else {
+        itemId = 'luminous_fragment';
+      }
+      break;
+    }
     case 'lake':
       if (state.gather.lakeWater >= MAX_WATER) {
         overrideText = 'The water lies still. Best not to take more right now.';
@@ -299,10 +400,47 @@ export function gather(state: GameState): ActionResult {
           mineOre: newState.gather.mineOre + 1,
         },
       };
+    } else if (itemId === 'luminous_fragment') {
+      newState = {
+        ...newState,
+        gather: {
+          ...newState.gather,
+          luminousFragments: (newState.gather.luminousFragments ?? 0) + 1,
+        },
+      };
     }
   }
 
-  const gatherText = overrideText ?? gatherAt(state.currentLocation);
+  // Check if player has enough ingredients for ritual and update quest step
+  const healQuest = getQuestState(newState, 'heal_the_grove');
+  if (healQuest && healQuest.status === 'active' && healQuest.step === 'gather_ingredients') {
+    const herbs = countItem(newState, 'forest_herb');
+    const water = countItem(newState, 'lake_water');
+    if (herbs >= 3 && water >= 1) {
+      newState = setQuestStep(newState, 'heal_the_grove', 'perform_ritual');
+    }
+  }
+
+  // Add gather progress to log
+  let gatherText = overrideText ?? gatherAt(state.currentLocation);
+  if (!overrideText && itemId) {
+    const MAX_HERBS = 5;
+    const MAX_WATER = 3;
+    const MAX_ORE = 4;
+    let progress = '';
+    if (itemId === 'forest_herb') {
+      progress = ` (${newState.gather.wildsHerbs}/${MAX_HERBS} gathered)`;
+    } else if (itemId === 'lake_water') {
+      progress = ` (${newState.gather.lakeWater}/${MAX_WATER} gathered)`;
+    } else if (itemId === 'raw_ore') {
+      progress = ` (${newState.gather.mineOre}/${MAX_ORE} gathered)`;
+    } else if (itemId === 'luminous_fragment') {
+      const MAX_LUM = 2;
+      progress = ` (${newState.gather.luminousFragments ?? 0}/${MAX_LUM} gathered)`;
+    }
+    gatherText = gatherText + progress;
+  }
+
   const logEntry: LogEntry = {
     id: generateLogId(),
     type: 'narration',
@@ -319,6 +457,17 @@ export function gather(state: GameState): ActionResult {
  * Performs a talk action, initiating dialogue with an NPC.
  */
 export function talkTo(state: GameState, npcId: NpcId): ActionResult {
+  // Don't allow talking if run has ended
+  if (state.flags.runEnded) {
+    const logEntry: LogEntry = {
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    };
+    return { state, logEntries: [logEntry] };
+  }
+
   const npc = npcs[npcId];
 
   if (!npc) {
@@ -623,6 +772,107 @@ export function talkTo(state: GameState, npcId: NpcId): ActionResult {
         return { state: newState, logEntries };
       }
     }
+
+    // Allow the Hermit to accept a luminous fragment if the player has one
+    const hermitFragmentQuest = getQuestState(newState, 'hermit_fragment');
+    const hasFragment = countItem(newState, 'luminous_fragment') > 0;
+    if (hasFragment && (!hermitFragmentQuest || hermitFragmentQuest.status === 'not_started')) {
+      // Offer the quest: deliver the fragment
+      logEntries.push(
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "You found that pale shard? Give it to me — I would see what it contains.",`,
+          timestamp: Date.now(),
+        },
+        {
+          id: generateLogId(),
+          type: 'quest',
+          text: 'Quest started: Hermit\'s Gift (deliver a luminous fragment).',
+          timestamp: Date.now(),
+        },
+      );
+
+      let updatedState = activateQuestIfNeeded(newState, 'hermit_fragment');
+      updatedState = setQuestStatus(updatedState, 'hermit_fragment', 'active');
+      updatedState = setQuestStep(updatedState, 'hermit_fragment', 'unlocked');
+
+      const updatedNpcMemory = questMemoryUpdate();
+      updatedState = {
+        ...updatedState,
+        flags: {
+          ...updatedState.flags,
+          npcMemory: updatedNpcMemory,
+        },
+      };
+
+      return { state: updatedState, logEntries };
+    }
+
+    // If Hermit's Glow is completed, Hermit offers a small acknowledgement
+    if (hermitsGlowQuest && hermitsGlowQuest.status === 'completed') {
+      logEntries.push({
+        id: generateLogId(),
+        type: 'narration',
+        text: `${npc.name} studies you quietly. "The Glow has taken your measure. We'll see what that means for the rest of us."`,
+        timestamp: Date.now(),
+      });
+    }
+
+    // If quest is active and player gives fragment, consume it and complete the quest
+    if (hermitFragmentQuest && hermitFragmentQuest.status === 'active' && hasFragment) {
+      logEntries.push(
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: `${npc.name}: "Ah. Let me see that..."`,
+          timestamp: Date.now(),
+        },
+        {
+          id: generateLogId(),
+          type: 'narration',
+          text: 'The Hermit studies the fragment and tucks it away with a small, grateful nod.',
+          timestamp: Date.now(),
+        },
+      );
+
+      let updatedState = removeItems(newState, 'luminous_fragment', 1);
+      updatedState = setQuestStep(updatedState, 'hermit_fragment', 'delivered');
+      updatedState = setQuestStatus(updatedState, 'hermit_fragment', 'completed');
+
+      // Reward: small XP and reputation bump
+      const xpResult = applyXp(updatedState, 5);
+      updatedState = xpResult.state;
+      const currentRep = updatedState.flags.reputation ?? { forest: 0 };
+      updatedState = {
+        ...updatedState,
+        flags: {
+          ...updatedState.flags,
+          reputation: {
+            ...currentRep,
+            forest: currentRep.forest + 2,
+          },
+        },
+      };
+
+      logEntries.push({
+        id: generateLogId(),
+        type: 'system',
+        text: 'The Hermit thanks you. You gain 5 XP and forest regard increases. (+2)',
+        timestamp: Date.now(),
+      });
+
+      const updatedNpcMemory = questMemoryUpdate();
+      updatedState = {
+        ...updatedState,
+        flags: {
+          ...updatedState.flags,
+          npcMemory: updatedNpcMemory,
+        },
+      };
+
+      return { state: updatedState, logEntries };
+    }
   }
 
   // Default / other NPCs, with a special case for the Ranger
@@ -760,10 +1010,38 @@ export function attack(state: GameState): ActionResult {
       });
     }
 
+    // Special drop: will-o'-wisp leaves a faint luminous fragment
+    try {
+      if (encounter.creatureId === 'will_o_wisp') {
+        newState = addItemToInventory(newState, 'luminous_fragment', 1);
+        logEntries.push({
+          id: generateLogId(),
+          type: 'narration',
+          text: 'From the fading light you gather a pale shard — a luminous fragment.',
+          timestamp: Date.now(),
+        });
+  audioManager.playSFX('gather');
+      }
+    } catch (e) {
+      // defensive: do not break combat resolution on unexpected errors
+    }
+
     return { state: newState, logEntries };
   }
 
   const playerHpAfter = Math.max(0, newState.player.hp - creatureDamage);
+
+  // Add reputation flavour on first hit if not already applied
+  let hitText = creatureHitsPlayer(creature.name, creatureDamage);
+  let hasRepFlavourApplied = encounter.hasRepFlavourApplied ?? false;
+  if (!hasRepFlavourApplied && creatureDamage > 0) {
+    const tier = getForestRepTier(state);
+    const repFlavour = getRepFlavourForCreatureHit(tier);
+    if (repFlavour) {
+      hitText = `${hitText} ${repFlavour}`;
+      hasRepFlavourApplied = true;
+    }
+  }
 
   newState = {
     ...newState,
@@ -774,13 +1052,14 @@ export function attack(state: GameState): ActionResult {
     currentEncounter: {
       ...encounter,
       hp: creatureHpAfter,
+      hasRepFlavourApplied,
     },
   };
 
   logEntries.push({
     id: generateLogId(),
     type: 'combat',
-    text: creatureHitsPlayer(creature.name, creatureDamage),
+    text: hitText,
     timestamp: Date.now(),
   });
   if (creatureDamage > 0) {
@@ -914,6 +1193,17 @@ export function attemptEscape(state: GameState): ActionResult {
 export function performGroveRitual(state: GameState): ActionResult {
   const logEntries: LogEntry[] = [];
 
+  // Don't allow ritual if run has ended
+  if (state.flags.runEnded) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
   // Must be in the Wilds
   if (state.currentLocation !== 'wilds') {
     logEntries.push({
@@ -1038,10 +1328,127 @@ export function performGroveRitual(state: GameState): ActionResult {
 }
 
 /**
+ * Performs the Deeper Wilds communion set-piece for Hermit's Glow.
+ */
+export function communeWithGlow(state: GameState): ActionResult {
+  const logEntries: LogEntry[] = [];
+
+  // Don't allow if run has ended
+  if (state.flags.runEnded) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  // Must be in the Deeper Wilds
+  if (state.currentLocation !== 'deep_wilds') {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'The Glow is not here.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  const glowQuest = getQuestState(state, 'hermits_glow');
+  if (!glowQuest || glowQuest.status !== 'active') {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: 'The strange light flickers at the edge of your vision, but it does not yet answer you.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  if (glowQuest.step !== 'found_glow' && glowQuest.step !== 'commune_with_glow') {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'narration',
+      text: 'The glow pulses faintly, waiting for something you have not yet done.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
+
+  let newState = state;
+
+  // First time: play the full set-piece and advance step
+  if (glowQuest.step === 'found_glow') {
+    newState = setQuestStep(newState, 'hermits_glow', 'commune_with_glow');
+    logEntries.push(
+      {
+        id: generateLogId(),
+        type: 'narration',
+        text: 'You step into the circle of pale motes. They rise, slow and deliberate, like breath drawn in.',
+        timestamp: Date.now(),
+      },
+      {
+        id: generateLogId(),
+        type: 'narration',
+        text: 'For a moment you feel the Wilds looking through you, weighing every choice you have made here.',
+        timestamp: Date.now(),
+      },
+    );
+  }
+
+  // Complete the communion: reward reputation and mark quest complete
+  const currentRep = newState.flags.reputation ?? { forest: 0 };
+  const newForestRep = currentRep.forest + 8;
+  newState = {
+    ...newState,
+    flags: {
+      ...newState.flags,
+      reputation: { ...currentRep, forest: newForestRep },
+      glowCommuneComplete: true,
+    },
+  };
+
+  newState = setQuestStatus(newState, 'hermits_glow', 'completed');
+  newState = setQuestStep(newState, 'hermits_glow', 'completed');
+
+  logEntries.push(
+    {
+      id: generateLogId(),
+      type: 'narration',
+      text: 'The light sinks into the roots and into you. The forest no longer watches from a distance — it knows you now.',
+      timestamp: Date.now(),
+    },
+    {
+      id: generateLogId(),
+      type: 'narration',
+      text: 'You sense a new steadiness in the Wilds, and a quiet thread binding you back to the Hermit.',
+      timestamp: Date.now(),
+    },
+  );
+
+  audioManager.playRitualSwell();
+  audioManager.playAmbient(getLocation('deep_wilds').biome);
+
+  return { state: newState, logEntries };
+}
+
+/**
  * Performs a trade at the Trader's Post.
  */
 export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
   const logEntries: LogEntry[] = [];
+
+  // Don't allow trading if run has ended
+  if (state.flags.runEnded) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
 
   // Must be at Trader's Post
   if (state.currentLocation !== 'trader_post') {
@@ -1102,6 +1509,17 @@ export function performTrade(state: GameState, tradeId: TradeId): ActionResult {
  */
 export function consumeHealingTonic(state: GameState): ActionResult {
   const logEntries: LogEntry[] = [];
+
+  // Don't allow using items if run has ended
+  if (state.flags.runEnded) {
+    logEntries.push({
+      id: generateLogId(),
+      type: 'system',
+      text: 'Your journey in this run has ended.',
+      timestamp: Date.now(),
+    });
+    return { state, logEntries };
+  }
 
   // Check if player has a healing tonic
   const tonicCount = countItem(state, 'healing_tonic');

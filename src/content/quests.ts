@@ -6,7 +6,11 @@
 
 import type { QuestDefinition } from '../types/content';
 
-export type QuestId = 'heal_the_grove' | 'echoes_at_the_lake' | 'hermits_glow';
+export type QuestId =
+  | 'heal_the_grove'
+  | 'echoes_at_the_lake'
+  | 'hermits_glow'
+  | 'hermit_fragment';
 
 export const QUESTS: Record<QuestId, QuestDefinition> = {
   heal_the_grove: {
@@ -65,13 +69,29 @@ export const QUESTS: Record<QuestId, QuestDefinition> = {
     name: "Hermit's Glow",
     description: 'The Hermit speaks of lights deeper in the Wilds. Something waits beyond the newly quiet grove.',
     steps: [
+      { id: 'unlocked', summary: 'The Hermit hints at strange lights and expects you may seek them soon.' },
+      { id: 'seek_glow', summary: 'Seek the pale lights deeper in the Wilds.' },
+      { id: 'found_glow', summary: 'You have found the deeper glow.' },
+      { id: 'commune_with_glow', summary: 'Reach for the Glow and commune with it.' },
+      { id: 'completed', summary: 'Those lights will be met another day.' },
+    ],
+  },
+  hermit_fragment: {
+    id: 'hermit_fragment',
+    name: "Hermit's Gift",
+    description: 'The Hermit is interested in a pale shard of light you may find in the deeper Wilds.',
+    steps: [
       {
         id: 'unlocked',
-        summary: 'The Hermit hints at strange lights and expects you may seek them soon.',
+        summary: 'You have something the Hermit would like to see.',
+      },
+      {
+        id: 'delivered',
+        summary: 'You gave the Hermit a luminous fragment.',
       },
       {
         id: 'completed',
-        summary: 'Those lights will be met another day.',
+        summary: 'The Hermit thanks you and the Wilds seem kinder for it.',
       },
     ],
   },
