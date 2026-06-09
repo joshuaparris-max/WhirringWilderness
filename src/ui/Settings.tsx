@@ -84,7 +84,7 @@ export function Settings({ isOpen, onClose, lastRunSummary, onResetTutorial }: S
 
   const lastRunSummaryText = lastRunSummary
     ? [
-        `Finished: ${new Date(lastRunSummary.finishedAt).toLocaleString()}`,
+        `Finished: ${new Date(lastRunSummary.finishedAt ?? Date.now()).toLocaleString()}`,
         `Level: ${lastRunSummary.level}`,
         `XP earned: ${lastRunSummary.xp}`,
         `Forest reputation: ${lastRunSummary.forestReputation}`,
