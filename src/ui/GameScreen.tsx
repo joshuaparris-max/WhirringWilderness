@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createInitialState, appendLog } from '../engine/gameState';
-import { moveTo, sense, gather, talkTo, attack, attemptEscape, performGroveRitual, performTrade, consumeHealingTonic, communeWithGlow } from '../engine/actions';
+import { moveTo, sense, gather, talkTo, attack, defend, attemptEscape, performGroveRitual, performTrade, consumeHealingTonic, communeWithGlow } from '../engine/actions';
 import { getLocation, getAvailableExitsForState } from '../engine/locations';
 import { items } from '../content/items';
 import { npcs, type NpcId } from '../content/npcs';
@@ -13,10 +13,11 @@ import { RANGER_TRADES, type TradeId } from '../content/shop';
 import { canAffordTrade, canUseTrade, getEffectiveTradeLimit } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
-import { loadState, saveState, clearState } from '../engine/persistence';
+import { loadState, saveState, clearState, loadLastRunSummary, saveLastRunSummary } from '../engine/persistence';
 import { audioManager } from '../audio/audioManager';
 import { Settings } from './Settings';
 import { getLocationArtKey } from '../content/art';
+import type { RunSummary } from '../types/runSummary';
 
 function isQuestId(id: string): id is QuestId {
   return Object.prototype.hasOwnProperty.call(QUESTS, id);
@@ -32,7 +33,12 @@ export function GameScreen() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [lastNpcId, setLastNpcId] = useState<string | null>(null);
   const [hoveredItemDesc, setHoveredItemDesc] = useState<string | null>(null);
+  const [infoTab, setInfoTab] = useState<'journal' | 'recap'>('journal');
+  const [lastRunSummary, setLastRunSummary] = useState<RunSummary | null>(() =>
+    loadLastRunSummary(),
+  );
   const gameStateRef = useRef(gameState);
+  const hasSavedSummaryRef = useRef(false);
   
   // Keep ref in sync with state
   useEffect(() => {
@@ -45,6 +51,17 @@ export function GameScreen() {
 
   // Central UI lock: disables interactions when in encounter, run ended, or tutorial visible
   const uiLocked = isInEncounter(gameState) || (gameState.flags.runEnded ?? false) || showTutorial;
+  const reduceMotion = gameState.flags.reduceMotion ?? false;
+
+  function handleToggleReduceMotion() {
+    setGameState((prev) => ({
+      ...prev,
+      flags: {
+        ...prev.flags,
+        reduceMotion: !(prev.flags.reduceMotion ?? false),
+      },
+    }));
+  }
 
   const handleLogScroll: React.UIEventHandler<HTMLDivElement> = (event) => {
     const target = event.currentTarget;
@@ -205,6 +222,15 @@ export function GameScreen() {
     setGameState(newState);
   };
 
+  const handleDefend = () => {
+    const result = defend(gameState);
+    let newState = result.state;
+    for (const entry of result.logEntries) {
+      newState = appendLog(newState, entry);
+    }
+    setGameState(newState);
+  };
+
   const handleEscape = () => {
     const result = attemptEscape(gameState);
     let newState = result.state;
@@ -241,6 +267,30 @@ export function GameScreen() {
     setGameState(newState);
   };
 
+  function buildRunSummary(state: GameState): RunSummary {
+    const forestReputation = state.flags.reputation?.forest ?? 0;
+    const groveHealedFlag = !!state.flags.groveHealed;
+    const itemsCarried = state.player.inventory.reduce(
+      (sum, item) => sum + (item.quantity ?? 1),
+      0,
+    );
+    let deathCause = 'You left the Wilds behind.';
+    if (state.flags.runEnded && state.player.hp <= 0) {
+      const loc = getLocation(state.currentLocation);
+      deathCause = `You fell in the ${loc.name}.`;
+    }
+    return {
+      finishedAt: Date.now(),
+      level: state.player.level,
+      xp: state.player.xp,
+      forestReputation,
+      groveHealed: groveHealedFlag,
+      location: state.currentLocation,
+      itemsCarried,
+      deathCause,
+    };
+  }
+
   useEffect(() => {
     saveState(gameState);
   }, [gameState]);
@@ -250,6 +300,13 @@ export function GameScreen() {
       'Start a new run? Your current progress in the Wilds will be lost.',
     );
     if (!confirmReset) return;
+
+    // Save a summary of the current run before wiping state
+    if (!runEnded) {
+      const summary = buildRunSummary(gameState);
+      saveLastRunSummary(summary);
+      setLastRunSummary(summary);
+    }
 
     audioManager.fadeOutAmbient();
     const fresh = createInitialState();
@@ -326,14 +383,14 @@ export function GameScreen() {
     switch (type) {
       case 'narration':
       case 'choice':
-        return { label: 'Story', icon: '🌲', className: 'ww-log-tag-narration' };
+        return { label: 'Story', icon: 'ST', className: 'ww-log-tag-narration' };
       case 'combat':
-        return { label: 'Combat', icon: '⚔', className: 'ww-log-tag-combat' };
+        return { label: 'Combat', icon: 'CB', className: 'ww-log-tag-combat' };
       case 'quest':
-        return { label: 'Quest', icon: '✦', className: 'ww-log-tag-quest' };
+        return { label: 'Quest', icon: 'QT', className: 'ww-log-tag-quest' };
       case 'system':
       default:
-        return { label: 'System', icon: '⚙', className: 'ww-log-tag-system' };
+        return { label: 'System', icon: 'SY', className: 'ww-log-tag-system' };
     }
   }
 
@@ -378,13 +435,27 @@ export function GameScreen() {
     }
   }, [runEnded]);
 
+  useEffect(() => {
+    if (runEnded && !hasSavedSummaryRef.current) {
+      const summary = buildRunSummary(gameState);
+      saveLastRunSummary(summary);
+      setLastRunSummary(summary);
+      hasSavedSummaryRef.current = true;
+    }
+    if (!runEnded) {
+      hasSavedSummaryRef.current = false;
+    }
+  }, [runEnded, gameState]);
+
   return (
-    <div className="ww-root">
-      <header className="ww-header">
+    <div className="ww-root" data-reduce-motion={reduceMotion ? 'true' : 'false'}>
+      <a href="#ww-main" className="ww-skip-link">Skip to main content</a>
+      <a href="#ww-log" className="ww-skip-link">Skip to story log</a>
+      <header className="ww-header" role="banner">
         <h1 className="ww-header-title">{currentLocation.name}</h1>
         <p className="ww-header-stats">
           Level {gameState.player.level}{' '}
-          — XP {gameState.player.xp}
+          - XP {gameState.player.xp}
           {nextLevelXp !== null ? ` / ${nextLevelXp}` : ' (max)'}
         </p>
         <p className="ww-header-stats">
@@ -394,7 +465,7 @@ export function GameScreen() {
           <button
             type="button"
             onClick={() => setSettingsOpen(true)}
-            className="ww-button ww-button-small ww-button-secondary"
+            className="ww-button ww-button-small ww-button-secondary ww-header-button"
             aria-label="Open settings"
             title="Settings (Esc to close)"
           >
@@ -402,16 +473,29 @@ export function GameScreen() {
           </button>
           <button
             type="button"
+            onClick={handleToggleReduceMotion}
+            className="ww-button ww-button-small ww-button-secondary ww-header-button"
+            aria-pressed={reduceMotion}
+          >
+            {reduceMotion ? 'Motion: Reduced' : 'Motion: Normal'}
+          </button>
+          <button
+            type="button"
             onClick={handleNewRun}
-            className="ww-button ww-button-small ww-button-secondary"
+            className="ww-button ww-button-small ww-button-secondary ww-header-button"
           >
             New Run
           </button>
         </div>
       </header>
 
-      <div className="ww-main">
-        <div className="ww-column ww-primary">
+      <main
+        id="ww-main"
+        className="ww-main"
+        role="main"
+        aria-label="Whispering Wilds main view"
+      >
+        <div className="ww-column ww-primary" role="region" aria-label="Journal, story log, actions">
           {currentCreature && (
             <section className="ww-panel ww-encounter">
               <h2 className="ww-panel-title">Encounter</h2>
@@ -437,9 +521,18 @@ export function GameScreen() {
             </section>
           )}
 
-          <section className="ww-panel ww-log-panel">
+          <section className="ww-panel ww-log-panel" aria-label="Story and system log">
             <h2 className="ww-panel-title">Log</h2>
-            <div className="ww-log" ref={logRef} onScroll={handleLogScroll}>
+            <div
+              id="ww-log"
+              className="ww-log"
+              ref={logRef}
+              onScroll={handleLogScroll}
+              role="log"
+              aria-live="polite"
+              aria-relevant="additions"
+              aria-atomic="false"
+            >
               {gameState.log.length === 0 ? (
                 <p className="ww-log-empty">The log is empty.</p>
               ) : (
@@ -476,6 +569,13 @@ export function GameScreen() {
                     title="Attack (Space/Enter)"
                   >
                     Attack
+                  </button>
+                  <button
+                    onClick={handleDefend}
+                    disabled={!inEncounter}
+                    className="ww-button ww-button-secondary"
+                  >
+                    Defend
                   </button>
                   <button
                     onClick={handleEscape}
@@ -547,22 +647,6 @@ export function GameScreen() {
                   Reach for the Glow
                 </button>
               )}
-              {canCommuneWithGlow && (
-                <button
-                  onClick={() => {
-                    const result = communeWithGlow(gameState);
-                    let newState = result.state;
-                    for (const entry of result.logEntries) {
-                      newState = appendLog(newState, entry);
-                    }
-                    setGameState(newState);
-                  }}
-                  disabled={runEnded}
-                  className="ww-button ww-button-success"
-                >
-                  Reach for the Glow
-                </button>
-              )}
             </div>
             {gameState.currentLocation === 'wilds' && !ritualAvailable && groveAtPeace && (
               <p className="ww-ritual-note">The grove is already at peace.</p>
@@ -592,7 +676,7 @@ export function GameScreen() {
           )}
         </div>
 
-        <aside className="ww-column ww-secondary">
+        <aside className="ww-column ww-secondary" aria-label="Inventory and character status">
           <section className={`ww-panel ww-art-panel ww-art-${artKey}`}>
             <div className="ww-art-overlay">
               <div className="ww-art-location-name">{currentLocation.name}</div>
@@ -626,7 +710,7 @@ export function GameScreen() {
                       onMouseEnter={() => setHoveredItemDesc(itemDescription || null)}
                       onMouseLeave={() => setHoveredItemDesc(null)}
                     >
-                      {itemName} ×{item.quantity}
+                      {itemName} x{item.quantity}
                     </p>
                   );
                 })}
@@ -639,74 +723,168 @@ export function GameScreen() {
             )}
           </section>
 
-          <section className="ww-panel ww-journal">
-            <h2 className="ww-panel-title">Journal</h2>
-            {(() => {
-              const activeQuests = gameState.quests.filter((quest) => quest.status === 'active');
-              const fallbackQuests =
-                activeQuests.length > 0
-                  ? activeQuests
-                  : (() => {
-                      const completed = gameState.quests.filter((quest) => quest.status === 'completed');
-                      if (completed.length > 0) {
-                        return [completed[completed.length - 1]];
-                      }
-                      return gameState.quests.slice(0, 1);
-                    })();
+          <section className="ww-panel ww-journal" aria-label="Quest journal and story recap">
+            <div className="ww-tabs" role="tablist" aria-label="Information tabs">
+              <button
+                role="tab"
+                id="ww-tab-journal"
+                aria-selected={infoTab === 'journal'}
+                aria-controls="ww-tabpanel-journal"
+                tabIndex={infoTab === 'journal' ? 0 : -1}
+                className={`ww-tab ${infoTab === 'journal' ? 'ww-tab-active' : ''}`}
+                onClick={() => setInfoTab('journal')}
+                type="button"
+              >
+                Journal
+              </button>
+              <button
+                role="tab"
+                id="ww-tab-recap"
+                aria-selected={infoTab === 'recap'}
+                aria-controls="ww-tabpanel-recap"
+                tabIndex={infoTab === 'recap' ? 0 : -1}
+                className={`ww-tab ${infoTab === 'recap' ? 'ww-tab-active' : ''}`}
+                onClick={() => setInfoTab('recap')}
+                type="button"
+              >
+                Story Recap
+              </button>
+            </div>
+            {infoTab === 'journal' && (
+              <div
+                id="ww-tabpanel-journal"
+                role="tabpanel"
+                aria-labelledby="ww-tab-journal"
+                className="ww-journal-content"
+              >
+                {(() => {
+                  const activeQuests = gameState.quests.filter((quest) => quest.status === 'active');
+                  const fallbackQuests =
+                    activeQuests.length > 0
+                      ? activeQuests
+                      : (() => {
+                          const completed = gameState.quests.filter((quest) => quest.status === 'completed');
+                          if (completed.length > 0) {
+                            return [completed[completed.length - 1]];
+                          }
+                          return gameState.quests.slice(0, 1);
+                        })();
 
-              const prioritizedQuests = fallbackQuests.filter(
-                (quest): quest is (typeof gameState.quests)[number] => quest !== undefined,
-              );
+                  const prioritizedQuests = fallbackQuests.filter(
+                    (quest): quest is (typeof gameState.quests)[number] => quest !== undefined,
+                  );
 
-              const journalEntries: Array<{
-                quest: (typeof gameState.quests)[number];
-                definition: (typeof QUESTS)[keyof typeof QUESTS];
-                stepSummary: string;
-              }> = [];
+                  const hermitsGlowQuest = gameState.quests.find((q) => q.id === 'hermits_glow');
+                  const shouldHintHermitGlow =
+                    hermitsGlowQuest?.status !== 'active' &&
+                    hermitsGlowQuest?.status !== 'completed';
 
-              prioritizedQuests.forEach((quest) => {
-                if (!isQuestId(quest.id)) {
-                  return;
-                }
-                const definition = QUESTS[quest.id];
-                const stepSummary =
-                  definition.steps.find((step) => step.id === quest.step)?.summary ?? '';
-                journalEntries.push({ quest, definition, stepSummary });
-              });
+                  const journalEntries: Array<{
+                    quest: (typeof gameState.quests)[number];
+                    definition: (typeof QUESTS)[keyof typeof QUESTS];
+                    stepSummary: string;
+                  }> = [];
 
-              if (journalEntries.length === 0) {
-                return <div className="ww-journal-content">No active quests.</div>;
-              }
+                  prioritizedQuests.forEach((quest) => {
+                    if (!isQuestId(quest.id)) {
+                      return;
+                    }
+                    const definition = QUESTS[quest.id];
+                    const stepSummary =
+                      definition.steps.find((step) => step.id === quest.step)?.summary ?? '';
+                    journalEntries.push({ quest, definition, stepSummary });
+                  });
 
-              return journalEntries.map(({ quest, definition, stepSummary }) => {
-                // Calculate progress for heal_the_grove quest
-                let progressText = '';
-                if (quest.id === 'heal_the_grove' && quest.status === 'active') {
-                  if (quest.step === 'gather_ingredients' || quest.step === 'perform_ritual') {
-                    const herbs = gameState.player.inventory.find(
-                      (item) => item.itemId === 'forest_herb',
-                    )?.quantity ?? 0;
-                    const water = gameState.player.inventory.find(
-                      (item) => item.itemId === 'lake_water',
-                    )?.quantity ?? 0;
-                    progressText = ` (Herbs: ${herbs}/3, Water: ${water}/1)`;
+                  if (journalEntries.length === 0) {
+                    return <div className="ww-journal-content">No active quests.</div>;
                   }
-                }
 
-                return (
-                  <div key={quest.id} className="ww-journal-content">
-                    <div>
-                      <span className="ww-journal-quest-name">{definition.name}</span>{' '}
-                      <span className="ww-journal-quest-status">({quest.status})</span>
-                      {progressText && (
-                        <span className="ww-journal-progress">{progressText}</span>
-                      )}
-                    </div>
-                    {stepSummary && <div className="ww-journal-step">{stepSummary}</div>}
+                  return journalEntries.map(({ quest, definition, stepSummary }) => {
+                    // Calculate progress for heal_the_grove quest
+                    let progressText = '';
+                    if (quest.id === 'heal_the_grove' && quest.status === 'active') {
+                      if (quest.step === 'gather_ingredients' || quest.step === 'perform_ritual') {
+                        const herbs = gameState.player.inventory.find(
+                          (item) => item.itemId === 'forest_herb',
+                        )?.quantity ?? 0;
+                        const water = gameState.player.inventory.find(
+                          (item) => item.itemId === 'lake_water',
+                        )?.quantity ?? 0;
+                        progressText = ` (Herbs: ${herbs}/3, Water: ${water}/1)`;
+                      }
+                    }
+
+                    const showHermitGlowHint =
+                      shouldHintHermitGlow &&
+                      quest.id === 'echoes_at_the_lake' &&
+                      quest.status === 'completed';
+
+                    return (
+                      <div key={quest.id} className="ww-journal-content">
+                        <div>
+                          <span className="ww-journal-quest-name">{definition.name}</span>{' '}
+                          <span className="ww-journal-quest-status">({quest.status})</span>
+                          {progressText && (
+                            <span className="ww-journal-progress">{progressText}</span>
+                          )}
+                        </div>
+                        {stepSummary && <div className="ww-journal-step">{stepSummary}</div>}
+                        {showHermitGlowHint && (
+                          <div className="ww-journal-step">Next: talk to the Hermit again.</div>
+                        )}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            )}
+            {infoTab === 'recap' && (
+              <div
+                id="ww-tabpanel-recap"
+                role="tabpanel"
+                aria-labelledby="ww-tab-recap"
+                className="ww-journal-content"
+              >
+                {!lastRunSummary ? (
+                  <p className="ww-empty-state">
+                    No previous run to recap yet. Venture into the Wilds and see what stories you bring back.
+                  </p>
+                ) : (
+                  <div className="ww-recap">
+                    <p className="ww-recap-heading">
+                      Last run ended {new Date(lastRunSummary.finishedAt).toLocaleString()}
+                    </p>
+                    <ul className="ww-recap-list">
+                      <li>
+                        Reached <strong>Level {lastRunSummary.level}</strong> with{' '}
+                        <strong>{lastRunSummary.xp} XP</strong>.
+                      </li>
+                      <li>
+                        Forest regard:{' '}
+                        {lastRunSummary.forestReputation > 0
+                          ? `favour +${lastRunSummary.forestReputation}`
+                          : lastRunSummary.forestReputation < 0
+                          ? `unease ${lastRunSummary.forestReputation}`
+                          : 'neutral'}
+                      </li>
+                      <li>
+                        Grove status:{' '}
+                        {lastRunSummary.groveHealed
+                          ? 'the grove was healed.'
+                          : 'the grove remained unrestored.'}
+                      </li>
+                      <li>
+                        Final location: <strong>{getLocation(lastRunSummary.location).name}</strong>.
+                      </li>
+                      <li>
+                        Items carried: <strong>{lastRunSummary.itemsCarried}</strong>.
+                      </li>
+                    </ul>
+                    <p className="ww-recap-death">{lastRunSummary.deathCause}</p>
                   </div>
-                );
-              });
-            })()}
+                )}
+              </div>
+            )}
           </section>
 
           <section className="ww-panel ww-section ww-shop">
@@ -762,12 +940,17 @@ export function GameScreen() {
             )}
           </section>
         </aside>
-      </div>
+      </main>
 
       {runEnded && (
-        <div className="ww-run-overlay">
+        <div
+          className="ww-run-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ww-run-summary-title"
+        >
           <div className="ww-run-overlay-content">
-            <h2>You fell in the Whispering Wilds</h2>
+            <h2 id="ww-run-summary-title">You fell in the Whispering Wilds</h2>
             <p>Your journey in this run is over.</p>
             <ul className="ww-run-summary">
               <li>
@@ -813,10 +996,10 @@ export function GameScreen() {
             <ul className="ww-tutorial-list">
               <li><strong>Move</strong> between locations using the Movement buttons.</li>
               <li><strong>Sense</strong> to feel what the forest is doing around you.</li>
-              <li><strong>Gather</strong> herbs, water, and ore — but don’t take more than you need.</li>
+              <li><strong>Gather</strong> herbs, water, and ore - but don't take more than you need.</li>
               <li><strong>Fight or flee</strong> when creatures appear. Use Healing Tonics to recover.</li>
-              <li><strong>Trade</strong> with the Ranger at the Trader’s Post to turn resources into supplies.</li>
-              <li><strong>Heal the Grove</strong> to calm the Wilds… and see what the forest thinks of you.</li>
+              <li><strong>Trade</strong> with the Ranger at the Trader's Post to turn resources into supplies.</li>
+              <li><strong>Heal the Grove</strong> to calm the Wilds... and see what the forest thinks of you.</li>
             </ul>
             <button
               onClick={() => {
@@ -839,6 +1022,7 @@ export function GameScreen() {
       <Settings
         isOpen={settingsOpen}
         onClose={() => setSettingsOpen(false)}
+        lastRunSummary={lastRunSummary}
         onResetTutorial={() => {
           // Reset the tutorial flag so the overlay shows again on top of the game
           setGameState((prev) => ({

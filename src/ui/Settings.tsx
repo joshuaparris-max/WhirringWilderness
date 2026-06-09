@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { audioManager } from '../audio/audioManager';
+import type { RunSummary } from '../types/runSummary';
 
 interface SettingsProps {
   isOpen: boolean;
   onClose: () => void;
+  lastRunSummary?: RunSummary | null;
   /** Optional callback to reset the first-time tutorial flag (replay tutorial) */
   onResetTutorial?: () => void;
 }
@@ -14,6 +16,7 @@ interface SettingsState {
   musicVolume: number;
   sfxVolume: number;
   textSize: number;
+  logHeight: number;
   animationsEnabled: boolean;
   typewriterEffect: boolean;
   showLogTags: boolean;
@@ -41,7 +44,7 @@ function saveSettings(settings: Partial<SettingsState>) {
   }
 }
 
-export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
+export function Settings({ isOpen, onClose, lastRunSummary, onResetTutorial }: SettingsProps) {
   const [settings, setSettings] = useState<SettingsState>(() => {
     const loaded = loadSettings();
     return {
@@ -50,6 +53,7 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
       musicVolume: 100,
       sfxVolume: 100,
       textSize: 100,
+      logHeight: 50,
       animationsEnabled: true,
       typewriterEffect: false,
       showLogTags: false,
@@ -71,11 +75,40 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
 
   useEffect(() => {
     document.documentElement.style.setProperty('--text-size', `${settings.textSize}%`);
+    document.documentElement.style.setProperty('--log-max-height', `${settings.logHeight}vh`);
     document.documentElement.style.setProperty(
       '--animations-enabled',
       settings.animationsEnabled ? '1' : '0',
     );
-  }, [settings.textSize, settings.animationsEnabled]);
+  }, [settings.textSize, settings.logHeight, settings.animationsEnabled]);
+
+  const lastRunSummaryText = lastRunSummary
+    ? [
+        `Finished: ${new Date(lastRunSummary.finishedAt).toLocaleString()}`,
+        `Level: ${lastRunSummary.level}`,
+        `XP earned: ${lastRunSummary.xp}`,
+        `Forest reputation: ${lastRunSummary.forestReputation}`,
+        `Grove healed: ${lastRunSummary.groveHealed ? 'Yes' : 'No'}`,
+        `Last location: ${lastRunSummary.location}`,
+        `Items carried: ${lastRunSummary.itemsCarried}`,
+        `Death cause: ${lastRunSummary.deathCause || 'Survived'}`,
+      ].join('\n')
+    : '';
+
+  const copyLastRunSummary = async () => {
+    if (!lastRunSummaryText) return;
+    await navigator.clipboard.writeText(lastRunSummaryText);
+  };
+
+  const downloadLastRunSummary = () => {
+    if (!lastRunSummaryText) return;
+    const blob = new Blob([lastRunSummaryText], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `whirring-wilderness-summary-${new Date(lastRunSummary?.finishedAt ?? Date.now()).toISOString().slice(0, 10)}.txt`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
 
   const updateSetting = <K extends keyof SettingsState>(
     key: K,
@@ -96,7 +129,7 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
             className="ww-button-close"
             aria-label="Close settings"
           >
-            ×
+            x
           </button>
         </div>
 
@@ -158,6 +191,17 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
                 onChange={(e) => updateSetting('textSize', Number(e.target.value))}
               />
             </label>
+            <label className="ww-settings-slider">
+              <span>Log Height: {settings.logHeight}vh</span>
+              <input
+                type="range"
+                min="30"
+                max="80"
+                step="2"
+                value={settings.logHeight}
+                onChange={(e) => updateSetting('logHeight', Number(e.target.value))}
+              />
+            </label>
             <label className="ww-settings-checkbox">
               <input
                 type="checkbox"
@@ -201,6 +245,21 @@ export function Settings({ isOpen, onClose, onResetTutorial }: SettingsProps) {
               </div>
             )}
           </section>
+
+          {lastRunSummary && (
+            <section className="ww-settings-section">
+              <h3>Last run summary</h3>
+              <pre className="ww-summary-box">{lastRunSummaryText}</pre>
+              <div className="flex flex-wrap gap-2 mt-3">
+                <button className="ww-button ww-button-secondary" onClick={copyLastRunSummary}>
+                  Copy summary
+                </button>
+                <button className="ww-button ww-button-secondary" onClick={downloadLastRunSummary}>
+                  Download summary
+                </button>
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </div>
