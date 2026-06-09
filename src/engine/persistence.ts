@@ -55,3 +55,28 @@ export function clearState(): void {
   }
 }
 
+export function createStateBackup(state: GameState): string {
+  const payload: PersistedState = {
+    version: SAVE_VERSION,
+    state,
+  };
+  return JSON.stringify(payload, null, 2);
+}
+
+export function parseStateBackup(raw: string): GameState {
+  const parsed = JSON.parse(raw) as Partial<PersistedState>;
+  const state = parsed?.state as GameState | undefined;
+
+  if (
+    parsed?.version !== SAVE_VERSION ||
+    !state?.currentLocation ||
+    !state.player ||
+    !Array.isArray(state.log) ||
+    !Array.isArray(state.quests)
+  ) {
+    throw new Error('This is not a valid Whispering Wilds journey backup.');
+  }
+
+  return state;
+}
+

@@ -1,6 +1,8 @@
 # Whispering Wilds
 
-Text-first wildlands RPG prototype.
+Text-first wildlands RPG prototype with branching quests, tactical encounters, local autosaves, and portable journey backups.
+
+The header shows the latest save status. Use **Save now** for an explicit checkpoint, **Download journey** to keep a portable JSON backup, or **Restore journey** to continue that backup in another browser.
 
 ## Development
 

@@ -1,14 +1,8 @@
 // Quick playtest script to simulate will-o-wisp defeat and Hermit fragment delivery
 import { createInitialState, appendLog } from '../src/engine/gameState';
-import { moveTo, attack, talkTo, addItemToInventory } from '../src/engine/actions';
+import { moveTo, attack, talkTo } from '../src/engine/actions';
 import { createEncounterState } from '../src/engine/encounters';
 import { creatures } from '../src/content/creatures';
-
-function printLogs(state: any) {
-  console.log('--- Logs ---');
-  for (const l of state.log) console.log(l.type, '-', l.text);
-  console.log('------------');
-}
 
 async function run() {
   let state = createInitialState();
@@ -44,7 +38,7 @@ async function run() {
   }
 
   // Check inventory
-  const fragments = state.player.inventory.find((i:any)=>i.itemId==='luminous_fragment')?.quantity ?? 0;
+  const fragments = state.player.inventory.find((item) => item.itemId === 'luminous_fragment')?.quantity ?? 0;
   console.log('Luminous fragments after combat:', fragments);
 
   // Move to hermit_hut and talk to hermit (ensure echoes quest completed so hermit offers)
@@ -61,7 +55,7 @@ async function run() {
   for (const l of talk.logEntries) console.log(l.type, '-', l.text);
 
   // Final inventory & quest
-  const finalFragments = state.player.inventory.find((i:any)=>i.itemId==='luminous_fragment')?.quantity ?? 0;
+  const finalFragments = state.player.inventory.find((item) => item.itemId === 'luminous_fragment')?.quantity ?? 0;
   console.log('Final luminous fragments:', finalFragments);
 }
 

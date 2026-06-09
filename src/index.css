@@ -67,6 +67,17 @@ html, body {
   gap: 0.75rem;
 }
 
+.ww-file-input {
+  display: none;
+}
+
+.ww-save-status {
+  margin: 0.65rem 0 0;
+  color: #a9c7b0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
 .ww-header-title {
   margin: 0 0 0.75rem 0;
   color: #f0f0f0;

@@ -13,7 +13,13 @@ import { RANGER_TRADES, type TradeId } from '../content/shop';
 import { canAffordTrade, canUseTrade, getEffectiveTradeLimit } from '../engine/trading';
 import type { GameState } from '../types/gameState';
 import type { LocationId } from '../types/gameState';
-import { loadState, saveState, clearState } from '../engine/persistence';
+import {
+  clearState,
+  createStateBackup,
+  loadState,
+  parseStateBackup,
+  saveState,
+} from '../engine/persistence';
 import { audioManager } from '../audio/audioManager';
 import { Settings } from './Settings';
 import { getLocationArtKey } from '../content/art';
@@ -32,6 +38,8 @@ export function GameScreen() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [lastNpcId, setLastNpcId] = useState<string | null>(null);
   const [hoveredItemDesc, setHoveredItemDesc] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState('Journey autosaves after every action.');
+  const restoreInputRef = useRef<HTMLInputElement | null>(null);
   const gameStateRef = useRef(gameState);
   
   // Keep ref in sync with state
@@ -243,7 +251,40 @@ export function GameScreen() {
 
   useEffect(() => {
     saveState(gameState);
+    setSaveStatus('Autosaved just now.');
   }, [gameState]);
+
+  function handleSaveNow() {
+    saveState(gameState);
+    setSaveStatus('Saved just now.');
+  }
+
+  function handleDownloadJourney() {
+    const blob = new Blob([createStateBackup(gameState)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `whispering-wilds-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setSaveStatus('Journey backup downloaded.');
+  }
+
+  async function handleRestoreJourney(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!window.confirm('Restore this journey backup and replace the current run?')) return;
+
+    try {
+      const restored = parseStateBackup(await file.text());
+      saveState(restored);
+      setGameState(restored);
+      setSaveStatus('Journey restored.');
+    } catch (error) {
+      setSaveStatus(error instanceof Error ? error.message : 'Could not restore that journey.');
+    }
+  }
 
   function handleNewRun() {
     const confirmReset = window.confirm(
@@ -407,7 +448,36 @@ export function GameScreen() {
           >
             New Run
           </button>
+          <button
+            type="button"
+            onClick={handleSaveNow}
+            className="ww-button ww-button-small ww-button-secondary"
+          >
+            Save now
+          </button>
+          <button
+            type="button"
+            onClick={handleDownloadJourney}
+            className="ww-button ww-button-small ww-button-secondary"
+          >
+            Download journey
+          </button>
+          <button
+            type="button"
+            onClick={() => restoreInputRef.current?.click()}
+            className="ww-button ww-button-small ww-button-secondary"
+          >
+            Restore journey
+          </button>
+          <input
+            ref={restoreInputRef}
+            type="file"
+            accept="application/json"
+            onChange={handleRestoreJourney}
+            className="ww-file-input"
+          />
         </div>
+        <p className="ww-save-status" role="status">{saveStatus}</p>
       </header>
 
       <div className="ww-main">
