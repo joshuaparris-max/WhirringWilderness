@@ -1,0 +1,253 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Talk to 2 NPCs
+   Reward: +2 XP, +5 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+You take the Rusty Key.
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+A Stone Gnaw emerges!
+(New entry added to your bestiary.)
+> go e
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Abandoned Mine
+Timbers groan above a vein of dull ore.
+Exits: d, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  @ |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go d
+Use: move n/s/e/w
+> help
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+unlock - Unlock gates (auto-uses key)
+use [item] - Use an item (key, apple, bandage, potion)
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [name] - View info about room/items/NPCs/creatures
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+> d
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+Unknown command. Try 'help'.
+> skip tutorial
+Tutorial skipped. Type 'help' for command list.
+> look
+Abandoned Mine
+Timbers groan above a vein of dull ore.
+Exits: d, w
+> go w
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  · |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Abandoned Mine
+Timbers groan above a vein of dull ore.
+Exits: d, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  @ |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go d
+Use: move n/s/e/w
+> look
+Abandoned Mine
+Timbers groan above a vein of dull ore.
+Exits: d, w
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+Items: Rusty Key
+Bandages: 1
+
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+unlock - Unlock gates (auto-uses key)
+use [item] - Use an item (key, apple, bandage, potion)
+
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [name] - View info about room/items/NPCs/creatures
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

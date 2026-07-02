@@ -1,0 +1,103 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Complete a quest
+   Reward: +10 XP, +25 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+You take the Rusty Key.
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> unlock
+You turn the key. The gate creaks open eastward.
+> go e
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> take
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+No such item here.
+> take apple
+You take the Apple.
+> skip tutorial
+Tutorial skipped. Type 'help' for command list.
+> go e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+A Stone Gnaw emerges!
+(New entry added to your bestiary.)
+> Stone Gnaw
+Unknown command. Try 'help'.
+> go north
+Old Watchtower
+Cracked stairs spiral into shadow; graffiti marks the stone.
+Exits: e, s, u
+
+[Mini-Map]
++---------------------+
+|    ?  ?     @  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> hunt
+You are already engaged!
+> attack
+You hit the Stone Gnaw (-2 HP).
+The Stone Gnaw misses!
+Stone Gnaw HP: 1/3
+> attack
+You hit the Stone Gnaw (-2 HP).
+The Stone Gnaw dissipates.
+(+1 XP)
+> hunt
+A Camp Raider emerges!
+(New entry added to your bestiary.)
+> Camp Raider
+Unknown command. Try 'help'.
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Items: Rusty Key, Apple
+Bandages: 1
+Use 'help' command to update
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

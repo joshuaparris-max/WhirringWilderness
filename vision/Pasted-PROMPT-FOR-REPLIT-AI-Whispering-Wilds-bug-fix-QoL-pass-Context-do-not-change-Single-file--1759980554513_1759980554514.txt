@@ -1,0 +1,184 @@
+PROMPT FOR REPLIT AI (Whispering Wilds – bug-fix + QoL pass)
+
+Context (do not change):
+
+Single-file static game in index.html, Python runs via PyScript/Pyodide in the browser. No build, no server code. Keep architecture and UI layout; only improve/fix logic and small UI behaviour. 
+
+index
+
+Existing features to preserve: auto-scroll output, clickable text that fills the command input, pinned side panels (Map/Quests/Inventory/Help), command history (↑/↓), numeric repetition (e.g., forage 5), recipes listing, map after move. 
+
+index
+
+Replit: make minimal, surgical edits inside index.html (JS helpers + <script type="py"> game code). No external libs, keep styles.
+
+Goals:
+Fix the remaining bugs and implement the specific QoL from the list below. Add clear player feedback. Maintain saved-game compatibility.
+
+A) Critical bug fixes
+
+Harvest/forage encounters not triggering reliably
+
+Ensure repeated harvests can trigger minor encounters with a sensible floor/ceiling (e.g., guarantee one roll in any 10 chained harvests), respecting the current cooldown system. Add a deterministic path in Dev/Test mode so QA can verify quickly.
+Accept: In a fresh game, performing 10 chained forage actions in the same area produces ≥1 encounter on average; Dev “Run Tests” proves it.
+
+Command history (↑) starts on second-last command
+
+Fix history index reset so the most recent command is shown first. Don’t break Down-arrow behaviour or Enter-to-repeat.
+Accept: After entering A, B, C, pressing ↑ yields C first every time; manual test passes.
+
+Save/Load robustness (“no save found” after save)
+
+Harden localStorage save/load: wrap in try/except, validate JSON, and surface ✓/✗ messages in output (already mentioned in notes—make it bullet-proof).
+
+On successful save, echo “Saved ✓”. On load with no data, echo “No save found ✗”. Auto-load on start should never silently fail.
+Accept: Fresh run → save → reload page → auto-loads; corrupting storage key shows a graceful error and resets. 
+
+index
+
+Lorekeeper mistakenly granted on Angler Aid completion
+
+Audit achievement triggers; ensure Lorekeeper only fires on lore milestones, not quest completions.
+Accept: Finishing Angler Aid no longer awards Lorekeeper; separate test quest still awards correctly.
+
+“Talk to two NPCs” micro-goal double counts / re-awards
+
+Ensure it tracks unique NPCs and can award only once; ignore repeats.
+Accept: Talking to the same NPC twice does not progress; talking to two different NPCs does.
+
+Row 3, Col 5 (Hermit) access
+
+Verify grid connectivity to r3c5. Add a fallback path if needed so Hermit is reachable from adjacent tiles.
+Accept: From any neighbouring cell, a valid go route exists; manual walking test passes. (Your changelog claims this was fixed—re-verify.) 
+
+index
+
+Mine Matters ore count / hand-in accuracy
+
+Make quest progress read from both “materials” and inventory; ensure the panel shows correct X/Y and hand-in consumes correctly.
+Accept: Having ≥2 ore shows “2/2” and turn-in completes; regression test included. 
+
+index
+
+Coal / pearls / crystal shards unobtainable in practice
+
+Ensure locations and gating are reachable and hinted:
+
+Pearls via dive in appropriate water tiles (remove any torch requirement for diving—doesn’t make sense underwater).
+
+Coal in deep mine nodes; crystals in crystal cave.
+
+Add short, diegetic hints via Caretaker/Trader dialog or help blurbs.
+Accept: Each resource can be acquired in a normal playthrough; lore updates after first find.
+
+Hidden area traversal (descend/dive/climb) clarity
+
+Confirm Sunken Cellar, Deep Mine, Lake Depths, etc. have working transitions and contextual prompts (“You sense a way down… try descend”).
+Accept: From surface rooms the correct verbs work and print a contextual hint on failure (e.g., “Nothing to descend here.”). (Your notes claim these exist—re-verify usability.) 
+
+Whispering Wilds Design Doc
+
+Shop: buy/sell multiples
+
+Support buy <item> <n> and sell <item> <n> with caps (1–10), update gold/inv atomically, and show a compact receipt line.
+Accept: Buying 3 daggers adjusts gold and inventory correctly; selling 5 fish works similarly.
+
+Potion naming/stacking clarity
+
+Ensure crafted “Lesser Potion” (8 HP) and shop “Healing Potion” (20 HP) have distinct names and stack separately. Update help text accordingly.
+Accept: Inventory shows two distinct entries; both usable; help explains the difference. 
+
+replit
+
+B) Quality-of-Life & UX improvements
+
+Action history per room (Success/Failed/Untried)
+
+Provide/verify a history command that prints, e.g.:
+=History Sanctum
+Success: Talk, Forage, Hunt, Take
+Failed: Climb, Descend
+Untried: Fish, Dive, Search, Unlock, Mine, Harvest
+
+Make each listed action clickable (appends the action into the input if “Append mode” is on; otherwise replaces).
+Accept: Output matches format above; clicks respect append/replace toggle. 
+
+replit
+
+Mini-map toggle
+
+Keep the “Display map on move” checkbox; persist in localStorage; default ON for first-timers.
+Accept: Toggle state survives reload; map only auto-prints when ON. 
+
+index
+
+Batch summary for gathering/looting
+
+Toggle to condense repeated outputs into one summary block (already mentioned—ensure consistent across forage/fish/mine/search/loot).
+Accept: forage 10 prints “Performed 10/10” plus a condensed “Found:” list. 
+
+replit
+
+Clickable quests
+
+Make quest titles clickable: clicking fills the input with the best next command (e.g., talk trader for turn-in, or track <quest>), respecting append/replace toggle.
+Accept: Clicking a quest writes/executes a sensible command.
+
+Unknown legend
+
+In the map legend/text, ensure ? means Unknown, not “known.”
+Accept: Help/map legend shows “? = Unknown”.
+
+Armor equip clarity
+
+Inventory/stats should clearly show: “🛡️ Leather Armor (equipped, −25% damage)” and that armor is passive; no equip command required.
+Accept: Text present in inv and stats. 
+
+replit
+
+Harvest feedback
+
+When nothing to harvest: “Nothing to harvest here. [Plant] grows in [n] other locations.” (Use a generic hint if dynamic counts are hard.)
+Accept: Message appears with at least a generic hint.
+
+Craft UX nits
+
+Accept both craft pickaxe and craft iron pickaxe.
+
+If craft fails due to unknown recipe, suggest recipes.
+Accept: Both aliases work; helpful prompt appears on failure.
+
+C) Dev/Test hooks (keep lightweight)
+
+Wire the existing Dev Mode → Run Tests button to a quick sanity suite:
+
+History arrow returns latest.
+
+Save → reload → auto-load works.
+
+forage 10 summary appears (with toggle ON).
+
+Buy/sell multiples adjust inventory/gold correctly.
+
+Quest clickable fills input per next step.
+Accept: Tests print ✓ lines in the console without blocking the normal game. 
+
+index
+
+D) Implementation constraints
+
+Do not split files or add build tooling. Keep everything in index.html (CSS/JS helpers + PyScript block). 
+
+index
+
+Keep existing UI and shortcuts; only refine behaviours and messages.
+
+No new external libraries.
+
+Preserve existing save keys where possible (wilds_save, toggles) and migrate gracefully if changed. 
+
+index
+
+Done = All “Accept” checks pass, no regressions in help, recipes, map auto-update, pinned panels, clickable text, and command batching. 
+
+index

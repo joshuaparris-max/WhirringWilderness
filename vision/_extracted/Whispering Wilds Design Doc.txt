@@ -1,0 +1,64 @@
+Whispering Wilds Design Doc
+Pros/Fixed
+Bugs
+Suggestions
+Summary of Previous Feedback and Corresponding Fixes
+What Jayden Liked:
+Engaging gameplay
+ – held his attention for more than 30 minutes.
+Map command
+ – very helpful for navigating.
+Command buttons
+ – quick access buttons made play easier.
+Quality-of-Life Suggestions:
+Better scrolling behavior
+ – auto-scroll with bottom text and a dedicated scroll bar instead of an ever-expanding page.
+Clickable commands/items
+ – clicking NPCs or items should auto-fill the appropriate command.
+Pin panels/messages
+ – pin map, quests, inventory, or help into separate columns for easy reference.
+Up-arrow history & batch actions
+ – ability to recall previous commands and batch commands (e.g., “forage 5”).
+Clearer crafting list
+ – show which items can be crafted.
+Map auto-update
+ – show map automatically after movement.
+Custom command buttons
+ – allow users to create their own quick command buttons.
+Gameplay Issues:
+Difficulty figuring out how to turn in quests and use bandages.
+Row 3 column 5 inaccessible.
+Caretaker dialogues (say options 2–4) were broken in some cases.
+Help commands were out of order.
+Lore command didn’t detect creatures.
+“xp” command missing; unclear purpose of XP.
+Bandages couldn’t be used even when present.
+Drop/use didn’t work consistently; mine matters quest didn’t detect ore.
+Angler Aid quest re-offered but couldn’t be re-accepted.
+Old Feedback Fixes Implemented:
+UI improvements
+: auto-scroll in main output, clickable items/NPCs that auto-fill commands, pinned side panels (map, quests, inventory, help), and command history recall (?/?).
+Batch actions
+: numeric repetition added (e.g. “forage 5”).
+Crafting visibility
+: added 
+recipes
+ command to list craftable items.
+Quest UX
+: hints for turn-in requirements; quests panel shows progress and ready-to-turn-in status.
+Mini-map
+: displayed after move/go; separate map panel can be updated with 
+map
+.
+Tutorial and tips
+: first-time tutorial, first-time tip system, and help reorganized.
+Bug fixes
+: caretaker dialogues fixed; help ordering corrected; lore now detects seen creatures; XP system with level progression and XP display added; bandages and consumables usable; drop/use work correctly; mine matters soft-lock fixed; Angler Aid no longer re-offers after completion.
+Combat updates
+: power strike implemented, and combat UI clarified.
+Hidden areas
+: descend/dive/climb commands connect to deep mine, lake depths, crystal cave, sunken shrine, and tower top.
+Economy balance
+: crafted healing potion renamed to “Lesser Potion” (8 HP) to distinguish from shop “Healing Potion” (20 HP); NPC conversation micro-goal counts unique NPCs; resource gathering adds cooldown; armor status shown in inventory/stats.
+Custom quick buttons
+: players can create custom buttons with labels and commands; buttons stored in local storage with append mode toggle.

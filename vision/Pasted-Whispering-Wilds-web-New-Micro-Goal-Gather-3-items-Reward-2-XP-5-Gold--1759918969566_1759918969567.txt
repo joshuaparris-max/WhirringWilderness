@@ -1,0 +1,123 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Gather 3 items
+   Reward: +2 XP, +5 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> n
+Northern Grove
+Silver-barked trees and soft leaf litter.
+Items here: Wild Mint
+Exits: e, s
+
+[Mini-Map]
++---------------------+
+|    @  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> take mint
+You take the Wild Mint.
+> go s
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ·  ?     ?  ?    |
+| ?  @  ?  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> drop mint
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+You drop the Wild Mint.
+> look
+✅ Great! You can see your surroundings now.
+📍 Step 2: Take an item
+You should see a 'Rusty Key' here. Take it!
+Type: take key
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key, Wild Mint
+You see: Caretaker
+Exits: e, n, s, w
+> s
+Sunken Cellar
+Damp stone, old crates, and a chill draft.
+Items here: Old Torch
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ·  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    @  ?     ?  ?  ? |
++---------------------+
+> take torch
+✅ Perfect! The key is now in your inventory.
+📍 Step 3: Check your inventory
+Type: inv
+(or click 'inv' button below)
+You take the Old Torch.
+> go n
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key, Wild Mint
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ·  ?     ?  ?    |
+| ?  @  ?  ?  ?  ?  ? |
+|    ·  ?     ?  ?  ? |
++---------------------+
+> drop torch
+You drop the Old Torch.
+> look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key, Wild Mint, Old Torch
+You see: Caretaker
+Exits: e, n, s, w
+> take caretaker
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+No such item here.
+> attack caretaker
+You strike into the air. (Dealt 2 imaginary damage)
+> take pillars
+No such item here.
+> attack pillars
+You strike into the air. (Dealt 2 imaginary damage)
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+Bandages: 1
+Use 'help' command to update
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

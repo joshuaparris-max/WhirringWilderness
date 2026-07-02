@@ -1,0 +1,241 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Craft any item
+   Reward: +5 XP, +15 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+You take the Rusty Key.
+🏆 Achievement Unlocked: First Steps - Take your first item
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> n
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+Old Watchtower
+Cracked stairs spiral into shadow; graffiti marks the stone.
+Exits: e, s, u
+
+[Mini-Map]
++---------------------+
+|    ?  ?     @  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> s
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> n
+Old Watchtower
+Cracked stairs spiral into shadow; graffiti marks the stone.
+Exits: e, s, u
+
+[Mini-Map]
++---------------------+
+|    ?  ?     @  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> u
+Watchtower Summit
+From here, the entire realm spreads before you.
+Items here: Brass Spyglass
+Exits: d
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> d
+Old Watchtower
+Cracked stairs spiral into shadow; graffiti marks the stone.
+Exits: e, s, u
+
+[Mini-Map]
++---------------------+
+|    ?  ?     @  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+Hermit's Hut
+Bundles of herbs hang from the rafters.
+You see: Hermit
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     @  ?  ? |
++---------------------+
+> w
+Old Watchtower
+Cracked stairs spiral into shadow; graffiti marks the stone.
+Exits: e, s, u
+
+[Mini-Map]
++---------------------+
+|    ?  ?     @  ?    |
+| ?  ·  ·  ·  ·  ?  ? |
+|    ?  ?     ·  ?  ? |
++---------------------+
+> s
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ·  ?  ? |
++---------------------+
+> e
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ·  ?  ? |
++---------------------+
+> s
+Ranger Camp
+A tidy camp with a banked fire and supple bows.
+You see: Ranger
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ·  @  ? |
++---------------------+
+> n
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ·  ·  ? |
++---------------------+
+> n
+Moonlit Lake
+A cold, glassy lake. Ripples reveal darting shapes.
+Exits: d, s
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  @    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ·  ·  ? |
++---------------------+
+> d
+Lake Depths
+Underwater grottos reveal secrets long submerged.
+Exits: s, u
+🏆 Achievement Unlocked: Explorer - Visit 10 different locations
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  ·    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ·  ·  ? |
++---------------------+
+> u
+Moonlit Lake
+A cold, glassy lake. Ripples reveal darting shapes.
+Exits: d, s
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ·  @    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ·  ·  ? |
++---------------------+
+> swim
+There's no water here. Try finding a lake or spring!
+> look
+✅ Great! You can see your surroundings now.
+📍 Step 2: Take an item
+You should see a 'Rusty Key' here. Take it!
+Type: take key
+Moonlit Lake
+A cold, glassy lake. Ripples reveal darting shapes.
+Exits: d, s
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+Items: Rusty Key
+Bandages: 1
+Use 'help' command to update
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

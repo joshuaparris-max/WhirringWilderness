@@ -1,0 +1,311 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Gather 3 items
+   Reward: +2 XP, +5 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> look
+✅ Great! You can see your surroundings now.
+📍 Step 2: Take an item
+You should see a 'Rusty Key' here. Take it!
+Type: take key
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+✅ Perfect! The key is now in your inventory.
+📍 Step 3: Check your inventory
+Type: inv
+(or click 'inv' button below)
+You take the Rusty Key.
+🏆 Achievement Unlocked: First Steps - Take your first item
+> inv
+✅ Nice! You can see what you're carrying.
+📍 Step 4: Check the map
+See where you are in the world.
+Type: map
+Inventory: Rusty Key
+Bandages: 1
+> map
+✅ Excellent! You can navigate using directions.
+📍 Step 5: Move to another room
+Type: go north  (or just: n)
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  @  ?  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+You are at: Sanctum
+Legend: @ you, · visited, ? known (unvisited), blank = off-map
+> move s
+✅ You're moving around now!
+📍 Final Step: Check available quests
+See what adventures await you.
+Type: quests
+Sunken Cellar
+Damp stone, old crates, and a chill draft.
+Items here: Old Torch
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    @  ?     ?  ?  ? |
++---------------------+
+> take torch
+You take the Old Torch.
+> help
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+use [item] - Use an item (key, apple, bandage, potion)
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+=== QUESTS ===
+accept [quest] - Accept a quest
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] - Choose dialogue option
+talk [npc] - Talk to an NPC
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [creature] - View creature lore
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+> look
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+Sunken Cellar
+Damp stone, old crates, and a chill draft.
+Exits: e, n
+> go e
+Southern Thicket
+Close-set shrubs tug at your sleeves.
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    ·  @     ?  ?  ? |
++---------------------+
+> forage
+You forage and find 1 herb.
+🎯 Progress: Gather 3 items (1/3)
+> forage
+You forage and find 1 fiber.
+🎯 Progress: Gather 3 items (2/3)
+> forage
+You forage and find 1 fiber.
+╔═══════════════════════════════════════════╗
+║   🎉 MICRO-GOAL COMPLETE!              ║
+╚═══════════════════════════════════════════╝
+✅ Gather 3 items
+💫 +2 XP
+💰 +5 Gold
+> hunt
+🎯 New Micro-Goal: Craft any item
+   Reward: +5 XP, +15 Gold
+A Shadow Wisp emerges!
+(New entry added to your bestiary.)
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+The Shadow Wisp drops a herb.
+> attack
+You strike into the air. (Dealt 2 imaginary damage)
+> rest
+You rest, but you're already at full health.
+> inv
+Inventory: Rusty Key, Old Torch
+Bandages: 1
+Materials: fiber x2, herb x2
+> look
+Southern Thicket
+Close-set shrubs tug at your sleeves.
+Exits: w
+> go w
+Sunken Cellar
+Damp stone, old crates, and a chill draft.
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    @  ·     ?  ?  ? |
++---------------------+
+> go n
+Sanctum
+A quiet stone atrium with mossy pillars.
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  @  ?  ?  ?  ?  ? |
+|    ·  ·     ?  ?  ? |
++---------------------+
+> go n
+Northern Grove
+Silver-barked trees and soft leaf litter.
+Items here: Wild Mint
+Exits: e, s
+
+[Mini-Map]
++---------------------+
+|    @  ?     ?  ?    |
+| ?  ·  ?  ?  ?  ?  ? |
+|    ·  ·     ?  ?  ? |
++---------------------+
+> go s
+Sanctum
+A quiet stone atrium with mossy pillars.
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ·  ?     ?  ?    |
+| ?  @  ?  ?  ?  ?  ? |
+|    ·  ·     ?  ?  ? |
++---------------------+
+> talk caretaker
+Caretaker listens. Choose:
+  1. Who are you?
+  2. What is this place?
+  3. Tell me about the Whispering Wilds.
+  4. What threats lie beyond these walls?
+  5. Is there any work I can do?
+  6. What can you tell me about the grove?
+  7. Goodbye.
+Say a number with: say [n]
+> 1
+Unknown command. Try 'help'.
+> say 1
+Caretaker: "A watcher of thresholds. I keep small fires lit."
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Items: Rusty Key, Old Torch
+Bandages: 1
+Materials: fiber x2, herb x2
+
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+use [item] - Use an item (key, apple, bandage, potion)
+
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+
+=== QUESTS ===
+accept [quest] - Accept a quest
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] - Choose dialogue option
+talk [npc] - Talk to an NPC
+
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [creature] - View creature lore
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

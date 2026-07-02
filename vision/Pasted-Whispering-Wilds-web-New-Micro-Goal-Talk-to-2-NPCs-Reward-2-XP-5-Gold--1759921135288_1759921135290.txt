@@ -1,0 +1,470 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Talk to 2 NPCs
+   Reward: +2 XP, +5 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> froage
+Unknown command. Try 'help'.
+> forage
+You forage and find 1 herb.
+> forage
+You forage and find 1 fiber.
+> forage
+You forage and find 1 fiber.
+> forage
+You forage and find 1 fiber.
+> forage
+You forage and find 1 fiber.
+> forage
+You forage and find 1 fiber.
+> forage
+You forage and find 1 fiber.
+> craft
+Craft what? Try 'recipes' to see what you can make.
+> recipes
+=== Advanced Crafting Recipes ===
+✓ Leather Armor - Reduces damage taken
+   Requires: fiber 6/5
+✗ Crystal Amulet - Increases XP gain
+   Requires: crystal_shard 0/3, ore 0/2
+✗ Fishing Rod - Improves fishing success
+   Requires: fiber 6/3, ore 0/1
+✗ Healing Potion - Restores 5 HP when used
+   Requires: herb 1/3, glowcap 0/1
+✗ Master Bandage - Heals 5 HP instantly
+   Requires: fiber 6/2, herb 1/2, glowcap 0/1
+✗ Pearl Ring - Increases gold drops
+   Requires: pearl 0/2, ore 0/1
+✗ Iron Pickaxe - Mines ore more efficiently
+   Requires: ore 0/3, fiber 6/2
+✗ Torch - Lights dark places
+   Requires: fiber 6/2, coal 0/1
+> craft armor
+You craft a Leather Armor!
+> attack
+You strike into the air. (Dealt 2 imaginary damage)
+> hunt
+A Shadow Wisp emerges!
+(New entry added to your bestiary.)
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+The Shadow Wisp drops a herb.
+> attack
+You strike into the air. (Dealt 2 imaginary damage)
+> hunt
+A Shadow Wisp emerges!
+> hunt
+You are already engaged!
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp misses!
+Shadow Wisp HP: 2/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+> hunt
+A Fen Serpent emerges!
+(New entry added to your bestiary.)
+> attack
+You hit the Fen Serpent (-2 HP).
+🛡️ Your leather armor absorbs 1 damage!
+The Fen Serpent strikes you (-1 HP).
+Fen Serpent HP: 1/3
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent dissipates.
+(+1 XP)
+> stats
+Level 1  |  HP: 9/10  |  Damage: 2
+XP: 5 (5 to next level)  |  Gold: 5
+> rest
+You rest and recover 2 HP.
+> hunt
+A Shadow Wisp emerges!
+> attack
+You miss the Shadow Wisp.
+🛡️ Your leather armor absorbs 1 damage!
+The Shadow Wisp strikes you (-2 HP).
+Shadow Wisp HP: 4/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+🛡️ Your leather armor absorbs 1 damage!
+The Shadow Wisp strikes you (-1 HP).
+Shadow Wisp HP: 2/4
+> attack
+You miss the Shadow Wisp.
+🛡️ Your leather armor absorbs 1 damage!
+The Shadow Wisp strikes you (-1 HP).
+Shadow Wisp HP: 2/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+> stats
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip' to skip the tutorial.
+Level 1  |  HP: 6/10  |  Damage: 2
+XP: 6 (4 to next level)  |  Gold: 5
+> rest
+You rest and recover 2 HP.
+> rest
+You rest and recover 2 HP.
+> rest
+You rest, but you're already at full health.
+> hunt
+A Fen Serpent emerges!
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent misses!
+Fen Serpent HP: 1/3
+> attack
+You miss the Fen Serpent.
+The Fen Serpent misses!
+Fen Serpent HP: 1/3
+> attack
+You miss the Fen Serpent.
+🌟 You dodge the Fen Serpent's attack!
+Fen Serpent HP: 1/3
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent dissipates.
+(+1 XP)
+💎 Enemy dropped: Fish!
+> rest
+You rest, but you're already at full health.
+> hunt
+A Shadow Wisp emerges!
+> attack
+You hit the Shadow Wisp (-2 HP).
+🌟 You dodge the Shadow Wisp's attack!
+Shadow Wisp HP: 2/4
+> attack
+You miss the Shadow Wisp.
+The Shadow Wisp misses!
+Shadow Wisp HP: 2/4
+> attack
+You miss the Shadow Wisp.
+The Shadow Wisp misses!
+Shadow Wisp HP: 2/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+The Shadow Wisp drops a fiber.
+> rest
+You rest, but you're already at full health.
+> hunt
+A Fen Serpent emerges!
+> attack
+You hit the Fen Serpent (-2 HP).
+🛡️ Your leather armor absorbs 1 damage!
+The Fen Serpent strikes you (-1 HP).
+Fen Serpent HP: 1/3
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent dissipates.
+(+1 XP)
+The Fen Serpent drops a herb.
+> attack
+You strike into the air. (Dealt 1 imaginary damage)
+> rest
+╔═══════════════════════════════════════════╗
+║       ⭐ LEVEL UP! Now Level 2!        ║
+╚═══════════════════════════════════════════╝
+• Max HP increased: 10 → 12
+• Damage increased to 3
+• HP restored to full!
+You rest, but you're already at full health.
+> rest
+You rest, but you're already at full health.
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go w
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  @  ·  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> take key
+You take the Rusty Key.
+🏆 Achievement Unlocked: First Steps - Take your first item
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go e
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go s
+Ranger Camp
+A tidy camp with a banked fire and supple bows.
+You see: Ranger
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  @  ? |
++---------------------+
+A Briar Hound emerges!
+(New entry added to your bestiary.)
+> go e
+Trader's Post
+A makeshift counter piled with oddments. The Trader runs a shop here. (Type 'shop' to browse)
+You see: Trader
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  ·  @ |
++---------------------+
+> talk
+Trader listens. Choose:
+  1. What do you trade?
+  2. Do you need anything?
+  3. Goodbye.
+Type a number (e.g., 1) or use: say [n]
+🎯 Progress: Talk to 2 NPCs (1/2)
+> 2
+Trader: "Bring me 2 fish from the lake. I'll pay well."
+Type: accept angler_aid
+> 1
+Trader: "Bits and bobs. Mostly I deal in fish and favors."
+> trade
+> trade
+> help
+=== NAVIGATION ===
+n/s/e/w/u/d or north/south/east/west/up/down - Move
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [direction] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+unlock - Unlock gates (auto-uses key)
+use [item] - Use an item (key, apple, bandage, potion)
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [name] - View info about room/items/NPCs/creatures
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+Items: Leather Armor, Rusty Key
+Consumables: Fish x1
+Bandages: 1
+Materials: fiber x2, herb x3
+
+=== NAVIGATION ===
+n/s/e/w/u/d or north/south/east/west/up/down - Move
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [direction] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+unlock - Unlock gates (auto-uses key)
+use [item] - Use an item (key, apple, bandage, potion)
+
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [name] - View info about room/items/NPCs/creatures
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save
+Uncaught PythonError: Error in sys.excepthook:
+Traceback (most recent call last):
+  File "/lib/python312.zip/traceback.py", line 125, in print_exception
+  File "/lib/python312.zip/traceback.py", line 1046, in print
+TypeError: println() got an unexpected keyword argument 'file'
+
+Original exception was:
+Traceback (most recent call last):
+  File "<exec>", line 4216, in on_key
+  File "<exec>", line 4207, in on_send
+  File "<exec>", line 4199, in handle_line
+  File "<exec>", line 903, in dispatch
+AttributeError: 'int' object has no attribute 'name'
+Uncaught PythonError: Error in sys.excepthook:
+Traceback (most recent call last):
+  File "/lib/python312.zip/traceback.py", line 125, in print_exception
+  File "/lib/python312.zip/traceback.py", line 1046, in print
+TypeError: println() got an unexpected keyword argument 'file'
+
+Original exception was:
+Traceback (most recent call last):
+  File "<exec>", line 4216, in on_key
+  File "<exec>", line 4207, in on_send
+  File "<exec>", line 4199, in handle_line
+  File "<exec>", line 903, in dispatch
+AttributeError: 'int' object has no attribute 'name'

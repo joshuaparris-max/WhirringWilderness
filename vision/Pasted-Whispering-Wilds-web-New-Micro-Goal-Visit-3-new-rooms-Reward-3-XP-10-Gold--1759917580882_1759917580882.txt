@@ -1,0 +1,207 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Visit 3 new rooms
+   Reward: +3 XP, +10 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+🎯 Progress: Visit 3 new rooms (1/3)
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> map
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+You are at: East Gate
+Legend: @ you, · visited, ? known (unvisited), blank = off-map
+> help
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+use [item] - Use an item (key, apple, bandage, potion)
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [creature] - View creature lore
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+> go e
+The gate is locked. A keyhole awaits a fitting key.
+> go w
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  @  ·  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> take
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip tutorial' to skip the tutorial.
+No such item here.
+> take key
+You take the Rusty Key.
+🏆 Achievement Unlocked: First Steps - Take your first item
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> unlock
+Unknown command. Try 'help'.
+> use key
+You turn the key. The gate creaks open eastward.
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
++---------------------+
+| ? ? ? ? |
+| ? · @ ? ? ? ? |
+| ? ? ? ? ? |
++---------------------+
+You are at: East Gate
+Legend: @ you, · visited, ? known
+Items: Rusty Key
+Bandages: 1
+
+=== NAVIGATION ===
+n/s/e/w or north/south/east/west - Move in direction
+climb - Climb to tower summit
+descend - Descend into deep mine
+dive - Dive underwater at lake
+go/move [n/s/e/w/u/d] - Move in a direction
+look - Examine your surroundings
+map - Show the world map
+
+=== COMBAT ===
+attack - Attack an enemy in combat
+power/strike - Use Power Strike skill (Level 3+, 2x damage)
+heal - Use Heal skill (Level 5+, restore 5 HP)
+defend - Use Defend skill (Level 7+, 50% damage reduction)
+hunt - Search for creatures (in wilds)
+rest - Recover HP (2 HP, not during combat)
+skills - Show your unlocked skills
+
+=== ITEMS ===
+drop [item] - Drop an item
+inv - Show inventory
+take [item] - Pick up an item
+use [item] - Use an item (key, apple, bandage, potion)
+
+=== CRAFTING ===
+craft [item] - Craft an item (e.g., healing potion, armor)
+forage [n] - Gather herbs/fiber (optional: repeat n times)
+recipes - Show all craftable items and requirements
+
+=== QUESTS ===
+accept [quest] - Accept a quest (auto if only one available)
+quests - List active quests and progress
+turnin [quest] - Turn in a completed quest
+
+=== ACTIVITIES ===
+fish - Fish at the lake
+harvest - Gather glowcaps in damp places
+mine - Mine ore at the mine
+search - Search for hidden treasures
+
+=== ECONOMY ===
+buy [item] - Purchase item from shop
+shop - Browse shop inventory
+travel [location] - Fast travel (10 gold)
+upgrade [skill] - Upgrade skills with gold
+
+=== SOCIAL / DIALOGUE ===
+give [item] [npc] - Give item to NPC
+say [number] or just [number] - Choose dialogue option
+talk [npc] - Talk to NPC (auto if only one in room)
+
+=== SYSTEM ===
+achievements - View achievement progress
+bestiary - List discovered creatures
+help - Show this help
+load - Load saved game
+lore [creature] - View creature lore
+quit - Exit game
+save - Save game to browser
+sound - Toggle sound effects on/off
+stats - Show HP, XP, and gold
+test - Run automated tests
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

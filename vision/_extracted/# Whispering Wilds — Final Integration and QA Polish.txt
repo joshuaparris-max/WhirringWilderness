@@ -1,0 +1,40 @@
+# Whispering Wilds — Final Integration and QA Polish
+You are a senior PyScript game engineer. 
+The game already supports vertical travel (z layers) and new rooms. 
+Now do the following FINAL tasks:
+1. **Room Linking**
+   - Add missing reverse exits:
+     rooms[&quot;moonlit_lake&quot;].exits[&quot;down&quot;] = &quot;sunken_grotto&quot;
+     rooms[&quot;abandoned_mine&quot;].exits[&quot;down&quot;] = &quot;deep_veins&quot;
+     rooms[&quot;hunters_camp&quot;].exits[&quot;up&quot;] = &quot;canopy_walk&quot;
+     rooms[&quot;sanctum&quot;].exits.update({&quot;up&quot;:&quot;watchtower&quot;,&quot;down&quot;:&quot;catacombs&quot;})
+2. **Minimap Indicators**
+   - Modify minimap renderer:
+     - Use `^` symbol for z>0 rooms, `v` for z<0.
+     - Keep normal `·` for z=0.
+     - Don’t double-print map after move.
+3. **QA Suite Update**
+   - Extend `test` to include:
+     - Vertical navigation tests (up/down paths valid)
+     - Room z-values recorded in logs
+     - Ensure no Room() init crashes
+     - Save/export/import works with z
+4. **Help & Tutorial**
+   - Add to help text:
+     “You can also move vertically using: go up / climb / go down / descend / dive.”
+   - If hints are ON, show one-time toast when first entering a vertical room.
+5. **Loot & Event Polish**
+   - Give z<0 areas (catacombs, deep_veins, grotto) a small +5% rare drop bonus.
+   - Add event modifier: during Blood Moon, deep areas have 1 extra encounter chance.
+6. **Save Safety**
+   - Ensure `z` is included when serialising player location.
+   - Validate migration: if `z` missing in old save, default to 0.
+7. **Final Verification**
+   - Run `test` and confirm:
+     - No TypeErrors.
+     - Up/down works everywhere.
+     - Minimap shows ^/v correctly.
+     - Save/import/export passes.
+     - Hints show once.
+Definition of Done:
+All vertical travel stable, minimap indicators visible, help updated, QA suite all green, no console errors.

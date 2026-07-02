@@ -1,0 +1,150 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Win 2 combats
+   Reward: +3 XP, +8 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip tutorial'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> Rusty Key
+Rusty Key: Old key with a jagged bite.
+> Caretaker
+Caretaker: "Keys open ways, traveler. Try the east gate."
+> talk
+Caretaker listens. Choose:
+  1. Who are you?
+  2. What is this place?
+  3. Tell me about the Whispering Wilds.
+  4. What threats lie beyond these walls?
+  5. Is there any work I can do?
+  6. What can you tell me about the grove?
+  7. Goodbye.
+Type a number (e.g., 1) or use: say [n]
+> 5
+Caretaker: "The northern grove is sick. Bring me 2 herbs for a remedy."
+Type: accept heal_grove   (or talk caretaker again for details)
+> accept
+Multiple quests available. Please specify:
+  - accept heal_grove
+  - accept angler_aid
+  - accept mine_matters
+  - accept hermit_glow
+  - accept crystal_power
+  - accept ancient_secrets
+  - accept summit_view
+> accept angler_aid
+Quest accepted: Angler's Aid.
+> look
+✅ Great! You can see your surroundings now.
+📍 Step 2: Take an item
+You should see a 'Rusty Key' here. Take it!
+Type: take key
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+✅ Perfect! The key is now in your inventory.
+📍 Step 3: Check your inventory
+Type: inv
+(or click 'inv' button below)
+You take the Rusty Key.
+> go e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> unlock
+You turn the key. The gate creaks open eastward.
+> go e
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> go 
+Use: move n/s/e/w
+> go e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+A Stone Gnaw emerges!
+(New entry added to your bestiary.)
+> go e
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> s
+Ranger Camp
+A tidy camp with a banked fire and supple bows.
+You see: Ranger
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  @  ? |
++---------------------+
+> go e
+Trader's Post
+A makeshift counter piled with oddments. The Trader runs a shop here. (Type 'shop' to browse)
+You see: Trader
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  ·  @ |
++---------------------+
+> talk
+Trader listens. Choose:
+  1. Remind me what you need.
+  2. Where can I fish?
+  3. Goodbye.
+Type a number (e.g., 1) or use: say [n]
+> 1
+Trader: "Two fish from the Moonlit Lake. Fresh as you can manage."
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

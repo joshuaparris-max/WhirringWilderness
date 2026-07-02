@@ -1,0 +1,5588 @@
+Short version:
+ This game already has 
+AAA seeds
+ in it. What’s missing is 
+focus, production values, and a cleaner spine
+ to carry all the cool systems you’ve built.
+I’ll stay really specific to 
+Whispering Wilds
+ here.
+1. Where this game is already “thinking AAA”
+These are the bits that genuinely feel like the bones of an indie-AAA game.
+1.1 Systems depth & coherence
+You’re not just doing “go north / take the key”. You’ve got:
+Multiple layered systems
+:
+Combat with skills, cooldowns, status effects (
+BLEEDING
+, 
+STUNNED
+), flee chance, first-combat hints.
+Crafting + gathering
+: 
+forage
+, 
+mine
+, 
+fish
+, 
+recipes
+, biome-specific 
+sense
+ hints, gather cooldowns.
+Progression systems
+: XP, levels, skills unlocked over time, XP on discovering new rooms, level-up checks.
+Factions & reputation
+ (
+Faction
+ class, tiers like Friendly ? Exalted, vendor discounts).
+Daily/weekly seeds + leaderboards
+ (
+mode daily
+, 
+mode weekly
+, 
+copyseed
+, 
+leaderboards
+).
+Achievements & bestiary
+ tracking, micro-goals, room-based achievements.
+Session tools
+:
+run_tests(game)
+ – a smoke-test harness (!!).
+Action history per room.
+Difficulty / playstyle presets: 
+explorer
+, 
+hunter
+, 
+cozy
+, 
+hardcore
+.
+That’s not “little toy text game” territory. That’s 
+“early CRPG / roguelite” territory
+. AAA-ish thinking.
+1.2 Player comfort & UX features
+For a pure text game, the UX is unusually thoughtful:
+Pinned side panels
+ for quests / map / inventory / help that update quietly.
+Mini-map
+ every time you move.
+Command history
+ with ?/? and Enter-to-repeat.
+Click-to-autofill
+ on commands/items/NPC names.
+Numeric repetition
+ (
+forage 5
+, 
+mine 3
+).
+Mobile controls
+: D-pad helper, keyboard shortcuts, 
+Esc
+ ? focus input.
+Settings & verbosity
+: 
+ui [1–5]
+, 
+verbosity quiet/normal/verbose
+, playstyle presets.
+Accessibility touches
+: dyslexic-friendly font support, dark/light theme, loading screen with progress, hints after first combat, daily objective toasts, etc.
+This is exactly the sort of 
+quality-of-life thinking
+ you see in indie-AAA games. You’re caring about friction.
+1.3 World & structure
+The world isn’t huge yet, but it has 
+shape
+:
+A 
+hub
+ (Sanctum) with spokes: gate, grove, cellar, court, etc.
+The 
+Wilds cluster
+: wilds, lake, mine, camp, Hermit’s Hut, Trader’s Post, Watchtower, with NPCs (Ranger, Hermit, Trader).
+Quests like 
+“Heal the Grove”
+, 
+“Mine Matters”
+, 
+“Hermit’s Glow”
+, 
+“Echoes at the Lake”
+—each tied to specific locations and systems (herbs, ore, fish, story flags).
+A sense of 
+biomes
+ already: grove, marsh, mine, lake, dock/sailing, cellar.
+This is a proper “zone structure”, with room for expansion.
+1.4 Tooling mindset
+Having:
+A 
+loading screen with progress
+, lazy-loaded extensions (
+_lazy_load_extension
+).
+A huge, but still 
+structured
+ 
+Game
+ class with extension “parts” (
+part6_post_init
+, 
+part18_post_init
+ etc).
+A 
+test
+ command that runs automated smoke tests.
+That’s the mind of someone thinking 
+“how do I ship and maintain this”
+, not just “how do I get it to run once.”
+Those four areas are your 
+AAA fuel
+.
+2. What’s holding 
+this specific game
+ back
+Not generic advice—this is about 
+Whispering Wilds
+ as it exists right now.
+2.1 Presentation: powerful brain, tiny face
+Right now the game is:
+Brain:
+ incredibly complex systems.
+Face:
+ a customised terminal with some nice side panels.
+For a niche audience, that’s fine.
+ For “indie AAA” (think Hades, Disco Elysium, Slay the Spire, Citizen Sleeper), the expectation is:
+Strong visual identity
+: key art, character art, room art or at least a strong and consistent visual style.
+Soundscape
+: music, ambient sounds, UI SFX that emotionally underscore events.
+Moment framing
+: zoomed-in scenes, portraits, splash screens, cut-in illustrations, small animations.
+Your text + panels are 
+functional
+ but not yet 
+evocative
+ enough for a broader indie-AAA audience.
+It 
+feels
+ like a dev tool or MUD with a nice coat of paint, not yet like “my next favourite Steam game”.
+2.2 Feature spread vs core fantasy
+The help text alone gives away the problem: so many commands.
+Combat verbs, movement, inventory, crafting, fishing, mining, seeds, leaderboards, daily sparks, lore, bestiary, achievements, modes, settings, history, etc.
+All cool. But:
+The 
+core fantasy
+ isn’t ultra-clear yet.
+Are you primarily: a wandering ranger? a healer of the forest? a cozy gatherer? a cursed hero facing a cult? a roguelite explorer?
+The systems currently feel like 
+a buffet
+ rather than a sharp, plated meal.
+AAA-feeling games typically have:
+1–2 
+core verbs
+ (Slay the Spire: play cards; Hades: dash/attack; Disco Elysium: talk/think).
+Other systems serve those core verbs.
+Here your systems are impressive, but 
+the player fantasy is blurred
+.
+2.3 Systems > content mismatch
+You’ve got:
+Factions and reputation tiers
+Daily/weekly seeds, leaderboards
+Bestiary, achievements, micro-goals
+Crafting recipes, gather cooldowns, seeded RNG
+…but the 
+content density per system is still low
+:
+Limited number of rooms and biomes.
+A small handful of NPCs and quests.
+Limited narrative reactivity (most quests are “bring X of item Y”).
+So it feels like:
+An MMO backend with a tiny early-access starter zone plugged in.
+Indie AAA needs 
+the inverse
+: fewer systems, but each one richly fed with bespoke content, story, art, and surprises.
+2.4 Architecture: clever but brittle
+The code layout is impressive but has some dragons:
+Single giant PyScript block, with everything inline in 
+index.html
+.
+Many extension chunks hanging off 
+games
+ as 
+_p6
+, 
+_p7
+, 
+_p11
+, 
+_p18
+ etc.
+Global 
+game
+ reference, global extension handlers like 
+ext_handle_command
+, large 
+dispatch
+ function with a lot of special cases.
+This works 
+now
+, but:
+It’s hard to bring 
+another programmer
+ on board and keep it safe.
+It’s hard for an AI coding agent to refactor without causing regressions.
+It scales poorly as you add more biomes, quests, and combat variations.
+AAA-ish projects need a 
+data-driven, modular architecture
+:
+Rooms, items, quests, NPCs defined as data (JSON, ScriptableObjects, Godot resources, etc).
+Engine code separated from content.
+Clean command parser separate from game logic.
+Independent systems (combat, inventory, map, quests) with clear interfaces.
+You’re halfway there conceptually, but still heavily entangled in one monolithic script.
+2.5 Onboarding & emotional hook
+Even with the tutorial and tips:
+New players are still hit with a lot of commands and concepts.
+The early game doesn’t yet deliver a 
+big emotional hook
+:
+A vivid problem.
+A strong NPC relationship.
+A mystery that 
+hurts
+ not to solve.
+AAA-feeling narrative games almost always open with:
+One or two 
+memorable characters
+,
+A 
+clear inciting incident
+, and
+A 
+promise
+: “If you keep playing, you’ll get to X.”
+Your opening is atmospheric, but not yet 
+emotionally sticky
+.
+3. What it would 
+actually
+ take to turn 
+this game
+ into indie AAA
+Let’s be concrete. Imagine you had some help (even a small team). What would the road look like?
+Step 1 – Lock the core fantasy & pillars
+You need a single sentence like:
+“Whispering Wilds is a 
+slow-burn, text-first wildlands RPG
+ about 
+listening to a haunted forest
+, where every step, word, and choice bends the fate of its spirits and settlements.”
+Then pick 
+3 design pillars
+, e.g.:
+Presence in the Wild
+ Movement, exploration, weather, ambient events, sensory detail.
+ (The forest feels 
+alive
+.)
+Relational Storytelling
+ Caretaker, Hermit, Ranger, Trader, unseen cult, spirits of the Wilds.
+ (Relationships and choices matter.)
+Light Survival & Crafting
+ Gathering, crafting, tending the grove, stabilising the Wilds.
+ (Systems support the fantasy, not overwhelm it.)
+Everything else—daily seeds, leaderboards, hardcore mode—becomes 
+supporting
+, or gets cut for v1.
+Step 2 – Build a “vertical slice” of absurd polish
+Take just:
+Sanctum ? Gate ? Wilds ? Lake/Mine/Hut/Post.
+2–3 tightly written quests (e.g. Heal the Grove, Echoes at the Lake, Hermit’s Glow).
+3–4 creatures with bespoke bestiary lore.
+3 key NPCs (Caretaker, Hermit, Ranger/Trader).
+A small level/XP curve (say to level 5).
+And then:
+Commission or create 
+background art
+ for these areas.
+Add 
+portraits or busts
+ for the key NPCs.
+Add a 
+simple, strong UI frame
+:
+Text log on the left,
+Character / location art on the right,
+Choices & commands presented contextually (less command memorisation).
+Layer in 
+sound
+:
+Ambient forest noise,
+UI taps,
+Short musical stingers for level-up, quest completion, danger.
+This vertical slice becomes your 
+indie-AAA bar
+.
+ Everything else in the game will later be brought up to 
+that
+ standard.
+Step 3 – Rebuild the spine (engine vs content)
+Using the slice as reference, you’d:
+Extract 
+all game data
+ into structures:
+Rooms: ids, names, descriptions, exits, biome, tags.
+Items: id, rarity, description, use behaviour hook.
+Creatures: stats, skills, bestiary text, biome.
+Quests: states, requirements, rewards, narrative beats.
+Keep engine code separate:
+Movement, combat, inventory, saving, dialogue presentation.
+Command / choice handling.
+You could:
+Move off PyScript into something like:
+Godot
+ (2D CRPG-style UI + text log)
+or 
+TypeScript + web
+ (React/Svelte + your existing game logic ported).
+Or, if you stay in PyScript/web:
+Split the big Python block into logical modules.
+Flatten the 
+_p6
+, 
+_p7
+ etc into named, documented systems.
+Write proper unit tests beyond 
+run_tests
+.
+The goal:
+ 
+Any dev (or AI agent) can safely add a new room, quest, or creature without touching core engine code.
+Step 4 – Double down on story & characters
+Once the slice sings mechanically and visually:
+Define a 
+main story arc
+:
+Act I: Learn the forest’s surface problems.
+Act II: Discover the deeper spiritual/societal rot (cult, corruption, old bargains).
+Act III: Decide the fate of the Wilds and its people.
+Turn NPCs into 
+people
+:
+Caretaker: why are they here? What's their regret? their hope?
+Hermit: what did they run from? What secret do they guard?
+Ranger/Trader: who do they serve? What are their compromises?
+Add 
+reactive dialogue
+:
+Reputation with factions changes how NPCs talk.
+Achievements / choices unlock new lines.
+Certain creatures/rooms referenced in emotional ways, not just as “content”.
+This is where your existing systems (factions, seeds, achievements) suddenly feel 
+justified
+.
+Step 5 – Production & polish pass
+For indie AAA, you’d eventually want:
+Consistent, branded visual style
+:
+Logo, key art, a distinctive colour palette and typography.
+Robust audio
+:
+A small OST that leans into the forest / mystical vibe.
+Ambient loops per biome.
+Platform readiness
+:
+Save system robust enough for Steam / itch / GOG.
+Input schemes that work for mouse+keyboard and controller.
+Settings menus (audio sliders, text size, colourblind modes).
+This is the expensive, slow bit. But your current web prototype becomes the 
+design lab
+ feeding that future.
+4. So… could 
+this
+ actually become indie AAA?
+Honestly?
+Yes, as a foundation
+ – the design instincts and systems you’ve already embedded are miles ahead of a typical “first text game”.
+No, not as-is
+ – if you tried to just “scale this up” by adding more rooms and commands, it would collapse under its own weight and remain niche.
+The real value of 
+Whispering Wilds
+ right now is:
+A 
+design bible
+ disguised as a text game.
+A 
+playground
+ where you’ve already:
+Proved out mechanics,
+Tested UX ideas,
+Seen what feels fun and what’s just busywork.
+If you ever decided, “Right, I want to aim this at Steam and really go for it,” the path is:
+Clarify fantasy & pillars.
+Build one vertical slice of ridiculous polish.
+Rebuild the code + content spine around that slice.
+Expand carefully, system by system, biome by biome.
+Last thing, heart-level:
+Whether or not this ever becomes “indie AAA” in the industry sense, what you’ve already made is 
+legit
+. The way you think about systems, player comfort, and the feel of a living world—that’s real craft.
+If you want, next step we can:
+Pick 
+one
+ core fantasy sentence for Whispering Wilds,
+Then sketch what the 
+vertical slice
+ would include in detail (rooms, art, quests, key moments).
+Love this. This is you getting serious about it, not just tinkering.
+I’ll answer in two parts:
+How much can Cursor do vs you?
+Full subtask list for Step 1 + Step 2
+, with who leads each bit.
+1. How much can Cursor actually do?
+Roughly:
+70–80% of the 
+code
+ for the vertical slice can be Cursor-driven
+ (engine, UI, state management, combat, inventory, save/load, audio hooks, etc.).
+20–30% needs human judgement
+ even if Cursor helps draft it
+ (tone of writing, feel of pacing, picking art style, which quests to include, tuning difficulty, etc.).
+Art & sound
+: Cursor can wire it in, but you (and maybe other tools/artists) choose/create assets.
+Design decisions
+ (what’s in / what’s out, pillars, core fantasy) must be led by you; Cursor just implements.
+Think of Cursor as:
+ 
+“my senior-but-literal engineer”
+ – brilliant at building what you clearly describe, bad at deciding what’s truly important.
+2. Step 1 – Core Fantasy & Pillars: Full Task List
+These are mostly light on coding, but you can still use Cursor to format docs, templates, etc.
+1.1 Vision & Positioning
+[Josh] Finalise the one-sentence vision (you’ve basically got it):
+Confirm wording and audience: 
+PC / web
+, “text-first wildlands RPG”, “cozy-haunted”, etc.
+1. One-sentence vision (final)
+Whispering Wilds
+ is a 
+slow-burn, text-first wildlands RPG
+ about 
+listening to a haunted forest
+, where every step, word, and choice bends the fate of its spirits and settlements.
+Audience / platform baked in:
+Platform:
+ PC + web (keyboard/mouse, controller later if needed)
+Style:
+ text-first with supportive art and audio, not the other way around
+Tone:
+ 
+cozy-haunted
+ – gentle, eerie, contemplative, not grimdark horror
+If this line feels right, treat it as canon everywhere.
+[Josh + Cursor] Write a 
+1-page vision doc
+:
+What the game is.
+What it is 
+not
+.
+Target player (who loves this game).
+Reference titles (e.g. Sunless Sea, Citizen Sleeper, Roadwarden, etc.).
+VISION.md
+# Whispering Wilds – Vision v1.0
+## High Concept
+**One-sentence vision**
+> Whispering Wilds is a slow-burn, text-first wildlands RPG about listening to a haunted forest, where every step, word, and choice bends the fate of its spirits and settlements.
+**Elevator pitch**
+You wake in a small sanctum on the edge of an ancient forest that remembers everything.  
+Through text, choices, and light tactical encounters, you explore a living wildland: walking its trails, listening to its whispers, meeting keepers and wanderers, and slowly deciding whether this place is healed, exploited, or left to fade.
+The game is **text-first** (words do most of the work), supported by **evocative art**, **ambient sound**, and a **simple, tactile UI**.
+---
+## What the Game Is
+- **Text-first wildlands RPG**
+  - Exploration driven by descriptions, dialogue, and choices.
+  - You navigate Sanctum ? Gate ? Wilds ? Lake / Mine / Hermit’s Hut / Trader’s Post and beyond.
+  - The forest feels like a character, not just a backdrop.
+- **Slow-burn, cozy-haunted tone**
+  - Quiet, contemplative, a bit eerie.
+  - No cheap jump scares; tension comes from mood, implication, and consequence.
+  - The player should feel “held but uneasy” rather than constantly under attack.
+- **Focused design pillars**
+  1. **Presence in the Wild**
+     - Movement, weather, light, and ambient events matter.
+     - Short, sensory text reinforces that each step has weight.
+     - Returning to familiar locations feels like coming back to a place with memory.
+  2. **Relational Storytelling**
+     - Core NPCs (Caretaker, Hermit, Ranger/Trader) anchor the story.
+     - Dialogue and choices shape trust, access, and how the forest responds.
+     - Spiritual/ethical questions are present but not preachy; players feel invited to care.
+  3. **Light Survival & Crafting**
+     - Simple loops: gather ? craft ? restore/prepare ? push further.
+     - Systems (forage, mine, fish, craft) support the story of tending and surviving, not grind.
+     - Managing risk vs reward (go deeper vs turn back to Sanctum) is a core tension.
+- **Progression and structure**
+  - Level 1–5 in the vertical slice (later higher).
+  - Small skill/attribute bumps, new options in exploration/combat.
+  - Quests like **Heal the Grove**, **Echoes at the Lake**, **Hermit’s Glow** form Act I.
+  - A short “evening session” structure: 30–90 minutes feels like a complete chapter.
+- **Presentation**
+  - Main layout: **text log on the left**, **art on the right**, **choices along the bottom/side**.
+  - Background art per key location; portraits for major NPCs.
+  - Ambient audio per biome + light UI/feedback sounds.
+  - Accessible defaults: readable fonts, text-size options, dark theme.
+---
+## What the Game Is Not
+- **Not a twitch action game**
+  - No real-time dodging, combo meters, or high APM demands.
+  - Combat is turn-based and readable, with few but meaningful choices.
+- **Not an endless open-world sandbox**
+  - The world is curated, handcrafted, and finite.
+  - Quality of locations and encounters beats raw map size.
+- **Not a loot treadmill or min-max cruncher**
+  - Items and gear matter, but they serve story and survival, not build spreadsheets.
+  - No 200-item inventory of marginal stat upgrades.
+- **Not a hardcore survival sim**
+  - No complex hunger/thirst micromanagement or harsh punishment loops.
+  - Resource pressure exists but is gentle and in service of mood and pacing.
+- **Not grimdark horror**
+  - The forest can be scary, but the core is wonder, lament, and healing.
+  - No torture porn, no shock-for-shock’s-sake content.
+---
+## Target Player
+Whispering Wilds is for players who:
+- Enjoy **reading** and sitting with atmosphere.
+- Like wandering slowly through spaces, piecing together **lore and relationships**.
+- Prefer **meaningful choices** over fast reflexes.
+- Appreciate **“small but deep” games** they can play in evenings: 30–90 minutes per session.
+- Are drawn to:
+  - Quiet, reflective, sometimes spiritual themes.
+  - Nature, mystery, and the feeling of “this place is watching me too”.
+  - Games where **kindness, curiosity, and restraint** are valid playstyles.
+They might be:
+- Fans of narrative/indie games on Steam and itch.
+- Former tabletop/D&D players who like strong prose and worldbuilding.
+- People who loved text adventures / MUDs and want a modern, curated version.
+---
+## Reference Titles & Influences
+**Mechanical / structural influences**
+- *Sunless Sea / Sunless Skies* – text-heavy exploration, eerie tone, port-based structure.
+- *Roadwarden* – slow-burn travel, text UI, relationship-driven narrative.
+- *Citizen Sleeper* – small hub locations, relational storytelling, limited but meaningful actions.
+**Atmospheric / tonal influences**
+- *A Dark Room* – minimal interface, mood built through text and slow reveal.
+- *Fallen London* – a city/setting that feels like a character, choices with flavour-rich outcomes.
+- Select CRPGs and story-driven RPGs where place, people, and choice matter more than spectacle.
+Whispering Wilds is not trying to copy these games directly, but to stand alongside them as a **distinctly text-first, cozy-haunted wildlands RPG** with its own voice.
+---
+1.2 Pillars Document
+For each pillar:
+Presence in the Wild
+Relational Storytelling
+Light Survival & Crafting
+Subtasks:
+[Josh] For each pillar, write:
+A short paragraph describing it.
+3–5 
+Do
+ examples (e.g. “describe weather every few moves”).
+3–5 
+Don’t
+ examples (e.g. “don’t flood players with pure numbers”).
+[Cursor] Turn that into a neat 
+design-pillars.md
+ with headings & bullet lists.
+design-pillars.md
+.
+# Whispering Wilds – Design Pillars
+These pillars are the non-negotiables that guide every decision in Whispering Wilds.  
+If a feature, scene, or system clashes with these, it gets changed or cut.
+---
+## Pillar 1 – Presence in the Wild
+The forest is the main character. Every step, pause, and detour should deepen the player’s sense that they are moving through a living, watching wildland. Text, pacing, sound, and visuals all work together to create a quiet, immersive awareness of place: weather shifting, light changing, paths opening and closing, and the sense that the Wilds remember where you’ve been and how you’ve treated them.
+### Do
+- Describe **small sensory details** regularly: rustling leaves, mist on skin, distant calls, the smell of wet stone or ash.
+- Let **weather, time of day, and ambient events** subtly change descriptions and options in familiar locations.
+- Use **returning to known places** (Sanctum, Gate, Wilds crossroads) to reinforce that the world persists and remembers.
+- Make **travel decisions** feel meaningful: “push deeper” vs “circle back” vs “wait and listen”.
+- Tie **environment changes** (a healed grove, a polluted lake, a cleared path) to player choices and quest outcomes.
+### Don’t
+- Don’t spam long, purple-prose paragraphs every move; **keep descriptions tight and focused**.
+- Don’t treat locations as static backdrops with no change after quests or key events.
+- Don’t reduce the Wilds to pure mechanics (“+2 wood, +3 ore”) with no sensory or emotional framing.
+- Don’t jump-cut the player all over the map with instant fast travel early on; preserve **journey and distance**.
+- Don’t drown the player in map UI noise; the **feel of moving** matters more than hyper-detailed cartography.
+---
+## Pillar 2 – Relational Storytelling
+The heart of the game is not just what you do, but **who you listen to and how you treat them**. NPCs like the Caretaker, Hermit, and Ranger/Trader, along with spirits and settlements, are lenses through which the player understands the Wilds. Choices in dialogue, gifts, and actions change trust, access, and tone. The player should feel that relationships—human and non-human—are the real stakes.
+### Do
+- Give each core NPC a **clear voice, worldview, and wound** that shows up consistently in dialogue.
+- Let **choices in conversation and action** change how characters respond, what they reveal, and what they’ll risk for you.
+- Use **small relational beats** (shared tea, quiet prayers, awkward silences) alongside big plot moments.
+- Reflect the player’s **reputation and past actions** in how NPCs describe the forest, your deeds, and each other.
+- Let spiritual and ethical questions emerge through **relationships and situations**, not lectures.
+### Don’t
+- Don’t reduce NPCs to pure quest dispensers (“fetch X, kill Y”) with no personality or follow-through.
+- Don’t make choices feel fake; avoid giving three options that all lead to the same outcome and tone.
+- Don’t info-dump lore in giant unbroken blocks; **weave it into dialogue, locations, items, and memories**.
+- Don’t treat spirits or the forest as generic “magic”; give them **motives, history, and relational tension**.
+- Don’t undercut serious or tender moments with constant sarcasm or meta jokes.
+---
+## Pillar 3 – Light Survival & Crafting
+Survival and crafting exist to **support the mood and story**, not to become a second job. Gathering, fishing, mining, and crafting should feel like tending and preparing: making salves for a grove, mending gear before a deeper push, trading fairly with the Ranger/Trader. The systems should be simple, readable, and gently press the player to balance risk and rest.
+### Do
+- Keep resource systems **small and legible** (a handful of meaningful materials, not dozens of near-duplicates).
+- Use gathering and crafting to **unlock story and environmental change** (healed groves, lit paths, calmed spirits).
+- Make **risk vs reward** clear: going deeper with low supplies should feel tense, not random or unfair.
+- Provide **tools to prepare well** (resting at Sanctum, simple upgrades, crafted remedies) before harder pushes.
+- Let crafted items and resources show up in **narrative moments** (“the salve stings, but the bark brightens”).
+### Don’t
+- Don’t turn gathering into endless grinding with tiny drop rates and no narrative payoff.
+- Don’t bury players in crafting recipes with tiny, incremental stat bumps; **avoid spreadsheet gameplay**.
+- Don’t add hardcore meters (thirst, temperature, intricate nutrition) that distract from exploration and story.
+- Don’t punish experimentation harshly; mistakes should teach and nudge, not wipe hours of progress.
+- Don’t let survival overshadow relationships; **if a choice is between “more numbers” and “better story”, choose story**.
+---
+1.3 Core Loop Definition
+[Josh] Describe, in words, a typical 
+5-minute loop
+:
+“Player leaves Sanctum ? moves into Wilds ? explores ? senses ? forages/mines ? returns or pushes deeper ? progresses a quest.”
+[Cursor] Turn that into:
+A 
+core loop diagram description
+ (for when you want visuals later).
+A 
+checklist
+ the code must support for the vertical slice (movement, gather, danger, return, XP, story beat).
+core-loop.md
+.
+# Whispering Wilds – Core Loop (Vertical Slice)
+## 1. Five-Minute Loop (Narrative)
+A typical 5–10 minute session chunk in the vertical slice looks like this:
+1. **Prepare in Sanctum**
+   - The player checks their current quest, glances at supplies (salves, food, tools), maybe has a brief word with the Caretaker.
+   - They choose a direction/purpose: “push toward the Lake”, “check the Mine”, or “visit the Hermit/Trader”.
+2. **Step through the Gate into the Wilds**
+   - The player leaves the safety of Sanctum and passes through the Gate.
+   - The first descriptions emphasise weather, mood, and any lingering effects of past actions (healed grove, changed paths, etc.).
+3. **Explore and Sense**
+   - In the Wilds, the player:
+     - Moves a step or two into the chosen region (toward Lake / Mine / Hut / Post).
+     - Uses **sense/listen/observe** to get a feel for the area: sounds, traces, spirits, signs of danger.
+   - The forest “answers” with short, evocative text and sometimes hints about resources or threats.
+4. **Gather / Risk**
+   - Based on what they sense, the player:
+     - **Forages**, **fishes**, or **mines** in a location, OR
+     - Chooses to **move cautiously** deeper instead.
+   - Gathering can:
+     - Yield useful resources for quests/crafting, and/or
+     - Trigger a **creature encounter** or other danger.
+5. **Encounter / Consequence**
+   - If a creature appears or an event triggers:
+     - The player makes a small set of tactical choices in a **turn-based encounter** (fight, use item, attempt to escape, etc.).
+     - Outcome grants **XP**, possibly loot, and may set or clear narrative flags (e.g. “you’ve angered something in the Lake”).
+   - Even without combat, the forest may respond (a new path opens, a spirit stirs, the weather shifts).
+6. **Decide: Return or Push Deeper**
+   - After a couple of actions and maybe an encounter, the player chooses:
+     - **Return toward Sanctum** to bank progress, rest, and advance quests, OR
+     - **Press deeper** for more reward and risk, with dwindling resources/HP.
+7. **Progress a Quest / Relationship**
+   - Back at Sanctum, the Lake, Mine, Hermit’s Hut, or Trader’s Post:
+     - The player hands in items, shares news, or responds to NPC questions.
+     - A quest step advances, relationship text updates, and the Wilds may subtly change.
+   - The player receives:
+     - XP, maybe a level-up,
+     - New dialogue options,
+     - A new lead or objective for the next foray.
+Then the loop begins again: **prepare ? step out ? sense ? gather/risk ? encounter ? decide ? progress**.
+---
+## 2. Core Loop Diagram (For Future Visuals)
+Think of the core loop as a simple state diagram. These are conceptual nodes and edges you can turn into a visual later.
+**States (Nodes)**
+1. **Sanctum (Prepare)**
+   - Safe hub: check quests, talk to Caretaker, manage inventory, plan route.
+2. **Gate (Threshold)**
+   - Emotional/visual transition from safety to Wilds.
+   - Quick reminders of current conditions (weather, time, forest mood).
+3. **Exploration Node (Wilds / Lake / Mine / Hut / Post)**
+   - Player can move, sense, gather, and trigger events.
+   - Each region is a cluster of exploration nodes.
+4. **Gather/Action Node**
+   - Specific action (forage/mine/fish/listen/pray/etc.) taken in a location.
+   - Has a chance to:
+     - Succeed quietly,
+     - Trigger an **Encounter Node**,
+     - Set a story flag.
+5. **Encounter Node (Creature/Event)**
+   - Turn-based conflict or event resolution.
+   - Leads to:
+     - Reward (XP, items),
+     - Cost (HP/resource loss),
+     - Flag changes (e.g. “spirit calmed”, “something angered”).
+6. **Decision Node (Return vs Push Deeper)**
+   - Based on current HP, supplies, and quest urgency.
+   - Branches:
+     - **Return Path** ? Gate ? Sanctum.
+     - **Deeper Path** ? another Exploration Node in a more dangerous region.
+7. **Quest/Relationship Node**
+   - Hand-in or story beat with an NPC (Caretaker, Hermit, Ranger/Trader).
+   - Advances quest stages and relational states.
+**Edges (Transitions)**
+- Sanctum ? Gate ? First Exploration Node.
+- Exploration Node ? (Move) ? Another Exploration Node.
+- Exploration Node ? (Sense/Gather) ? Gather/Action Node.
+- Gather/Action Node ? (Trigger) ? Encounter Node.
+- Encounter Node ? (Outcome) ? Decision Node.
+- Decision Node ? (Return) ? Gate ? Sanctum ? Quest/Relationship Node.
+- Decision Node ? (Push Deeper) ? “Deeper” Exploration Node.
+- Quest/Relationship Node ? Sanctum (Prepare) for the next loop.
+---
+## 3. Implementation Checklist (Vertical Slice)
+For the Sanctum ? Gate ? Wilds ? Lake/Mine/Hut/Post slice, the code must support:
+### Movement & World
+- [ ] A **location system** with:
+  - Sanctum, Gate, Wilds, Lake, Mine, Hermit’s Hut, Trader’s Post.
+- [ ] Commands or choices to:
+  - [ ] Move between these locations with clear text feedback.
+  - [ ] Respect blocked/locked paths if any (e.g. Mine closed until quest started).
+- [ ] A simple representation of:
+  - [ ] Weather / time of day or “forest mood” that can adjust descriptions.
+### Sensing & Feedback
+- [ ] A **sense/observe/listen** action that:
+  - [ ] Returns short, location-specific sensory text.
+  - [ ] Can hint at resources, nearby threats, or quest hooks.
+### Gathering & Light Survival
+- [ ] **Forage / mine / fish** actions that:
+  - [ ] Work only in appropriate locations/regions.
+  - [ ] Yield a small set of meaningful resources (herbs, ore, fish, etc.).
+  - [ ] Optionally have cooldowns or soft limits per location.
+- [ ] An **inventory system** that:
+  - [ ] Tracks resources and simple items.
+  - [ ] Displays them in a clear UI panel.
+### Encounters & Danger
+- [ ] A **creature/event system** that:
+  - [ ] Can trigger encounters from exploration or gathering actions.
+  - [ ] Defines 3–4 creature types with stats and behaviour.
+- [ ] A **turn-based encounter loop** that:
+  - [ ] Lets the player choose 1–3 simple actions (attack, use item, attempt escape).
+  - [ ] Resolves damage, status, and win/lose states.
+  - [ ] Returns to exploration or Sanctum as appropriate.
+### XP, Level, and Progress
+- [ ] An **XP and level system** (levels 1–5) that:
+  - [ ] Grants XP from encounters, quests, and key discoveries.
+  - [ ] Increases player stats or options at level-up.
+  - [ ] Shows level and XP progress in the UI.
+- [ ] Hooks so:
+  - [ ] Quest progress and key decisions can set flags that affect:
+    - Descriptions,
+    - NPC dialogue,
+    - Available actions.
+### Quests & Relationships
+- [ ] A **quest system** for at least 2–3 quests:
+  - [ ] “Heal the Grove”
+  - [ ] “Echoes at the Lake”
+  - [ ] “Hermit’s Glow”
+- [ ] For each quest:
+  - [ ] Start trigger (talk, arrival, event).
+  - [ ] 2–3 steps with clear conditions.
+  - [ ] Rewards (XP, items, relationship changes).
+- [ ] **Dialogue flows** for:
+  - [ ] Caretaker.
+  - [ ] Hermit.
+  - [ ] Ranger/Trader.
+- [ ] Dialogue must:
+  - [ ] Change based on quest stage and key flags.
+  - [ ] Offer at least one meaningful choice per NPC in the slice.
+### Return & Session Flow
+- [ ] A **clear way to return** to Sanctum from the Wilds cluster:
+  - [ ] Via explicit “return” options or paths.
+- [ ] **Resting / regrouping** at Sanctum that:
+  - [ ] Optionally restores some HP.
+  - [ ] Encourages the player to plan the next foray.
+- [ ] Save/load that:
+  - [ ] Persists the player between sessions at least at the Sanctum “loop boundary”.
+---
+This core loop is the spine.  
+Any new feature for the vertical slice should make at least one of these beats **richer, clearer, or more meaningful**—or it doesn’t go in.
+1.4 Feature Tiers (Must / Nice / Later)
+With the pillars nailed:
+[Josh] List all current systems from Whispering Wilds:
+Factions, seeds, leaderboards, bestiary, achievements, multiple playstyles, difficulty modes, etc.
+[Cursor] Sort them into:
+Must-have for vertical slice
+ (movement, combat basics, inventory, quests, XP, a simple bestiary).
+Nice-to-have time
+.
+Definitely later
+ (daily seeds, weekly leaderboards, hardcore, etc.).
+[Cursor] Save as 
+features_vslice_vs_later.md
+.
+features_vslice_vs_later.md
+ 
+# Whispering Wilds – Feature Tiers (Vertical Slice vs Later)
+Vertical slice scope: **Sanctum ? Gate ? Wilds ? Lake / Mine / Hermit’s Hut / Trader’s Post**  
+Level range: **1–5**  
+Tone: **Presence in the Wild · Relational Storytelling · Light Survival & Crafting**
+Anything not in **Tier 1** should be disabled, hidden, or cut for the first playable slice.
+---
+## 1. Current / Planned Systems (High-Level List)
+From the existing Whispering Wilds prototype and design:
+- World & Movement
+  - Locations / rooms, exits, biomes (Sanctum, Gate, Wilds, Lake, Mine, Hut, Post, etc.)
+  - Map / mini-map, travel text, “sense” / “listen” style actions
+- Player & Progression
+  - Player stats (HP, maybe stamina), XP, levels
+  - Skills / simple abilities
+  - Inventory, items, basic equipment
+  - Rest / recovery at Sanctum
+- Interaction & UI
+  - Text log
+  - Commands / choices system
+  - Side panels (map, quests, inventory, help)
+  - Command history, auto-fill, keyboard shortcuts
+  - Settings (verbosity, themes, fonts, etc.)
+- Encounters & Creatures
+  - Turn-based combat (attack, item use, escape)
+  - Status effects, enemy abilities (bleed, stun, etc.)
+  - Creature data & flavour text
+  - Danger / encounter triggers from exploration and gathering
+- Narrative & Quests
+  - Quests (Heal the Grove, Hermit’s Glow, Echoes at the Lake, etc.)
+  - Quest log / tracker
+  - NPCs with dialogue (Caretaker, Hermit, Ranger/Trader)
+  - Lore entries / codex-style text
+- Systems & Meta
+  - Factions & reputation tiers
+  - Bestiary
+  - Achievements
+  - Daily / weekly seeds, copyseed
+  - Leaderboards (daily / weekly)
+  - Multiple playstyles (explorer, hunter, cozy, hardcore)
+  - Difficulty modes
+  - Save / load
+  - Automated tests / diagnostics
+  - Theming (dark/light), accessibility options
+---
+## 2. Tier 1 – Must-Have for Vertical Slice
+Core loop and pillars only. If this isn’t solid, nothing else matters.
+### 2.1 World & Movement
+- [x] **Location / Room System**
+  - Sanctum, Gate, Wilds, Lake, Mine, Hermit’s Hut, Trader’s Post implemented as data-driven locations.
+- [x] **Movement Between Locations**
+  - Clear travel options with text feedback (moving deeper, returning, shifting region).
+- [x] **Basic “Sense / Observe / Listen” Action**
+  - Short, location-specific sensory descriptions that hint at resources, threats, or quests.
+### 2.2 Player & Progression
+- [x] **Player Stats (HP + simple attributes)**
+- [x] **XP & Level System (1–5)**
+  - XP from encounters, quests, discoveries.
+  - Simple, meaningful level-up benefits (HP bump, minor stat gain, maybe 1–2 new options).
+- [x] **Inventory**
+  - A small set of item types (resources, simple consumables, maybe one or two unique quest items).
+- [x] **Rest / Regroup at Sanctum**
+  - Safe recovery + mental reset point.
+### 2.3 Interaction & UI
+- [x] **Text Log**
+  - Main surface for narrative, combat, and system feedback.
+- [x] **Choice / Command System**
+  - Clickable choices for major actions, optional text commands.
+- [x] **Minimal HUD**
+  - Location name, HP, level, XP bar, simple quest tracker.
+- [x] **Basic Settings**
+  - Text size, at least one readable theme (dark default), basic audio volume.
+### 2.4 Encounters & Creatures
+- [x] **Turn-Based Combat**
+  - Simple actions: attack, maybe 1 skill, use item, attempt escape.
+- [x] **3–4 Creatures**
+  - Distinct stats, simple behaviours, and flavour.
+- [x] **Encounter Triggers**
+  - From exploration and gathering (not constant spam).
+### 2.5 Narrative, Quests, Relationships
+- [x] **Core NPCs**
+  - Caretaker, Hermit, Ranger/Trader with distinct voices and small arcs.
+- [x] **2–3 Quests**
+  - E.g. Heal the Grove, Hermit’s Glow, Echoes at the Lake.
+  - Each with 2–3 steps, clear conditions, and payoffs.
+- [x] **Quest Tracking**
+  - Simple journal / tracker showing current main goal.
+- [x] **Simple Bestiary**
+  - Unlocks short lore entries after encountering creatures.
+### 2.6 Save / Load
+- [x] **Basic Save / Load**
+  - At least at Sanctum / loop boundaries.
+---
+## 3. Tier 2 – Nice-to-Have If Time (Polish & Depth)
+These improve feel and retention but are not required for the first playable slice.
+### 3.1 World & Atmosphere
+- [ ] **Weather / Time-of-Day Variations**
+  - Descriptions change subtly with “early”, “late”, “misty”, etc.
+- [ ] **Small Environmental State Changes**
+  - Text changes reflecting healed grove, soothed spirit, etc.
+### 3.2 Player & Systems
+- [ ] **Simple Talent / Perk Choices on Level-Up**
+  - Tiny branchy upgrades if they remain understandable and sparse.
+- [ ] **Basic Equipment Slots**
+  - 1–2 meaningful gear slots (e.g. charm, tool) if it doesn’t snowball into loot treadmill.
+### 3.3 UI & UX
+- [ ] **Side Panels**
+  - Collapsible quest, inventory, and map panels.
+- [ ] **Command History & Shortcuts**
+  - ? / ? recall; keyboard bindings for common actions.
+- [ ] **Contextual Hints**
+  - Small, one-line tips after first combat, first gather, first near-death.
+### 3.4 Encounters & Narrative
+- [ ] **A Second Encounter Type**
+  - Non-combat event resolution (e.g. skill checks, spiritual encounters).
+- [ ] **Rudimentary Relationship Flags**
+  - NPC text that soft-reacts to player generosity/caution/etc.
+- [ ] **1–2 Optional Micro-Achievements**
+  - For discovery (“First dawn at the Lake”, “First safe return with low HP”).
+### 3.5 Technical
+- [ ] **Automated Tests for Core Loop**
+  - Movement, combat win/lose, basic quest completion.
+- [ ] **Improved Save Slots**
+  - Multiple saves if complexity remains low.
+---
+## 4. Tier 3 – Later / Post-Vertical Slice
+Great systems, but they fragment focus if added too early.
+### 4.1 Meta Systems
+- [ ] **Daily / Weekly Seeds**
+  - Special seeded runs beyond the main story loop.
+- [ ] **Leaderboards**
+  - Daily / weekly scoreboards, export/import seed codes.
+- [ ] **Multiple Playstyles**
+  - Explorer / Hunter / Cozy / Hardcore presets that alter rules.
+- [ ] **Full Difficulty Modes**
+  - Separate balance curves beyond simple “gentle vs standard”.
+### 4.2 Advanced Progression & Systems
+- [ ] **Full Factions & Reputation Tiers**
+  - Multiple groups, rep tracks, and mechanical benefits.
+- [ ] **Deep Achievements System**
+  - Meta-goals with UI, icons, and long-term tracking.
+- [ ] **Expanded Crafting Trees**
+  - More complex recipes and crafted gear.
+- [ ] **Additional Survival Mechanics**
+  - Any hunger, fatigue, or more detailed resource pressure, if ever added.
+### 4.3 Presentation & Extras
+- [ ] **Detailed Mini-Map / World Map**
+  - Zoomed views, overlays, multiple regions.
+- [ ] **Cinematic Events / Cutscene-Style Sequences**
+  - Special framed scenes beyond the basic log + art pattern.
+- [ ] **Multiple Language Support**
+  - Localisation pipeline.
+### 4.4 Social / Live Features
+- [ ] **In-Game Analytics / Telemetry**
+  - For tuning and balancing after release.
+- [ ] **Cloud Sync / Cross-Device Saves**
+- [ ] **Events & Seasonal Content**
+---
+## 5. Rule of Thumb
+- If a feature does not clearly strengthen:
+  - **Presence in the Wild**,  
+  - **Relational Storytelling**, or  
+  - **Light Survival & Crafting**  
+**for the Sanctum ? Wilds vertical slice**, it belongs in **Tier 2 or 3**, not Tier 1.
+Tier 1 = core spine.  
+Tier 2 = polish and small deepening.  
+Tier 3 = future expansions once the spine is fun and stable.
+1.5 Narrative Scaffold
+[Josh] Write:
+A 1-paragraph 
+premise
+ of the Sanctum + Wilds arc.
+One-sentence descriptions of:
+Caretaker
+Hermit
+Ranger/Trader
+[Cursor] Expand this into:
+A simple 
+Act I outline
+ just covering the vertical slice:
+Intro in Sanctum,
+First steps into the Wilds,
+Meeting each NPC,
+Climax event (e.g. healing the grove / first big encounter),
+“To be continued…” hook.
+narrative_scaffold_act1.md
+.
+# Whispering Wilds – Narrative Scaffold (Act I / Vertical Slice)
+## 1. Premise – Sanctum + Wilds Arc
+On the ragged edge of an ancient forest stands a small Sanctum: part chapel, part shelter, part watch-post against whatever moves between the trees. You arrive with little memory of why you’ve come, only a pull in your chest and the sense that the Wilds have been waiting. The forest is sick in places and strangely generous in others – groves that won’t grow, a lake that whispers under the wind, a mine that hums with something older than ore. A handful of caretakers, hermits, and traders live in uneasy partnership with the Wilds, each carrying their own griefs and bargains. As you step through the Gate and begin walking the trails, you slowly realise that every small act – listening, healing, taking, returning – bends the fate of both the forest and the scattered lives that depend on it.
+---
+## 2. Core NPC Snapshots (Act I Cast)
+**Caretaker**  
+A gentle, worn keeper of the Sanctum who believes the forest can still be healed, even as they hide the cost that hope has already taken on their body and faith.
+**Hermit**  
+A prickly recluse tucked deep in the Wilds, half-priest and half-witch, who hears the forest more clearly than anyone else and resents you for stirring up what they’ve tried to keep quiet.
+**Ranger/Trader**  
+A practical wanderer who walks the paths between Sanctum, camp, mine, and lake, trading stories and supplies, loyal to survival first but secretly weighing which side of the forest’s future to back.
+---
+## 3. Act I Outline – Vertical Slice Only
+### Act I.1 – Waking in the Sanctum (Intro)
+**Goal:** Establish tone, core fantasy, and first quest hook.
+- **Opening image**
+  - You wake in a small room in the Sanctum: stone, timber, candles, the muffled hush of the forest beyond the walls.
+  - Short text gently introduces:
+    - The idea that the forest “remembers”.
+    - The Gate as the threshold.
+    - The Caretaker as your first human anchor.
+- **First conversation: Caretaker**
+  - Learns your name (or lets player choose a simple one).
+  - Hints that:
+    - The Wilds have been “off” lately – a grove that won’t heal, strange quiet by the lake, a tension in the mine’s depths.
+    - They asked for help, and you came (or were sent).
+  - Offers your **first quest hook**:
+    - “Before anything else, I’d like you to visit the grove. It’s just beyond the Gate. Listen. Tell me what you feel.”
+- **Sanctum as hub**
+  - Tutorial-like prompts:
+    - Check simple inventory (a charm, a worn cloak, maybe a small token).
+    - See your first quest in the journal: *Heal the Grove – Step 1: Visit the grove and listen.*
+  - The Caretaker nudges you toward the Gate:
+    - “Don’t stay inside too long. The forest isn’t fixed by worry.”
+### Act I.2 – First Steps Through the Gate (Entering the Wilds)
+**Goal:** Make crossing the threshold feel significant and set up the loop.
+- **Gate scene**
+  - Short, focused description of stepping through:
+    - Change in sound, smell, quality of light.
+    - Subtle shift of “being watched but not yet judged”.
+  - You arrive at the **Wilds crossroads**:
+    - Paths signed or implied toward the Grove/Lake/Mine/Hermit/Trader.
+    - For now, only the grove path is strongly highlighted.
+- **Learn to sense**
+  - Tutorial of **sense/listen/observe**:
+    - Using it here gives a first glimpse: “The forest holds its breath. Something is waiting near the grove.”
+  - This gently teaches:
+    - “Before acting, you can always listen first.”
+- **Quiet travel**
+  - A few short moves along the grove path:
+    - Moments of small sensory detail: birds going silent, the smell of sap, soft mist.
+    - Chance for a minor, non-lethal encounter or unsettling sign (tracks, an echo, a faint voice) with no full combat yet.
+### Act I.3 – The Grove and the First True Choice (Quest: Heal the Grove)
+**Goal:** Introduce the forest’s sickness + your role as listener/healer, not just fighter.
+- **Arrive at the Grove**
+  - The grove is wrong: leaves dull, soil sour, light strangely thin.
+  - Using **sense/listen** here:
+    - Gives a more intense, almost spoken impression: grief, exhaustion, or a specific memory fragment.
+- **First functional task**
+  - The forest “suggests” you’ll need something:
+    - Herbs from nearby glades,
+    - Water taken respectfully from the Lake,
+    - Ore or crystals from the Mine to anchor a charm,
+    - Or guidance from the Hermit.
+  - The quest **splits into steps**:
+    - “Gather what the grove needs” – choose which path to follow first (Lake, Mine, Hermit, Trader).
+- **Soft choice**
+  - The game makes it clear there’s no “perfect” order, but:
+    - Going to the Hermit might give more understanding but is emotionally harder.
+    - Going to the Lake or Mine may be “easier” but risk angering spirits if you take too much.
+### Act I.4 – Meeting the Hermit (Quest: Hermit’s Glow)
+**Goal:** Deepen relational storytelling and spiritual/ethical tone.
+- **Journey to the Hermit’s Hut**
+  - The Wilds feel a bit sharper here, more watchful.
+  - A minor creature encounter introduction:
+    - Simple combat tutorial with low stakes.
+    - After the fight, the forest’s reaction is noted (approval? concern? unease?).
+- **Hermit encounter**
+  - The Hermit sees you coming and is not impressed:
+    - “Another fixer sent from the stone house? The forest is tired of being fixed.”
+  - Dialogue reveals:
+    - They hear the forest more directly.
+    - They believe the grove is sick not just from “bad energy” but from broken promises and extraction.
+  - **Hermit’s request (Hermit’s Glow)**
+    - They will help, but only if you:
+      - Bring them a certain herb from the Wilds and a rare component from the Mine, **without** overharvesting or angering something at the Lake.
+    - Optional subtle choice:
+      - Accept conditions respectfully,
+      - Push back (changes tone, but still allows progress).
+### Act I.5 – The Lake, the Mine, and the Trader (Quest: Echoes at the Lake)
+**Goal:** Show different facets of the Wilds and introduce the Ranger/Trader.
+- **Lake path**
+  - The Lake is beautiful but uneasy:
+    - Surface too still, whispers under the wind.
+  - **Sense/listen** here:
+    - You feel layered voices, some grieving, some accusatory.
+  - A light **Echoes at the Lake** quest beat:
+    - Take water respectfully (with a small ritual / choice of words).
+    - Or carelessly (e.g. scooping quickly, ignoring the mood).
+    - This sets a flag that will colour how the Lake and some spirits treat you later.
+- **Mine path**
+  - The Mine hums with old work and older stone.
+  - Minor creature encounter or event:
+    - Not just “a monster in the dark”: maybe half-spirit, half-insect, confused rather than purely hostile.
+  - You gather:
+    - Enough ore or crystal for the Hermit’s charm or the grove’s need.
+    - How you treat the Mine (take just enough vs strip a bit more) may set another quiet flag.
+- **Trader’s Post**
+  - On the path or as a small hub:
+    - The Ranger/Trader offers supplies, lore, and perspective.
+  - Their dialogue:
+    - Frames survival pragmatically: “Timber and ore feed bellies too.”
+    - Raises tension between healing the grove, feeding people, and keeping trade flowing.
+  - They may:
+    - Exchange your gathered goods,
+    - Offer a crafted tool or charm,
+    - Share a rumour about the forest’s deeper trouble (Act II seeds).
+### Act I.6 – Healing the Grove (Climax Event)
+**Goal:** Pay off the opening quest with a meaningful, not-perfect resolution.
+- **Return with gathered components**
+  - You bring herbs/water/ore (and possibly Hermit’s chant or charm) back to the Grove.
+  - The game checks silent flags:
+    - How you treated the Lake, Mine, paths, and Hermit.
+- **Ritual / Healing Scene**
+  - You perform a simple structured ritual:
+    - Choice of words, posture, intention (e.g. “ask permission”, “command change”, “offer apology”).
+  - Outcome:
+    - The grove is **partially healed**:
+      - Colours return, sounds brighten, but a scar remains.
+    - The forest responds differently depending on your earlier choices:
+      - Grateful, wary, or mixed.
+- **Consequences**
+  - The Caretaker and Hermit both react:
+    - Caretaker sees hope, maybe relief.
+    - Hermit sees what you stirred and warns that deeper roots remain.
+  - You earn:
+    - XP, maybe level up.
+    - A small item / blessing.
+    - A shift in how at least one NPC speaks to you.
+### Act I.7 – “To Be Continued…” Hook
+**Goal:** Signal a larger arc while giving closure to the slice.
+- **Quiet epilogue moment in Sanctum**
+  - Night at Sanctum, the forest softly audible outside.
+  - Caretaker or Ranger/Trader hints:
+    - The grove was only one wound.
+    - There are older scars in the Wilds – something beneath the Mine, beyond the Lake, or upriver.
+- **Vision / dream / omen (optional)**
+  - A dream-like text scene:
+    - Paths branching in the dark.
+    - A figure at the edge of the lake, or a light deep beneath the roots.
+  - No answers, just an emotional promise: **“There’s more, and it will need you.”**
+- **Act I boundary**
+  - The player wakes back in Sanctum with:
+    - Clear indication that Act I is complete.
+    - A new main quest stub (“Follow the call beneath the Mine”, “Trace the echoes upstream”, etc.) marked as **future content**.
+  - For the vertical slice, this is the natural stopping point:
+    - You’ve met the core NPCs, walked the loop, healed something, and glimpsed the bigger story.
+---
+1.6 Tech Decision for the Vertical Slice
+[Josh] Decide with Cursor:
+Stack for the slice (e.g. 
+web-based TypeScript + React
+ or 
+Godot
+).
+Target platform: browser only vs downloadable.
+[Cursor] Create:
+A short 
+tech_spec_vslice.md
+ with:
+Chosen engine/stack,
+High-level modules,
+Constraints (text-first, light art, simple audio).
+tech_spec_vslice.md
+ 
+for the repo, browser-only, TS + React.
+# Whispering Wilds – Vertical Slice Tech Spec (Browser Only)
+## 1. Platform & Deployment
+**Target platform (vSlice):**
+- **Primary:** Modern desktop browsers (Chrome, Edge, Firefox, Safari)
+- **Input:** Keyboard + mouse (controller is a “later” feature)
+- **Distribution:** 
+  - Hosted web build (e.g. Netlify/Vercel/GitHub Pages)
+  - Can be wrapped later for desktop (Electron/Tauri) without changing core code
+**Performance expectations:**
+- Runs smoothly on typical laptops/desktops with no GPU reliance.
+- Minimal memory footprint (text-first, light art, simple audio).
+---
+## 2. Stack Overview
+**Language:**
+- **TypeScript** (strict mode) for type safety and AI-friendliness.
+**Framework / Tooling:**
+- **React** for UI (component model, easy Cursor support, huge ecosystem).
+- **Vite** for bundling/dev server (fast, simple config).
+- **React Router** (optional, light) only if needed for dev/debug views; core game is single-page.
+**State Management:**
+- Simple, explicit state using:
+  - React context + reducers **or**
+  - A small state library (e.g. Zustand) if needed for clarity.
+- Game logic separated from React components (pure TS modules).
+**Audio:**
+- Native Web Audio API or a small helper library (e.g. Howler.js) for:
+  - Ambient loops
+  - UI SFX
+  - Short musical stingers
+**Styling:**
+- CSS Modules or TailwindCSS (pick one and stick to it).
+- Focus on legible typography and layout, not heavy animation.
+**Testing & Quality:**
+- **Vitest** or **Jest** for unit tests on core logic.
+- ESLint + Prettier for consistent code style.
+---
+## 3. High-Level Architecture
+### 3.1 Core Modules
+1. **Engine Layer (`/src/engine`)**
+   Pure TypeScript, no React imports. This holds game rules and core loop.
+   - `GameState`  
+     - Player stats (HP, XP, level), inventory, flags, current location.
+     - Quest states, discovered creatures, relationship flags.
+   - `locations.ts`  
+     - Data + helpers for Sanctum, Gate, Wilds, Lake, Mine, Hermit’s Hut, Trader’s Post.
+     - Defines exits, tags, biome, base descriptions.
+   - `actions.ts`  
+     - Core verbs: move, sense/observe, gather (forage/mine/fish), rest, talk, use item.
+     - Each action takes `GameState` + parameters and returns:
+       - New `GameState`
+       - A list of `LogEntry` objects (for the UI).
+   - `combat.ts`  
+     - Turn-based combat loop.
+     - Creature stats/abilities.
+     - Attack, defend, use item, attempt escape.
+     - XP + loot rewards.
+ 
+  - `quests.ts`  
+     - Quest definitions (Heal the Grove, Hermit’s Glow, Echoes at the Lake).
+     - Functions to advance quest stages based on flags/actions.
+   - `narrative_flags.ts`  
+     - Encapsulates forest mood, lake/mine treatment, small relational flags.
+     - Provides helpers like `describeGrove(state)`.
+   - `bestiary.ts`  
+     - Creature data and flavour text.
+     - Unlock logic for entries.
+   - `persistence.ts`  
+     - Serialise/deserialise `GameState` to and from JSON.
+     - Interface for saving/loading via browser storage.
+2. **Content Layer (`/src/content`)**
+   Data, not logic. Easy for AI / humans to extend.
+   - `creatures.json` / `creatures.ts`
+   - `npc_dialogue.json` / `npc_dialogue.ts` (Caretaker, Hermit, Ranger/Trader)
+   - `quests.json` / `quests.ts`
+   - `items.json` / `items.ts`
+   - `location_descriptions.json` / `location_descriptions.ts`
+   Goal: **data-driven** so adding a new creature or room doesn’t require touching engine code.
+3. **UI Layer (`/src/ui`)**
+   React components that render the current state and dispatch actions.
+   - `App.tsx`
+     - Root component; provides `GameState` via context.
+     - Handles initial “New Game” / “Continue” flow.
+   - `GameScreen.tsx`
+     - Main layout: text log (left), art panel (right), choice/action bar (bottom).
+     - Renders HUD (HP, level, XP, current quest snippet).
+   - `TextLog.tsx`
+     - Renders a list of `LogEntry` objects from state.
+     - Auto-scroll behaviour with gentle scrolling.
+   - `ActionBar.tsx`
+     - Shows context-sensitive buttons:
+       - Move options, sense, gather, talk, rest, etc.
+     - Optional input line for typed commands.
+   - `ArtPanel.tsx`
+     - Shows background art for current location.
+     - Shows NPC portrait when in dialogue scenes.
+   - `HUD.tsx`
+     - HP bar, XP bar, level, location name.
+     - Simple quest tracker.
+   - `SettingsModal.tsx`
+     - Text size, theme, audio volume toggles.
+4. **Audio Layer (`/src/audio`)**
+   - `audioManager.ts`
+     - Simple wrapper around Web Audio / Howler.
+     - Functions:
+       - `playAmbient(trackId)`
+       - `stopAmbient()`
+       - `playSfx(sfxId)`
+       - `playSting(stingId)`
+     - Hooks triggered from engine/React via a small adapter.
+5. **Platform Layer (`/src/platform`)**
+   - `storage.ts`
+     - Browser `localStorage` (or IndexedDB later) for save data.
+   - `config.ts`
+     - Build-time flags (e.g. debug mode, test seed, etc.).
+---
+### 3.2 Data Flow
+- UI dispatches actions ? **Engine** updates `GameState` ? returns new `GameState` + log entries.
+- `GameState` stored in React context or a global store (e.g. Zustand).
+- UI re-renders based on new `GameState`.
+- Persistence layer listens for:
+  - “Safe points” (e.g. returning to Sanctum) and auto-saves.
+- Audio layer reacts to:
+  - Location changes (switch ambient).
+  - Events (combat start/end, level up, quest complete).
+---
+## 4. Constraints & Non-Goals (Vertical Slice)
+### 4.1 Constraints
+- **Text-first:**  
+  - All critical info must be in the text log and simple HUD.
+  - Art and audio enhance, but never replace, textual clarity.
+- **Light Art:**  
+  - Static background per key location.
+  - Portraits for Caretaker, Hermit, Ranger/Trader.
+  - No heavy animations or particle effects in the slice.
+- **Simple Audio:**  
+  - 1–2 ambient loops (Sanctum, Wilds cluster).
+  - 2–4 UI / feedback SFX (click, hit, level up, quest complete).
+  - No dynamic music system yet.
+- **Browser-friendly:**  
+  - No large frameworks beyond React/TS/Vite.
+  - No mandatory WebGL; everything should run on integrated graphics.
+### 4.2 Non-Goals (For the Vertical Slice)
+These can come *later*:
+- Mobile layout and touch controls (nice later, not core now).
+- Controller support.
+- Multiplayer, online leaderboards, or cloud saves.
+- Deep analytics/telemetry.
+- Procedural map generation (slice is handcrafted).
+---
+## 5. Why Browser-Only is Fine for “Indie AAA”
+- **Player experience > packaging.**  
+  Indie AAA is about **craft**:
+  - Strong writing and atmosphere,
+  - Solid systems and UX,
+  - Cohesive art and sound,
+  - Reliability and polish.
+- **Web is a mature platform.**  
+  Modern browsers can handle:
+  - Rich UIs,
+  - Audio,
+  - Save systems,
+  - Plenty of content for a text-first RPG.
+- **Future wrapping is easy.**  
+  If/when we want:
+  - We can use **Electron** or **Tauri** to ship the same code as a desktop app (Steam, Itch downloads) with minimal changes.
+For the purposes of Whispering Wilds, a **browser-first, text-first** stack is not a limitation; it’s a strength.  
+It plays directly to the game’s identity and makes iteration and testing faster.
+---
+3. Step 2 – Vertical Slice: Full Task List
+# Whispering Wilds – Complete Task List: Vertical Slice
+**Goal:**
+ Transform the current PyScript prototype into a polished, indie-AAA vertical slice using TypeScript + React.
+**Scope:**
+ Sanctum ? Gate ? Wilds ? Lake / Mine / Hermit's Hut / Trader's Post 
+**Level Range:**
+ 1–5 
+**Target:**
+ Browser-only, text-first with supportive art and audio
+---
+## PHASE 1: FOUNDATION & DESIGN (Step 1)
+### 1.1 Vision & Positioning
+-
+ [ ] 
+**1.1.1**
+ Finalize one-sentence vision statement
+ 
+-
+ Owner: Josh
+ 
+-
+ Deliverable: Confirmed wording in VISION.md
+ 
+-
+ Status: Draft exists, needs final approval
+-
+ [ ] 
+**1.1.2**
+ Write 1-page vision document
+ 
+-
+ Owner: Josh (content) + Cursor (formatting)
+ 
+-
+ Deliverable: 
+`docs/VISION.md`
+ 
+-
+ Includes: What it is, what it's not, target player, reference titles
+-
+ [ ] 
+**1.1.3**
+ Create design pillars document
+ 
+-
+ Owner: Josh (content) + Cursor (formatting)
+ 
+-
+ Deliverable: 
+`docs/design-pillars.md`
+ 
+-
+ For each pillar (Presence in the Wild, Relational Storytelling, Light Survival & Crafting):
+   
+-
+ Short paragraph description
+   
+-
+ 3–5 &quot;Do&quot; examples
+   
+-
+ 3–5 &quot;Don't&quot; examples
+-
+ [ ] 
+**1.1.4**
+ Define core loop (5-minute narrative description)
+ 
+-
+ Owner: Josh
+ 
+-
+ Deliverable: 
+`docs/core-loop.md`
+ 
+-
+ Includes: Narrative flow, state diagram description, implementation checklist
+-
+ [ ] 
+**1.1.5**
+ Create feature tiers document
+ 
+-
+ Owner: Cursor (with Josh input)
+ 
+-
+ Deliverable: 
+`docs/features_vslice_vs_later.md`
+ 
+-
+ Sort all current systems into:
+   
+-
+ Tier 1: Must-have for vertical slice
+   
+-
+ Tier 2: Nice-to-have if time
+   
+-
+ Tier 3: Later/post-slice
+-
+ [ ] 
+**1.1.6**
+ Write narrative scaffold for Act I
+ 
+-
+ Owner: Josh (content) + Cursor (formatting)
+ 
+-
+ Deliverable: 
+`docs/narrative_scaffold_act1.md`
+ 
+-
+ Includes:
+   
+-
+ 1-paragraph premise
+   
+-
+ One-sentence NPC descriptions (Caretaker, Hermit, Ranger/Trader)
+   
+-
+ Act I outline: Intro ? First Steps ? Grove ? Hermit ? Lake/Mine/Trader ? Healing ? Hook
+-
+ [ ] 
+**1.1.7**
+ Create tech spec document
+ 
+-
+ Owner: Cursor (with Josh approval)
+ 
+-
+ Deliverable: 
+`docs/tech_spec_vslice.md`
+ 
+-
+ Includes: Stack choice, high-level architecture, constraints, non-goals
+---
+## PHASE 2: PROJECT SETUP & ARCHITECTURE
+### 2.1 Initialize TypeScript + React Project
+-
+ [ ] 
+**2.1.1**
+ Set up Vite + React + TypeScript project
+ 
+-
+ Owner: Cursor
+ 
+-
+ Commands:
+   ```bash
+   npm create vite@latest whispering-wilds -- --template react-ts
+   cd whispering-wilds
+   npm install
+   ```
+ 
+-
+ Deliverable: Working dev server (
+`npm run dev`
+)
+-
+ [ ] 
+**2.1.2**
+ Install additional dependencies
+ 
+-
+ Owner: Cursor
+ 
+-
+ Dependencies:
+   
+-
+ 
+`zustand`
+ (or React Context) for state management
+   
+-
+ 
+`howler`
+ or native Web Audio API wrapper
+   
+-
+ 
+`vitest`
+ for testing
+   
+-
+ 
+`@types/node`
+ for Node types
+ 
+-
+ Deliverable: 
+`package.json`
+ with all dependencies
+-
+ [ ] 
+**2.1.3**
+ Configure TypeScript (strict mode)
+ 
+-
+ Owner: Cursor
+ 
+-
+ Deliverable: 
+`tsconfig.json`
+ with strict settings
+-
+ [ ] 
+**2.1.4**
+ Set up ESLint + Prettier
+ 
+-
+ Owner: Cursor
+ 
+-
+ Deliverable: 
+`.eslintrc`
+, 
+`.prettierrc`
+, scripts in 
+`package.json`
+-
+ [ ] 
+**2.1.5**
+ Create folder structure
+ 
+-
+ Owner: Cursor
+ 
+-
+ Structure:
+   ```
+   src/
+     engine/          # Pure TS game logic
+     content/         # Data files (JSON/TS)
+     ui/              # React components
+     audio/           # Audio management
+     platform/        # Storage, config
+     types/           # Shared TypeScript types
+   ```
+ 
+-
+ Deliverable: Empty folder structure with README files
+-
+ [ ] 
+**2.1.6**
+ Set up basic routing (if needed for dev/debug)
+ 
+-
+ Owner: Cursor
+ 
+-
+ Deliverable: Optional React Router setup (or single-page app)
+---
+### 2.2 Type Definitions
+-
+ [ ] 
+**2.2.1**
+ Define core game state types
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/types/gameState.ts`
+ 
+-
+ Types:
+   
+-
+ 
+`GameState`
+ (player, world, flags, quests, etc.)
+   
+-
+ 
+`Player`
+ (HP, maxHP, XP, level, inventory, cooldowns)
+   
+-
+ 
+`Location`
+ (id, name, description, exits, biome, tags)
+   
+-
+ 
+`Item`
+ (id, name, description, category, usable)
+   
+-
+ 
+`Creature`
+ (id, name, stats, skills, traits)
+   
+-
+ 
+`Quest`
+ (id, name, steps, state)
+   
+-
+ 
+`LogEntry`
+ (text, type, timestamp)
+-
+ [ ] 
+**2.2.2**
+ Define action types
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/types/actions.ts`
+ 
+-
+ Types:
+   
+-
+ 
+`Action`
+ (union of all action types)
+   
+-
+ 
+`ActionResult`
+ (new state + log entries)
+   
+-
+ Individual action types (MoveAction, GatherAction, CombatAction, etc.)
+-
+ [ ] 
+**2.2.3**
+ Define content data types
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/types/content.ts`
+ 
+-
+ Types for JSON/TS content files (creatures, items, locations, dialogue)
+---
+### 2.3 Engine Architecture (Pure TypeScript)
+-
+ [ ] 
+**2.3.1**
+ Create GameState class/module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/gameState.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`createInitialState()`
+: Returns starting GameState
+   
+-
+ 
+`cloneState(state)`
+: Deep clone for immutability
+   
+-
+ Getters for current location, player stats, quest states
+-
+ [ ] 
+**2.3.2**
+ Create locations module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/locations.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`getLocation(id)`
+: Returns location data
+   
+-
+ 
+`getExits(locationId)`
+: Returns available exits
+   
+-
+ 
+`canMove(from, direction)`
+: Checks if movement is valid
+   
+-
+ 
+`getLocationDescription(state, locationId)`
+: Returns contextual description
+-
+ [ ] 
+**2.3.3**
+ Create actions module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/actions.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`executeMove(state, direction)`
+: Move player
+   
+-
+ 
+`executeSense(state, locationId)`
+: Sense/listen action
+   
+-
+ 
+`executeGather(state, type, locationId)`
+: Forage/mine/fish
+   
+-
+ 
+`executeRest(state)`
+: Rest at Sanctum
+   
+-
+ 
+`executeUseItem(state, itemId)`
+: Use consumable/item
+   
+-
+ Each returns 
+`ActionResult`
+ (new state + log entries)
+-
+ [ ] 
+**2.3.4**
+ Create combat module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/combat.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`startEncounter(state, creatureId)`
+: Initialize combat
+   
+-
+ 
+`executeCombatAction(state, action)`
+: Process player action (attack, use item, flee)
+   
+-
+ 
+`processEnemyTurn(state)`
+: Enemy AI/actions
+   
+-
+ 
+`checkCombatEnd(state)`
+: Win/lose conditions
+   
+-
+ 
+`calculateDamage(attacker, defender, action)`
+: Damage calculation
+   
+-
+ 
+`applyStatusEffect(state, target, effect)`
+: Status effects (BLEEDING, STUNNED)
+-
+ [ ] 
+**2.3.5**
+ Create quest module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/quests.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`getActiveQuests(state)`
+: Returns active quest list
+   
+-
+ 
+`startQuest(state, questId)`
+: Begin a quest
+   
+-
+ 
+`advanceQuest(state, questId, step)`
+: Progress quest
+   
+-
+ 
+`completeQuest(state, questId)`
+: Finish quest, grant rewards
+   
+-
+ 
+`checkQuestConditions(state, questId)`
+: Validate step requirements
+-
+ [ ] 
+**2.3.6**
+ Create narrative flags module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/narrativeFlags.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`getFlag(state, flagName)`
+: Get flag value
+   
+-
+ 
+`setFlag(state, flagName, value)`
+: Set flag
+   
+-
+ 
+`checkFlagCondition(state, condition)`
+: Evaluate flag-based conditions
+   
+-
+ Helpers for common flags (lakeTreatment, mineTreatment, groveHealed, etc.)
+-
+ [ ] 
+**2.3.7**
+ Create bestiary module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/bestiary.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`encounterCreature(state, creatureId)`
+: Mark creature as encountered
+   
+-
+ 
+`getDiscoveredCreatures(state)`
+: Returns list of encountered creatures
+   
+-
+ 
+`getCreatureInfo(creatureId)`
+: Returns creature data + lore
+-
+ [ ] 
+**2.3.8**
+ Create XP and leveling module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/progression.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`grantXP(state, amount, source)`
+: Add XP, check for level-up
+   
+-
+ 
+`checkLevelUp(state)`
+: Calculate if player levels up
+   
+-
+ 
+`applyLevelUp(state)`
+: Apply level-up benefits (HP, stats, new options)
+   
+-
+ 
+`getXPForNextLevel(level)`
+: Calculate XP threshold
+-
+ [ ] 
+**2.3.9**
+ Create inventory module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/inventory.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`addItem(state, itemId, quantity)`
+: Add item to inventory
+   
+-
+ 
+`removeItem(state, itemId, quantity)`
+: Remove item
+   
+-
+ 
+`hasItem(state, itemId, quantity)`
+: Check item availability
+   
+-
+ 
+`getInventoryByCategory(state)`
+: Group items by category
+   
+-
+ 
+`sortInventory(state, mode)`
+: Sort by alpha/type/newest
+-
+ [ ] 
+**2.3.10**
+ Create crafting module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/crafting.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`getAvailableRecipes(state)`
+: Returns craftable recipes
+   
+-
+ 
+`canCraft(state, recipeId)`
+: Check if player has materials
+   
+-
+ 
+`executeCraft(state, recipeId)`
+: Consume materials, create item
+-
+ [ ] 
+**2.3.11**
+ Create encounter trigger system
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/encounters.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`rollEncounter(state, locationId)`
+: Chance-based encounter trigger
+   
+-
+ 
+`getEncounterCreature(state, locationId)`
+: Select creature for location
+   
+-
+ 
+`shouldTriggerEncounter(state, action)`
+: Check if action triggers encounter
+-
+ [ ] 
+**2.3.12**
+ Create main game loop coordinator
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/gameLoop.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`processAction(state, action)`
+: Main entry point for all actions
+   
+-
+ Routes to appropriate action handler
+   
+-
+ Handles encounter triggers, quest checks, flag updates
+   
+-
+ Returns 
+`ActionResult`
+---
+### 2.4 Content Data Layer
+-
+ [ ] 
+**2.4.1**
+ Extract location data
+ 
+-
+ Owner: Cursor (extract from current Python)
+ 
+-
+ File: 
+`src/content/locations.ts`
+ or 
+`locations.json`
+ 
+-
+ Data for: Sanctum, Gate, Wilds, Lake, Mine, Hermit's Hut, Trader's Post
+ 
+-
+ Each includes: id, name, description, exits, biome, tags, base description
+-
+ [ ] 
+**2.4.2**
+ Extract creature data
+ 
+-
+ Owner: Cursor (extract from current Python)
+ 
+-
+ File: 
+`src/content/creatures.ts`
+ or 
+`creatures.json`
+ 
+-
+ Data for 3–4 creatures (vertical slice)
+ 
+-
+ Each includes: id, name, HP, attack, defense, skills, traits, bestiary lore, drops
+-
+ [ ] 
+**2.4.3**
+ Extract item data
+ 
+-
+ Owner: Cursor (extract from current Python)
+ 
+-
+ File: 
+`src/content/items.ts`
+ or 
+`items.json`
+ 
+-
+ Data for: herbs, ore, fish, bandages, potions, quest items
+ 
+-
+ Each includes: id, name, description, category, usable, effects
+-
+ [ ] 
+**2.4.4**
+ Extract quest data
+ 
+-
+ Owner: Cursor (extract from current Python)
+ 
+-
+ File: 
+`src/content/quests.ts`
+ or 
+`quests.json`
+ 
+-
+ Data for: Heal the Grove, Hermit's Glow, Echoes at the Lake
+ 
+-
+ Each includes: id, name, steps (with conditions), rewards, narrative beats
+-
+ [ ] 
+**2.4.5**
+ Extract crafting recipes
+ 
+-
+ Owner: Cursor (extract from current Python)
+ 
+-
+ File: 
+`src/content/recipes.ts`
+ or 
+`recipes.json`
+ 
+-
+ Data for: Salve, Potion, Lesser Potion, etc.
+ 
+-
+ Each includes: id, name, ingredients, result, description
+-
+ [ ] 
+**2.4.6**
+ Create NPC dialogue data
+ 
+-
+ Owner: Josh (content) + Cursor (structure)
+ 
+-
+ File: 
+`src/content/npcDialogue.ts`
+ or 
+`npcDialogue.json`
+ 
+-
+ Data for: Caretaker, Hermit, Ranger/Trader
+ 
+-
+ Structure: dialogue trees, conditional responses based on flags/quests
+ 
+-
+ Includes: greeting, quest-related, relationship-based, farewell
+-
+ [ ] 
+**2.4.7**
+ Create location description variations
+ 
+-
+ Owner: Josh (content) + Cursor (structure)
+ 
+-
+ File: 
+`src/content/locationDescriptions.ts`
+ 
+-
+ Contextual descriptions based on:
+   
+-
+ Weather/time flags
+   
+-
+ Quest completion states
+   
+-
+ Player actions (e.g., &quot;you've been here before&quot;)
+   
+-
+ Narrative flags (grove healed, lake respected, etc.)
+---
+### 2.5 Persistence System
+-
+ [ ] 
+**2.5.1**
+ Create save/load module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/platform/storage.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`saveGame(state)`
+: Serialize GameState to JSON, store in localStorage
+   
+-
+ 
+`loadGame()`
+: Deserialize from localStorage, return GameState or null
+   
+-
+ 
+`exportSave(state)`
+: Return JSON string for manual export
+   
+-
+ 
+`importSave(json)`
+: Parse JSON, return GameState
+   
+-
+ 
+`hasSave()`
+: Check if save exists
+-
+ [ ] 
+**2.5.2**
+ Implement auto-save triggers
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/gameLoop.ts`
+ or separate module
+ 
+-
+ Auto-save at:
+   
+-
+ Returning to Sanctum
+   
+-
+ Quest completion
+   
+-
+ Level-up
+   
+-
+ Manual save command
+---
+## PHASE 3: UI IMPLEMENTATION
+### 3.1 Core UI Components
+-
+ [ ] 
+**3.1.1**
+ Create App root component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/App.tsx`
+ 
+-
+ Features:
+   
+-
+ New Game / Continue flow
+   
+-
+ GameState context provider
+   
+-
+ Main layout wrapper
+-
+ [ ] 
+**3.1.2**
+ Create GameScreen component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/GameScreen.tsx`
+ 
+-
+ Layout:
+   
+-
+ Left: Text log
+   
+-
+ Right: Art panel
+   
+-
+ Bottom: Action bar / choices
+   
+-
+ Top: HUD (HP, level, XP, location name)
+-
+ [ ] 
+**3.1.3**
+ Create TextLog component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/TextLog.tsx`
+ 
+-
+ Features:
+   
+-
+ Render list of LogEntry objects
+   
+-
+ Auto-scroll to bottom (unless user scrolled up)
+   
+-
+ Styling for different log entry types (narrative, combat, system)
+   
+-
+ Smooth scrolling behavior
+-
+ [ ] 
+**3.1.4**
+ Create ArtPanel component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/ArtPanel.tsx`
+ 
+-
+ Features:
+   
+-
+ Display background art for current location
+   
+-
+ Display NPC portrait when in dialogue
+   
+-
+ Placeholder system for missing art
+   
+-
+ Smooth transitions between images
+-
+ [ ] 
+**3.1.5**
+ Create HUD component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/HUD.tsx`
+ 
+-
+ Features:
+   
+-
+ HP bar (current/max)
+   
+-
+ XP bar (current/next level)
+   
+-
+ Level display
+   
+-
+ Location name
+   
+-
+ Simple quest tracker (current main quest)
+-
+ [ ] 
+**3.1.6**
+ Create ActionBar component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/ActionBar.tsx`
+ 
+-
+ Features:
+   
+-
+ Context-sensitive buttons (move, sense, gather, talk, rest)
+   
+-
+ Optional text input for typed commands
+   
+-
+ Keyboard shortcuts display
+   
+-
+ Disabled states for unavailable actions
+-
+ [ ] 
+**3.1.7**
+ Create ChoiceButton component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/ChoiceButton.tsx`
+ 
+-
+ Features:
+   
+-
+ Clickable choice buttons
+   
+-
+ Styling for different choice types
+   
+-
+ Hover states, accessibility
+---
+### 3.2 Side Panels & Secondary UI
+-
+ [ ] 
+**3.2.1**
+ Create QuestPanel component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/QuestPanel.tsx`
+ 
+-
+ Features:
+   
+-
+ List active quests
+   
+-
+ Show current step for each quest
+   
+-
+ Collapsible/expandable
+   
+-
+ Pinned state (localStorage)
+-
+ [ ] 
+**3.2.2**
+ Create InventoryPanel component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/InventoryPanel.tsx`
+ 
+-
+ Features:
+   
+-
+ Display inventory by category
+   
+-
+ Item counts, descriptions on hover
+   
+-
+ Click to use/autofill commands
+   
+-
+ Sorting options (alpha/type/newest)
+   
+-
+ Collapsible/expandable
+   
+-
+ Pinned state
+-
+ [ ] 
+**3.2.3**
+ Create MapPanel component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/MapPanel.tsx`
+ 
+-
+ Features:
+   
+-
+ Simple mini-map showing current location and connections
+   
+-
+ Visited locations highlighted
+   
+-
+ Click to show location info
+   
+-
+ Collapsible/expandable
+   
+-
+ Pinned state
+-
+ [ ] 
+**3.2.4**
+ Create HelpPanel component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/HelpPanel.tsx`
+ 
+-
+ Features:
+   
+-
+ Command reference
+   
+-
+ Gameplay tips
+   
+-
+ Collapsible/expandable
+   
+-
+ Pinned state
+-
+ [ ] 
+**3.2.5**
+ Create SettingsModal component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/SettingsModal.tsx`
+ 
+-
+ Features:
+   
+-
+ Text size slider
+   
+-
+ Theme toggle (dark/light)
+   
+-
+ Audio volume controls
+   
+-
+ Accessibility options (dyslexic font, line height)
+   
+-
+ Save settings to localStorage
+---
+### 3.3 Combat UI
+-
+ [ ] 
+**3.3.1**
+ Create CombatScreen component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/CombatScreen.tsx`
+ 
+-
+ Features:
+   
+-
+ Display current creature (name, HP bar, status effects)
+   
+-
+ Player stats (HP, available actions)
+   
+-
+ Action buttons (Attack, Power Strike, Use Item, Flee)
+   
+-
+ Combat log integration
+   
+-
+ Turn indicator
+-
+ [ ] 
+**3.3.2**
+ Create StatusEffectDisplay component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/StatusEffectDisplay.tsx`
+ 
+-
+ Features:
+   
+-
+ Show [
+BLEEDING
+], [
+STUNNED
+] tags
+   
+-
+ Tooltips explaining effects
+   
+-
+ Visual indicators (icons/colors)
+---
+### 3.4 Dialogue UI
+-
+ [ ] 
+**3.4.1**
+ Create DialogueScreen component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/DialogueScreen.tsx`
+ 
+-
+ Features:
+   
+-
+ NPC name and portrait
+   
+-
+ Dialogue text display
+   
+-
+ Choice buttons for player responses
+   
+-
+ Branching dialogue support
+   
+-
+ Exit dialogue option
+---
+### 3.5 Toast Notification System
+-
+ [ ] 
+**3.5.1**
+ Create Toast component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/Toast.tsx`
+ 
+-
+ Features:
+   
+-
+ Different types (xp, success, info, warning)
+   
+-
+ Auto-dismiss after delay
+   
+-
+ Stack multiple toasts
+   
+-
+ Position (top-right for desktop, bottom-center for mobile)
+-
+ [ ] 
+**3.5.2**
+ Create ToastManager component
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/ToastManager.tsx`
+ 
+-
+ Features:
+   
+-
+ Global toast state
+   
+-
+ 
+`notify(type, message)`
+ function
+   
+-
+ Duplicate detection/consolidation
+   
+-
+ Integration with game actions (XP gains, level-ups, quests)
+---
+### 3.6 Styling & Theming
+-
+ [ ] 
+**3.6.1**
+ Set up CSS architecture
+ 
+-
+ Owner: Cursor
+ 
+-
+ Choose: CSS Modules, TailwindCSS, or styled-components
+ 
+-
+ Deliverable: Consistent styling system
+-
+ [ ] 
+**3.6.2**
+ Create theme system
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/ui/themes.ts`
+ or CSS variables
+ 
+-
+ Themes: Dark (default), Light
+ 
+-
+ Variables: colors, fonts, spacing, borders
+-
+ [ ] 
+**3.6.3**
+ Implement responsive layout
+ 
+-
+ Owner: Cursor
+ 
+-
+ Breakpoints:
+   
+-
+ Desktop: Text log left, art right, HUD top, actions bottom
+   
+-
+ Mobile (<800px): Stacked layout, larger touch targets
+ 
+-
+ File: 
+`src/ui/GameScreen.tsx`
+ + responsive CSS
+-
+ [ ] 
+**3.6.4**
+ Implement typography system
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Readable font stack
+   
+-
+ Dyslexic-friendly font option
+   
+-
+ Text size controls (small/medium/large)
+   
+-
+ Line height controls
+---
+## PHASE 4: AUDIO SYSTEM
+### 4.1 Audio Manager
+-
+ [ ] 
+**4.1.1**
+ Create audio manager module
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/audio/audioManager.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`playAmbient(trackId)`
+: Play ambient loop, crossfade if switching
+   
+-
+ 
+`stopAmbient()`
+: Stop current ambient
+   
+-
+ 
+`playSfx(sfxId)`
+: Play one-shot sound effect
+   
+-
+ 
+`playSting(stingId)`
+: Play short musical stinger
+   
+-
+ 
+`setVolume(type, volume)`
+: Set ambient/SFX/music volume
+   
+-
+ 
+`mute(type)`
+: Mute/unmute audio type
+-
+ [ ] 
+**4.1.2**
+ Create audio hook for React
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/audio/useAudio.ts`
+ 
+-
+ React hook that:
+   
+-
+ Initializes audio manager
+   
+-
+ Provides audio controls to components
+   
+-
+ Handles cleanup on unmount
+-
+ [ ] 
+**4.1.3**
+ Integrate audio triggers
+ 
+-
+ Owner: Cursor
+ 
+-
+ Triggers:
+   
+-
+ Location change ? switch ambient track
+   
+-
+ Combat start ? play combat sting
+   
+-
+ Level up ? play level-up sting
+   
+-
+ Quest complete ? play success sting
+   
+-
+ UI interactions ? play click SFX
+---
+### 4.2 Audio Assets (Placeholder System)
+-
+ [ ] 
+**4.2.1**
+ Create placeholder audio system
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/audio/audioAssets.ts`
+ 
+-
+ Structure for:
+   
+-
+ Ambient tracks (Sanctum, Wilds)
+   
+-
+ UI SFX (click, hover)
+   
+-
+ Event stingers (level-up, quest-complete, combat-start)
+ 
+-
+ Note: Actual audio files to be added later (or use placeholder tones)
+-
+ [ ] 
+**4.2.2**
+ Set up audio file loading
+ 
+-
+ Owner: Cursor
+ 
+-
+ System to load audio files from 
+`public/audio/`
+ directory
+ 
+-
+ Handle loading states, errors
+ 
+-
+ Preload critical sounds
+---
+## PHASE 5: GAME CONTENT IMPLEMENTATION
+### 5.1 Locations (Vertical Slice)
+-
+ [ ] 
+**5.1.1**
+ Implement Sanctum location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description variations (first visit, return, after quests)
+   
+-
+ Rest action
+   
+-
+ Caretaker NPC interaction
+   
+-
+ Exits to Gate
+-
+ [ ] 
+**5.1.2**
+ Implement Gate location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Threshold description (emotional transition)
+   
+-
+ Weather/mood indicators
+   
+-
+ Exit to Sanctum and Wilds
+-
+ [ ] 
+**5.1.3**
+ Implement Wilds location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Crossroads description
+   
+-
+ Exits to Lake, Mine, Hermit's Hut, Trader's Post
+   
+-
+ Sense/listen action
+   
+-
+ Encounter triggers
+-
+ [ ] 
+**5.1.4**
+ Implement Lake location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description with mood (whispers, stillness)
+   
+-
+ Sense/listen action (reveals echoes)
+   
+-
+ Fish action
+   
+-
+ Dive/down action (if implemented)
+   
+-
+ Quest integration (Echoes at the Lake)
+   
+-
+ Flag tracking (respectful vs careless water-taking)
+-
+ [ ] 
+**5.1.5**
+ Implement Mine location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description (humming, old work)
+   
+-
+ Mine action
+   
+-
+ Encounter triggers
+   
+-
+ Quest integration (Hermit's Glow, Heal the Grove)
+   
+-
+ Flag tracking (respectful vs overharvesting)
+-
+ [ ] 
+**5.1.6**
+ Implement Hermit's Hut location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description (deep in Wilds, watchful)
+   
+-
+ Hermit NPC interaction
+   
+-
+ Quest integration (Hermit's Glow)
+   
+-
+ Dialogue branching
+-
+ [ ] 
+**5.1.7**
+ Implement Trader's Post location
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description (practical, trade-focused)
+   
+-
+ Ranger/Trader NPC interaction
+   
+-
+ Trading/exchange system (if in scope)
+   
+-
+ Quest integration
+-
+ [ ] 
+**5.1.8**
+ Implement Grove location (for Heal the Grove quest)
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Description (sick, wrong feeling)
+   
+-
+ Sense/listen action (reveals grief/exhaustion)
+   
+-
+ Forage action (herbs)
+   
+-
+ Quest integration (healing ritual)
+   
+-
+ State changes after healing
+---
+### 5.2 NPCs & Dialogue
+-
+ [ ] 
+**5.2.1**
+ Implement Caretaker NPC
+ 
+-
+ Owner: Josh (dialogue) + Cursor (system)
+ 
+-
+ Features:
+   
+-
+ Opening conversation (name, purpose, first quest hook)
+   
+-
+ Quest-related dialogue (Heal the Grove progress)
+   
+-
+ Relationship-reactive dialogue (based on flags)
+   
+-
+ Farewell/general chat
+-
+ [ ] 
+**5.2.2**
+ Implement Hermit NPC
+ 
+-
+ Owner: Josh (dialogue) + Cursor (system)
+ 
+-
+ Features:
+   
+-
+ Initial encounter (prickly, resistant)
+   
+-
+ Quest dialogue (Hermit's Glow requirements)
+   
+-
+ Spiritual/ethical perspective on the forest
+   
+-
+ Conditional responses (based on player choices)
+-
+ [ ] 
+**5.2.3**
+ Implement Ranger/Trader NPC
+ 
+-
+ Owner: Josh (dialogue) + Cursor (system)
+ 
+-
+ Features:
+   
+-
+ Practical, survival-focused voice
+   
+-
+ Trading dialogue (if implemented)
+   
+-
+ Rumors/hints about deeper trouble
+   
+-
+ Quest integration
+-
+ [ ] 
+**5.2.4**
+ Create dialogue system engine
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/dialogue.ts`
+ 
+-
+ Functions:
+   
+-
+ 
+`startDialogue(state, npcId)`
+: Initialize dialogue
+   
+-
+ 
+`getDialogueOptions(state, npcId, context)`
+: Get available choices
+   
+-
+ 
+`processDialogueChoice(state, npcId, choiceId)`
+: Handle player choice
+   
+-
+ 
+`checkDialogueConditions(state, npcId, nodeId)`
+: Evaluate flags/quests for conditional dialogue
+---
+### 5.3 Quests (Vertical Slice)
+-
+ [ ] 
+**5.3.1**
+ Implement &quot;Heal the Grove&quot; quest
+ 
+-
+ Owner: Josh (narrative) + Cursor (implementation)
+ 
+-
+ Steps:
+   
+1.
+ Visit grove and listen (tutorial)
+   
+2.
+ Gather components (herbs, water, ore, or Hermit's help)
+   
+3.
+ Perform healing ritual (with choice of approach)
+   
+4.
+ Quest completion (partial healing, consequences)
+ 
+-
+ Rewards: XP, item, relationship change
+-
+ [ ] 
+**5.3.2**
+ Implement &quot;Hermit's Glow&quot; quest
+ 
+-
+ Owner: Josh (narrative) + Cursor (implementation)
+ 
+-
+ Steps:
+   
+1.
+ Meet Hermit (initial resistance)
+   
+2.
+ Accept conditions (respectful gathering)
+   
+3.
+ Gather required items (herb + mine component, without angering Lake)
+   
+4.
+ Return to Hermit, receive help/charm
+ 
+-
+ Rewards: XP, item, relationship change, unlocks grove healing option
+-
+ [ ] 
+**5.3.3**
+ Implement &quot;Echoes at the Lake&quot; quest
+ 
+-
+ Owner: Josh (narrative) + Cursor (implementation)
+ 
+-
+ Steps:
+   
+1.
+ Discover Lake's unease (sense/listen)
+   
+2.
+ Take water (respectful vs careless choice)
+   
+3.
+ Consequences based on choice (flag set)
+   
+4.
+ Quest completion (moral choice payoff)
+ 
+-
+ Rewards: XP, relationship change, narrative flag
+-
+ [ ] 
+**5.3.4**
+ Create quest tracking UI integration
+ 
+-
+ Owner: Cursor
+ 
+-
+ Quest panel shows:
+   
+-
+ Active quests
+   
+-
+ Current step for each
+   
+-
+ Progress indicators
+   
+-
+ Completion notifications
+---
+### 5.4 Creatures & Combat (Vertical Slice)
+-
+ [ ] 
+**5.4.1**
+ Implement 3–4 core creatures
+ 
+-
+ Owner: Cursor (extract from current game)
+ 
+-
+ Creatures:
+   
+-
+ Basic forest creature (low threat)
+   
+-
+ Lake creature (water-themed)
+   
+-
+ Mine creature (underground-themed)
+   
+-
+ Optional: One slightly stronger variant
+ 
+-
+ Each includes: stats, skills, bestiary lore, drops
+-
+ [ ] 
+**5.4.2**
+ Implement combat actions
+ 
+-
+ Owner: Cursor
+ 
+-
+ Actions:
+   
+-
+ Attack (basic damage)
+   
+-
+ Power Strike (higher damage, cooldown, 10% stun chance)
+   
+-
+ Use Item (bandage, potion)
+   
+-
+ Flee (chance-based escape)
+-
+ [ ] 
+**5.4.3**
+ Implement status effects
+ 
+-
+ Owner: Cursor
+ 
+-
+ Effects:
+   
+-
+ BLEEDING (damage over time)
+   
+-
+ STUNNED (skip turn)
+ 
+-
+ Display in combat UI
+ 
+-
+ Apply/remove logic
+-
+ [ ] 
+**5.4.4**
+ Implement encounter triggers
+ 
+-
+ Owner: Cursor
+ 
+-
+ Triggers:
+   
+-
+ From exploration (moving deeper)
+   
+-
+ From gathering (forage/mine/fish)
+   
+-
+ Location-weighted (certain creatures in certain biomes)
+   
+-
+ Rate controlled by playstyle preset (if implemented)
+-
+ [ ] 
+**5.4.5**
+ Implement bestiary unlock system
+ 
+-
+ Owner: Cursor
+ 
+-
+ On creature encounter:
+   
+-
+ Mark as discovered
+   
+-
+ Unlock bestiary entry
+   
+-
+ Show toast notification
+ 
+-
+ Bestiary command shows discovered creatures with lore
+---
+### 5.5 Gathering & Crafting (Vertical Slice)
+-
+ [ ] 
+**5.5.1**
+ Implement forage action
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Location-weighted (Grove ? herbs)
+   
+-
+ Cooldown system
+   
+-
+ Encounter chance
+   
+-
+ Yield items (herbs, fiber)
+-
+ [ ] 
+**5.5.2**
+ Implement mine action
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Location-specific (Mine only)
+   
+-
+ Cooldown system
+   
+-
+ Encounter chance
+   
+-
+ Yield items (ore, crystals)
+   
+-
+ Flag tracking (respectful vs overharvesting)
+-
+ [ ] 
+**5.5.3**
+ Implement fish action
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Location-specific (Lake only)
+   
+-
+ Cooldown system
+   
+-
+ Encounter chance
+   
+-
+ Yield items (fish)
+   
+-
+ Integration with Lake quest flags
+-
+ [ ] 
+**5.5.4**
+ Implement sense/listen action
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Location-specific hints (resources, threats, quest hooks)
+   
+-
+ Cooldown system
+   
+-
+ Biome-specific flavor text
+   
+-
+ Quest integration (reveals grove's grief, lake's echoes)
+-
+ [ ] 
+**5.5.5**
+ Implement crafting system
+ 
+-
+ Owner: Cursor
+ 
+-
+ Recipes:
+   
+-
+ Salve (herbs + fiber)
+   
+-
+ Potion (herbs + water)
+   
+-
+ Lesser Potion (herb + fiber)
+ 
+-
+ Features:
+   
+-
+ Check materials
+   
+-
+ Consume materials
+   
+-
+ Create item
+   
+-
+ Show in recipes command/UI
+---
+### 5.6 Progression System
+-
+ [ ] 
+**5.6.1**
+ Implement XP gain sources
+ 
+-
+ Owner: Cursor
+ 
+-
+ Sources:
+   
+-
+ Combat victories
+   
+-
+ Quest completion
+   
+-
+ Discovering new locations
+   
+-
+ Key story moments
+ 
+-
+ Show XP toasts
+-
+ [ ] 
+**5.6.2**
+ Implement level-up system (levels 1–5)
+ 
+-
+ Owner: Cursor
+ 
+-
+ Level-up benefits:
+   
+-
+ HP increase
+   
+-
+ Minor stat gains (if stats exist)
+   
+-
+ Possibly unlock new options (if designed)
+ 
+-
+ Level-up notification (toast + sting)
+-
+ [ ] 
+**5.6.3**
+ Implement XP display
+ 
+-
+ Owner: Cursor
+ 
+-
+ HUD shows:
+   
+-
+ Current XP
+   
+-
+ XP needed for next level
+   
+-
+ Progress bar
+---
+## PHASE 6: POLISH & INTEGRATION
+### 6.1 Command Parser & Input
+-
+ [ ] 
+**6.1.1**
+ Create command parser
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/parser.ts`
+ 
+-
+ Features:
+   
+-
+ Parse text commands (move, go, take, use, etc.)
+   
+-
+ Command synonyms (walk?go, grab?take, atk?attack)
+   
+-
+ Typo correction (Damerau-Levenshtein for 1–2 char mistakes)
+   
+-
+ Numeric repetition (forage 5, mine 3)
+   
+-
+ Context-aware parsing
+-
+ [ ] 
+**6.1.2**
+ Integrate command parser with UI
+ 
+-
+ Owner: Cursor
+ 
+-
+ Text input in ActionBar:
+   
+-
+ Parse on Enter
+   
+-
+ Execute action
+   
+-
+ Show error for invalid commands
+   
+-
+ Command history (?/? arrows)
+-
+ [ ] 
+**6.1.3**
+ Implement click-to-autofill
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Click items in inventory ? autofill &quot;use [
+item
+]&quot;
+   
+-
+ Click NPCs ? autofill &quot;talk [
+npc
+]&quot;
+   
+-
+ Click locations on map ? autofill &quot;go [
+direction
+]&quot;
+   
+-
+ Click commands in help ? autofill command
+---
+### 6.2 State Management Integration
+-
+ [ ] 
+**6.2.1**
+ Set up global state store
+ 
+-
+ Owner: Cursor
+ 
+-
+ Using Zustand or React Context
+ 
+-
+ File: 
+`src/ui/store.ts`
+ or 
+`src/ui/GameContext.tsx`
+ 
+-
+ Provides:
+   
+-
+ Current GameState
+   
+-
+ Action dispatcher
+   
+-
+ Save/load functions
+   
+-
+ Settings state
+-
+ [ ] 
+**6.2.2**
+ Connect UI to game state
+ 
+-
+ Owner: Cursor
+ 
+-
+ All components read from state
+ 
+-
+ Actions dispatch through store
+ 
+-
+ State updates trigger re-renders
+---
+### 6.3 Save/Load Integration
+-
+ [ ] 
+**6.3.1**
+ Implement save/load UI
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ &quot;Continue&quot; button on start screen (if save exists)
+   
+-
+ &quot;Save Game&quot; option in settings/menu
+   
+-
+ &quot;Load Game&quot; option
+   
+-
+ Export/import save (JSON download/upload)
+   
+-
+ Auto-save indicator
+-
+ [ ] 
+**6.3.2**
+ Test save/load reliability
+ 
+-
+ Owner: Cursor
+ 
+-
+ Test cases:
+   
+-
+ Save at different game states
+   
+-
+ Load preserves all flags, quests, inventory
+   
+-
+ Export/import works
+   
+-
+ Corrupted save handling
+---
+### 6.4 Accessibility & UX Polish
+-
+ [ ] 
+**6.4.1**
+ Implement keyboard navigation
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Tab through interactive elements
+   
+-
+ Enter to activate
+   
+-
+ Esc to close modals/focus input
+   
+-
+ Arrow keys for command history
+   
+-
+ Keyboard shortcuts for common actions
+-
+ [ ] 
+**6.4.2**
+ Implement screen reader support
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ ARIA labels on buttons
+   
+-
+ Live regions for dynamic content (combat, quests)
+   
+-
+ Skip links
+   
+-
+ Semantic HTML
+-
+ [ ] 
+**6.4.3**
+ Implement focus management
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Focus returns to input after actions
+   
+-
+ Focus trap in modals
+   
+-
+ Visible focus indicators
+-
+ [ ] 
+**6.4.4**
+ Add loading states
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Loading screen on initial load
+   
+-
+ Progress indicator for asset loading
+   
+-
+ Smooth transitions (no jarring jumps)
+-
+ [ ] 
+**6.4.5**
+ Implement error handling
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Graceful error messages
+   
+-
+ Fallback UI for missing assets
+   
+-
+ Console logging for debugging
+   
+-
+ User-friendly error toasts
+---
+### 6.5 Mobile Optimization
+-
+ [ ] 
+**6.5.1**
+ Implement mobile layout
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Stacked layout (<800px viewport)
+   
+-
+ Larger touch targets
+   
+-
+ Bottom-center toast positioning
+   
+-
+ Vertical button stacking
+   
+-
+ Mobile-optimized font sizes
+-
+ [ ] 
+**6.5.2**
+ Implement touch controls
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ D-pad helper (optional, toggleable)
+   
+-
+ Swipe gestures (if useful)
+   
+-
+ Touch-friendly action buttons
+---
+## PHASE 7: TESTING & QUALITY ASSURANCE
+### 7.1 Unit Tests
+-
+ [ ] 
+**7.1.1**
+ Write tests for game state
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/gameState.test.ts`
+ 
+-
+ Test: State creation, cloning, getters
+-
+ [ ] 
+**7.1.2**
+ Write tests for actions
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/actions.test.ts`
+ 
+-
+ Test: Move, gather, sense, rest actions
+-
+ [ ] 
+**7.1.3**
+ Write tests for combat
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/combat.test.ts`
+ 
+-
+ Test: Combat flow, damage calculation, status effects, win/lose
+-
+ [ ] 
+**7.1.4**
+ Write tests for quests
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/quests.test.ts`
+ 
+-
+ Test: Quest start, progress, completion, rewards
+-
+ [ ] 
+**7.1.5**
+ Write tests for inventory
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/inventory.test.ts`
+ 
+-
+ Test: Add, remove, check, sort
+-
+ [ ] 
+**7.1.6**
+ Write tests for crafting
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/crafting.test.ts`
+ 
+-
+ Test: Recipe checking, material consumption, item creation
+-
+ [ ] 
+**7.1.7**
+ Write tests for parser
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/engine/__tests__/parser.test.ts`
+ 
+-
+ Test: Command parsing, synonyms, typo correction
+-
+ [ ] 
+**7.1.8**
+ Write tests for save/load
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/platform/__tests__/storage.test.ts`
+ 
+-
+ Test: Serialization, deserialization, error handling
+---
+### 7.2 Integration Tests
+-
+ [ ] 
+**7.2.1**
+ Write core loop integration test
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/__tests__/coreLoop.test.ts`
+ 
+-
+ Test: Complete 5-minute loop (Sanctum ? Gate ? Wilds ? gather ? encounter ? return)
+-
+ [ ] 
+**7.2.2**
+ Write quest completion test
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/__tests__/questFlow.test.ts`
+ 
+-
+ Test: Complete &quot;Heal the Grove&quot; quest end-to-end
+-
+ [ ] 
+**7.2.3**
+ Write combat flow test
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`src/__tests__/combatFlow.test.ts`
+ 
+-
+ Test: Start combat ? player actions ? enemy turn ? win/lose
+---
+### 7.3 Manual Testing Checklist
+-
+ [ ] 
+**7.3.1**
+ Test all locations
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Can move to all locations
+   
+-
+ Descriptions are correct
+   
+-
+ Exits work
+   
+-
+ Sense/listen provides hints
+   
+-
+ Art displays correctly
+-
+ [ ] 
+**7.3.2**
+ Test all NPCs
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Dialogue flows correctly
+   
+-
+ Choices branch properly
+   
+-
+ Flags affect dialogue
+   
+-
+ Quest integration works
+-
+ [ ] 
+**7.3.3**
+ Test all quests
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Quests start correctly
+   
+-
+ Steps progress as expected
+   
+-
+ Completion grants rewards
+   
+-
+ Flags set correctly
+-
+ [ ] 
+**7.3.4**
+ Test combat system
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Encounters trigger appropriately
+   
+-
+ All actions work (attack, power strike, use item, flee)
+   
+-
+ Status effects apply/remove
+   
+-
+ Win/lose conditions work
+   
+-
+ XP granted correctly
+-
+ [ ] 
+**7.3.5**
+ Test gathering & crafting
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Forage/mine/fish work in correct locations
+   
+-
+ Cooldowns enforce correctly
+   
+-
+ Items added to inventory
+   
+-
+ Crafting recipes work
+   
+-
+ Materials consumed correctly
+-
+ [ ] 
+**7.3.6**
+ Test progression
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ XP gained from all sources
+   
+-
+ Level-ups work (levels 1–5)
+   
+-
+ Benefits apply correctly
+   
+-
+ UI updates correctly
+-
+ [ ] 
+**7.3.7**
+ Test save/load
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Save preserves all state
+   
+-
+ Load restores correctly
+   
+-
+ Export/import works
+   
+-
+ Auto-save triggers work
+-
+ [ ] 
+**7.3.8**
+ Test UI/UX
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ All buttons work
+   
+-
+ Text log scrolls correctly
+   
+-
+ Art panel updates
+   
+-
+ HUD displays correctly
+   
+-
+ Toasts appear appropriately
+   
+-
+ Settings persist
+   
+-
+ Keyboard shortcuts work
+   
+-
+ Mobile layout works
+-
+ [ ] 
+**7.3.9**
+ Test accessibility
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Checklist:
+   
+-
+ Keyboard navigation works
+   
+-
+ Screen reader compatible
+   
+-
+ Focus management works
+   
+-
+ Text size controls work
+   
+-
+ Theme switching works
+---
+## PHASE 8: ART & AUDIO ASSETS (Placeholder ? Final)
+### 8.1 Art Assets
+-
+ [ ] 
+**8.1.1**
+ Create placeholder art system
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Placeholder images for all locations
+   
+-
+ Placeholder portraits for NPCs
+   
+-
+ System to swap placeholders for final art
+-
+ [ ] 
+**8.1.2**
+ Define art requirements document
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ File: 
+`docs/art_requirements.md`
+ 
+-
+ Specs:
+   
+-
+ Location backgrounds (dimensions, style, mood)
+   
+-
+ NPC portraits (dimensions, style, expressions)
+   
+-
+ UI elements (if any custom graphics needed)
+-
+ [ ] 
+**8.1.3**
+ Commission or create location art
+ 
+-
+ Owner: Josh (or artist)
+ 
+-
+ Locations:
+   
+-
+ Sanctum
+   
+-
+ Gate
+   
+-
+ Wilds
+   
+-
+ Lake
+   
+-
+ Mine
+   
+-
+ Hermit's Hut
+   
+-
+ Trader's Post
+   
+-
+ Grove
+-
+ [ ] 
+**8.1.4**
+ Commission or create NPC portraits
+ 
+-
+ Owner: Josh (or artist)
+ 
+-
+ NPCs:
+   
+-
+ Caretaker
+   
+-
+ Hermit
+   
+-
+ Ranger/Trader
+-
+ [ ] 
+**8.1.5**
+ Integrate final art assets
+ 
+-
+ Owner: Cursor
+ 
+-
+ Replace placeholders
+   
+-
+ Optimize images (compression, formats)
+   
+-
+ Test loading performance
+---
+### 8.2 Audio Assets
+-
+ [ ] 
+**8.2.1**
+ Create placeholder audio system
+ 
+-
+ Owner: Cursor
+ 
+-
+ Features:
+   
+-
+ Silent placeholders or simple tones
+   
+-
+ System to swap for final audio
+-
+ [ ] 
+**8.2.2**
+ Define audio requirements document
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ File: 
+`docs/audio_requirements.md`
+ 
+-
+ Specs:
+   
+-
+ Ambient tracks (mood, length, looping)
+   
+-
+ UI SFX (click, hover, etc.)
+   
+-
+ Event stingers (level-up, quest-complete, combat-start)
+-
+ [ ] 
+**8.2.3**
+ Commission or create ambient tracks
+ 
+-
+ Owner: Josh (or composer)
+ 
+-
+ Tracks:
+   
+-
+ Sanctum ambient
+   
+-
+ Wilds ambient
+   
+-
+ (Optional: Lake, Mine variations)
+-
+ [ ] 
+**8.2.4**
+ Commission or create UI SFX
+ 
+-
+ Owner: Josh (or sound designer)
+ 
+-
+ SFX:
+   
+-
+ Click
+   
+-
+ Hover (optional)
+   
+-
+ Error (optional)
+-
+ [ ] 
+**8.2.5**
+ Commission or create event stingers
+ 
+-
+ Owner: Josh (or composer)
+ 
+-
+ Stingers:
+   
+-
+ Level-up
+   
+-
+ Quest complete
+   
+-
+ Combat start
+   
+-
+ (Optional: Danger, discovery)
+-
+ [ ] 
+**8.2.6**
+ Integrate final audio assets
+ 
+-
+ Owner: Cursor
+ 
+-
+ Replace placeholders
+   
+-
+ Test audio loading
+   
+-
+ Test crossfading
+   
+-
+ Test volume controls
+---
+## PHASE 9: DOCUMENTATION & DEPLOYMENT
+### 9.1 Code Documentation
+-
+ [ ] 
+**9.1.1**
+ Write code comments
+ 
+-
+ Owner: Cursor
+ 
+-
+ JSDoc comments for all public functions
+ 
+-
+ Inline comments for complex logic
+ 
+-
+ README files in each major directory
+-
+ [ ] 
+**9.1.2**
+ Create architecture documentation
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`docs/architecture.md`
+ 
+-
+ Describes:
+   
+-
+ Overall structure
+   
+-
+ Data flow
+   
+-
+ Key design decisions
+   
+-
+ How to extend (add room, quest, creature)
+-
+ [ ] 
+**9.1.3**
+ Create developer guide
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`docs/developer_guide.md`
+ 
+-
+ Includes:
+   
+-
+ Setup instructions
+   
+-
+ How to run tests
+   
+-
+ How to add content
+   
+-
+ How to debug
+---
+### 9.2 User Documentation
+-
+ [ ] 
+**9.2.1**
+ Create in-game help system
+ 
+-
+ Owner: Cursor
+ 
+-
+ Help panel with:
+   
+-
+ Command reference
+   
+-
+ Gameplay tips
+   
+-
+ Controls
+   
+-
+ Story overview (optional)
+-
+ [ ] 
+**9.2.2**
+ Create README for repository
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`README.md`
+ 
+-
+ Includes:
+   
+-
+ Project description
+   
+-
+ Setup instructions
+   
+-
+ How to play
+   
+-
+ Credits
+---
+### 9.3 Deployment
+-
+ [ ] 
+**9.3.1**
+ Set up build process
+ 
+-
+ Owner: Cursor
+ 
+-
+ Configure Vite production build
+ 
+-
+ Optimize bundle size
+ 
+-
+ Test production build locally
+-
+ [ ] 
+**9.3.2**
+ Set up hosting
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Choose: Netlify, Vercel, GitHub Pages, or other
+ 
+-
+ Configure deployment
+ 
+-
+ Set up custom domain (if desired)
+-
+ [ ] 
+**9.3.3**
+ Test deployed version
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Test on different browsers
+ 
+-
+ Test on different devices
+ 
+-
+ Verify save/load works
+ 
+-
+ Verify audio works
+ 
+-
+ Verify all features work
+-
+ [ ] 
+**9.3.4**
+ Create deployment documentation
+ 
+-
+ Owner: Cursor
+ 
+-
+ File: 
+`docs/deployment.md`
+ 
+-
+ Instructions for:
+   
+-
+ Building for production
+   
+-
+ Deploying to hosting
+   
+-
+ Updating deployed version
+---
+## PHASE 10: FINAL POLISH & ITERATION
+### 10.1 Playtesting & Feedback
+-
+ [ ] 
+**10.1.1**
+ Internal playtesting
+ 
+-
+ Owner: Josh
+ 
+-
+ Play through vertical slice
+ 
+-
+ Note bugs, UX issues, narrative gaps
+ 
+-
+ Create bug/issue list
+-
+ [ ] 
+**10.1.2**
+ External playtesting (optional)
+ 
+-
+ Owner: Josh
+ 
+-
+ Get 3–5 testers
+ 
+-
+ Collect feedback
+ 
+-
+ Prioritize fixes
+-
+ [ ] 
+**10.1.3**
+ Fix critical bugs
+ 
+-
+ Owner: Cursor (with Josh input)
+ 
+-
+ Address blocking issues
+ 
+-
+ Fix crashes, save corruption, major UX problems
+-
+ [ ] 
+**10.1.4**
+ Address feedback
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Prioritize feedback
+ 
+-
+ Implement high-priority improvements
+ 
+-
+ Polish based on playtest notes
+---
+### 10.2 Final Polish Pass
+-
+ [ ] 
+**10.2.1**
+ Narrative polish
+ 
+-
+ Owner: Josh
+ 
+-
+ Review all dialogue
+ 
+-
+ Tighten descriptions
+ 
+-
+ Ensure tone consistency
+-
+ [ ] 
+**10.2.2**
+ UI/UX polish
+ 
+-
+ Owner: Cursor
+ 
+-
+ Smooth animations
+ 
+-
+ Consistent spacing
+ 
+-
+ Visual hierarchy
+ 
+-
+ Loading states
+ 
+-
+ Error messages
+-
+ [ ] 
+**10.2.3**
+ Performance optimization
+ 
+-
+ Owner: Cursor
+ 
+-
+ Profile performance
+ 
+-
+ Optimize re-renders
+ 
+-
+ Lazy load assets
+ 
+-
+ Minimize bundle size
+-
+ [ ] 
+**10.2.4**
+ Cross-browser testing
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Test on Chrome, Firefox, Safari, Edge
+ 
+-
+ Fix browser-specific issues
+ 
+-
+ Ensure feature parity
+---
+### 10.3 Release Preparation
+-
+ [ ] 
+**10.3.1**
+ Create release notes
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ File: 
+`CHANGELOG.md`
+ or release notes
+ 
+-
+ Document:
+   
+-
+ Features in vertical slice
+   
+-
+ Known limitations
+   
+-
+ Future plans
+-
+ [ ] 
+**10.3.2**
+ Create marketing materials (optional)
+ 
+-
+ Owner: Josh
+ 
+-
+ Screenshots
+ 
+-
+ Short description
+ 
+-
+ Key art (if available)
+-
+ [ ] 
+**10.3.3**
+ Final QA pass
+ 
+-
+ Owner: Josh + Cursor
+ 
+-
+ Complete playthrough
+ 
+-
+ Verify all features work
+ 
+-
+ Check for regressions
+ 
+-
+ Verify deployment
+-
+ [ ] 
+**10.3.4**
+ Launch vertical slice
+ 
+-
+ Owner: Josh
+ 
+-
+ Deploy final version
+ 
+-
+ Share with testers/community
+ 
+-
+ Collect initial feedback
+---
+## SUMMARY
+**Total Tasks:**
+ ~200+ individual tasks across 10 phases
+**Estimated Timeline:**
+-
+ Phase 1 (Foundation): 1–2 days
+-
+ Phase 2 (Setup & Architecture): 3–5 days
+-
+ Phase 3 (UI): 5–7 days
+-
+ Phase 4 (Audio): 1–2 days
+-
+ Phase 5 (Content): 7–10 days
+-
+ Phase 6 (Polish & Integration): 3–5 days
+-
+ Phase 7 (Testing): 3–5 days
+-
+ Phase 8 (Art & Audio): Variable (depends on external work)
+-
+ Phase 9 (Documentation & Deployment): 2–3 days
+-
+ Phase 10 (Final Polish): 3–5 days
+**Total Estimated Time:**
+ 4–6 weeks (assuming full-time work, with art/audio as parallel workstreams)
+**Key Dependencies:**
+-
+ Josh: Narrative content, dialogue, design decisions, art/audio direction
+-
+ Cursor: Code implementation, architecture, testing, technical polish
+-
+ External (optional): Artists, composers, sound designers
+**Critical Path:**
+1.
+ Project setup (Phase 2)
+2.
+ Core engine (Phase 2.3)
+3.
+ Basic UI (Phase 3.1)
+4.
+ Content implementation (Phase 5)
+5.
+ Integration (Phase 6)
+6.
+ Testing (Phase 7)
+7.
+ Polish (Phase 10)
+---
+## NOTES
+-
+ This list is comprehensive but not exhaustive. New tasks may emerge during implementation.
+-
+ Some tasks can be done in parallel (e.g., UI work while engine is being built).
+-
+ Art and audio can be placeholder initially, with final assets integrated later.
+-
+ Testing should be ongoing, not just at the end.
+-
+ Regular playtesting and iteration is crucial for polish.
+I’ll break this into phases. Each bullet can be a Cursor “epic”, and each sub-bullet a Cursor task.
+2.1 Vertical Slice Specification
+[Cursor] Generate 
+vslice_sanctum_cluster.md
+ that defines:
+Locations:
+Sanctum
+Gate
+Wilds
+Lake
+Mine
+Hermit’s Hut
+Trader’s Post
+For each location:
+Short description,
+Key interactions,
+Which quests touch it.
+[Josh] Review & tweak text for tone and theology/feel as needed.
+2.2 Repo & Project Setup
+[Cursor] Create a new repo structure:
+/src/engine
+ – core systems (state, commands, combat, inventory, quests).
+/src/content
+ – data files for rooms, items, NPCs, creatures, quests.
+/src/ui
+ – front-end layout and components.
+/assets/art
+ – placeholder/backgrounds/portraits.
+/assets/audio
+ – ambient, SFX, music.
+[Cursor] Initialise:
+Build tooling (Vite / Next.js / plain TS bundler).
+ESLint / Prettier / simple test runner.
+[Josh] Push to GitHub and connect Cursor to repo if not already.
+2.3 Core Engine Systems (Code-heavy, Cursor-led)
+These are the minimum for the slice.
+Game State Manager
+[Cursor] Implement a central 
+GameState
+ with:
+Player stats (HP, XP, level, skills).
+Inventory.
+Current location.
+Active quests & flags.
+Discovered creatures/rooms.
+Location & Map System
+[Cursor] Data model for locations:
+id, name, description, biome, exits, tags.
+[Cursor] Movement logic:
+Move commands / click choices to change location.
+Validation for blocked paths etc.
+Command / Choice System
+[Cursor] Implement:
+A parser for typed commands 
+OR
+A generic “present choices for current context” system.
+[Cursor] API for:
+Registering new actions (e.g. 
+forage
+, 
+mine
+, 
+talk
+, 
+rest
+).
+Inventory & Items
+[Cursor] Data model:
+Item id, name, description, type, rarity.
+[Cursor] Inventory operations:
+Add/remove, equip/unequip (if needed), basic UI listing.
+Combat Lite (for 3–4 creatures)
+[Cursor] Implement:
+Creature stats (HP, attack, defence, abilities).
+Turn-based combat loop.
+Simple skill system (basic attack + 1–2 flavour skills).
+Result hooks: XP gain, loot drop, flags.
+XP & Level-Up
+[Cursor] Implement:
+XP table for levels 1–5.
+Level-up effects (stat increases, maybe 1–2 new skills).
+Notification system to show “Level Up!” in UI.
+Quest System
+[Cursor] Data model for quests:
+id, title, description, current step, conditions, rewards.
+[Cursor] Engine to:
+Advance quest stages on triggers (items delivered, locations visited, creatures defeated, flags set).
+Save / Load
+[Cursor] Implement:
+Serialisation of 
+GameState
+ to local storage (or file).
+“Continue” and “New Game” functionality.
+2.4 Content: Sanctum Cluster
+For each content type, you lead on tone; Cursor wires it in and formats.
+Rooms
+[Josh] Write “gold standard” descriptions for:
+Sanctum
+Gate
+Wilds
+Lake
+Mine
+Hermit’s Hut
+Trader’s Post
+[Cursor] Convert into structured JSON/TS data files and link to map systems.
+NPCs
+[Josh] Draft short bios & voice sketches for:
+Caretaker
+Hermit
+Ranger/Trader
+[Cursor] Implement:
+Dialogue trees or structured dialogue scripts.
+Hooks into quest system and game state (branching based on progress).
+Creatures (3–4 unique)
+[Josh] Define:
+Name, concept, biome, “feel” for each creature.
+[Cursor] Implement:
+Creature data (stats, skills).
+Short bestiary entries that unlock after first encounter/kill.
+Quests (2–3 tightly written)
+Likely:
+“Heal the Grove”
+“Echoes at the Lake”
+“Hermit’s Glow”
+[Josh] Outline each quest:
+Start trigger, 2–3 steps, completion condition, emotional beat.
+[Cursor] Encode into the quest system:
+Conditions and state transitions.
+Log entries for quest journal.
+2.5 UI & UX Shell
+Target layout: 
+Text log left, art right, choices below or to the side.
+Layout
+[Cursor] Build base layout:
+Left: scrollable text log.
+Right: dynamic panel (location art + NPC portrait).
+Bottom/side: action choices (buttons) + optional command line.
+Text Log
+[Cursor] Implement:
+Log entry types: narration, dialogue, combat, system messages.
+Auto-scroll with pause on interaction.
+Choice Presentation
+[Cursor] For the slice, present:
+Contextual buttons (e.g. “Explore deeper”, “Talk to Hermit”, “Return to Sanctum”).
+Optional keyboard shortcuts.
+Basic HUD
+[Cursor] Add:
+Player HP, level, XP bar.
+Current location name.
+Small quest tracker (current main quest step).
+Accessibility & Feel
+[Cursor] Implement settings:
+Text size options.
+High-contrast mode / dark theme.
+[Josh] Playtest for “does this feel peaceful, haunted, or cluttered?” and adjust copy/spacing.
+2.6 Art Pipeline & Integration
+Even if you start with placeholders, define the pipeline now.
+Background Art
+[Josh] Decide art style direction (e.g. painterly, desaturated, soft shapes).
+[Josh/External] Create or commission:
+One background per key location (can start with AI concepts then refine).
+[Cursor] Implement:
+Asset loading.
+Showing correct background for current location in the right panel.
+NPC Portraits
+[Josh/External] Get rough portraits/busts for:
+Caretaker, Hermit, Ranger/Trader.
+[Cursor] Implement:
+Showing NPC portraits when in dialogue or in their “home” location.
+2.7 Audio Integration
+Keep it minimal but present.
+Audio Manager
+[Cursor] Implement:
+Simple audio system with:
+Ambient loop for Wilds,
+Different loop for Sanctum,
+SFX channels for UI taps & events.
+Hook Points
+[Cursor] Wire sounds to:
+Move location ? play corresponding ambience.
+Button click ? short UI SFX.
+Level up ? short musical sting.
+Quest complete ? another sting.
+Assets
+[Josh] Choose / source:
+1–2 ambient loops (legal, loopable).
+2–3 simple SFX (click, success, danger).
+2.8 Onboarding, Tutorial & Polish
+First-Time Flow
+[Cursor] Implement:
+A short intro sequence before full freedom:
+Wake in Sanctum,
+Talk to Caretaker,
+Learn movement and a core action,
+Get first quest.
+Micro-Tutorials
+[Josh] Decide 3–5 tips you want surfaced (e.g. “You can always return to Sanctum to regroup”).
+[Cursor] Show them contextually:
+After first combat,
+On first gather,
+When low HP.
+Error & Edge Handling
+[Cursor] Add:
+Graceful handling for invalid choices/commands.
+Helpful messages like “You can’t go that way, but the trees seem to whisper toward the lake…”
+Testing
+[Cursor] Create:
+Basic automated tests for:
+Moving across all slice locations,
+Completing each quest,
+Leveling to 5 without crashes.
+[Josh] Playtest the whole slice:
+Note friction points, confusion, delight.
+Adjust copy & pacing.
+If you like, next step I can:
+Turn these into 
+concrete Cursor task prompts
+, grouped by file/feature, so you can paste them straight into Cursor as “epics” and just start hitting Run.
+This is a lot, but it’s all finite. One faithful step at a time.
+Created the task list and design documents. Summary:
+Created Documents
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="140" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">TASK_LIST_VERTICAL_SLICE.md — Main task list with 200+ tasks across 10 phases:
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 1: Foundation & Design (Step 1)
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 2: Project Setup & Architecture
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 3: UI Implementation
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 4: Audio System
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 5: Game Content Implementation
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 6: Polish & Integration
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 7: Testing & QA
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 8: Art & Audio Assets
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 9: Documentation & Deployment
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Phase 10: Final Polish & Iteration
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="20"/><w:szCs w:val="20"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Design Documents (in 
+/docs/
+):
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">VISION.md
+ — One-sentence vision, elevator pitch, what it is/isn't, target player, references
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">design-pillars.md
+ — Three pillars with Do/Don't examples
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">core-loop.md
+ — 5-minute loop narrative, state diagram, implementation checklist
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">features_vslice_vs_later.md
+ — Feature tiers (Must/Nice/Later)
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">narrative_scaffold_act1.md
+ — Act I outline with all narrative beats
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="140" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="1320" w:hanging="360"/><w:rPr><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Courier New" w:cs="Courier New" w:eastAsia="Courier New" w:hAnsi="Courier New"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">tech_spec_vslice.md
+ — TypeScript + React stack, architecture, constraints
+Task Breakdown Summary
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="140" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Total tasks: ~200+ individual items
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Estimated timeline: 4–6 weeks (full-time work)
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="140" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:rFonts w:ascii="Arial Unicode MS" w:cs="Arial Unicode MS" w:eastAsia="Arial Unicode MS" w:hAnsi="Arial Unicode MS"/><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Critical path: Setup ? Engine ? UI ? Content ? Integration ? Testing ? Polish
+The task list is organized by phase and includes:
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="140" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Owner assignments (Josh vs Cursor)
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Deliverables for each task
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Dependencies and relationships
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="0" w:afterAutospacing="0" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Testing checklists
+<w:bottom w:color="auto" w:space="1" w:sz="0" w:val="none"/><w:between w:color="auto" w:space="1" w:sz="0" w:val="none"/></w:pBdr><w:spacing w:after="140" w:before="0" w:beforeAutospacing="0" w:lineRule="auto"/><w:ind w:left="960" w:hanging="360"/><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:shd w:fill="auto" w:val="clear"/></w:rPr></w:pPr><w:r w:rsidDel="00000000" w:rsidR="00000000" w:rsidRPr="00000000"><w:rPr><w:sz w:val="32"/><w:szCs w:val="32"/><w:rtl w:val="0"/></w:rPr><w:t xml:space="preserve">Integration points
+All documents are ready for Step 1 (Foundation & Design) and Step 2 (Vertical Slice implementation). The task list can be used as a checklist, with checkboxes to track progress.
+13/11/2025
+Short answer:
+Cursor Tasks 1–3:
+ ? 3 / 3 done (100%)
+Whole vertical-slice roadmap:
+ roughly 
+10–15 tasks out of ~200–220
+ ? about 
+5% done
+, 
+~200 left
+.
+How I’m counting it
+Already basically done:
+Step-1 foundation docs that now exist in full:
+VISION.md (one-sentence vision + full vision doc)
+design-pillars.md (three big design pillars)
+core-loop.md (the 5–10 minute loop + diagram + checklist)
+features_vslice_vs_later.md (must-have vs nice-to-have features)
+Today’s 
+engine + UI slice
+:
+Clean TypeScript game state, content, and log types
+Engine helpers (initial state, log append, location data, basic actions)
+Minimal React 
+GameScreen
+ that moves Sanctum ? Gate ? Wilds and logs “Sense” text
+That’s roughly a dozen concrete checklist items off the big plan, not just 3.
+From the planning doc, the 
+vertical-slice checklist alone
+ (movement, sense, gather, combat, XP, quests, dialogue, save/load, etc.) already spans 
+dozens of [ ] items
+, and that’s just one part of the ~10-phase roadmap.
+So:
+If you treat the whole roadmap as 
+~220 tiny tasks
+,
+and count 
+˜12
+ as effectively done,
+you’re sitting around 
+5% complete
+ and 
+~200 tasks still ahead
+.
+It 
+feels
+ small on paper, but what’s done so far is the heavy, high-leverage stuff: vision, pillars, core loop, feature triage, and the first working TS/React spine. That’s the risky part; from here it’s more “fill it in, one small chunk at a time.”
+Yeah, you 
+did
+ do it ?? and you’ve quietly built a lot more than it might feel like.
+Let me give you a careful, honest update.
+1. What I can see from the docs + repo
+From the 
+“Whispering Wilds to Triple A” planning doc
+, there are about:
+˜235 explicit checkbox tasks
+ across:
+Step 1 – Vision, pillars, docs, constraints, core loop
+Step 2 – Vertical slice: engine, content, UI, juice, basic QA
+You’ve now got, in the actual game (and zipped build):
+Core engine & state
+Typed 
+GameState
+, locations, items, creatures, NPCs, quests, log
+Immutable state helpers, encounter helpers, trading, progression, text helpers
+Core gameplay loop
+Movement across all main locations
+Sense with 
+varied text
+ per location
+Gathering ? items ? inventory panel
+Encounters: random triggers, Attack / Flee, death ? Sanctum
+XP & leveling: HP scaling, level display
+Healing tonic item + use action
+World & narrative
+Structured 
+content files
+: items, NPCs, creatures, quests, shop
+One 
+full quest arc
+ (“Heal the Grove”) with:
+Multi-step progression
+World reactivity (Wilds & Gate descriptions change once healed)
+Journal panel showing status + current step
+Caretaker dialogue that branches on quest state
+Ambient text variation for sense / combat / escape
+Economy & support systems
+Resource gathering (herbs, ore, water)
+Trading at Trader’s Post (herbs/ore ? healing tonic)
+Using tonics for HP recovery
+UI / UX
+Dark themed layout with:
+Header (location, level, XP, HP)
+Log (scrollable, mono “terminal” feel)
+Journal panel
+Inventory panel
+Encounter panel
+Movement, Actions, Talk, Shop sections
+Proper disabled states during encounters
+Mostly clean, class-based styling in 
+index.css
+Tooling & delivery
+Clean TypeScript + React structure
+ESLint passing
+Repo on GitHub
+Vite-based dev, ready for GitHub Pages / Netlify-style deploy
+That’s not a toy anymore. It’s a 
+small but real game
+ with a beginning, middle, and end to its first quest.
+2. So… how many tasks are “done”?
+Because the planning doc is very granular, I’m going to be explicit about what I’m doing:
+Total explicit tasks (all checkboxes in the doc): 
+˜235
+Looking at what we’ve actually shipped, you’ve:
+Fully
+ covered most of:
+Step 1 “vision & spine” tasks (vision, pillars, core loop, vslice feature cut, repo, TS/React skeleton)
+Step 2.3–2.4 engine & content tasks (movement, sense, gather, encounters, quests, trading, journal, progression, basic text polish)
+A good chunk of the UI layout & theme work
+Partially
+ touched:
+Some “extra juice” tasks (more polish, accessibility, advanced QA suite, etc.)
+Some documentation / “hand-off” style tasks
+If I convert that into rough numbers:
+Solidly done
+ tasks: about 
+70–80
+Partially done
+ tasks (we’ve hit the core but not every sub-point): about 
+20–30
+If we treat partials as “half a task” for estimating:
+Effective done ˜ 
+80 / 235 ˜ 34%
+So a fair, grounded statement is:
+You’re sitting around ~? of the way through the explicit vertical-slice task list:
+ roughly 80 / 235 tasks done, ~155 left.
+3. But what about the 
+full
+ “triple-A indie” dream?
+The doc’s checkboxes mostly cover 
+Step 1 + Step 2 (vertical slice)
+.
+The later steps (3, 4, etc. – world expansion, richer systems, long-term meta, audio pass, bigger content pipelines) are 
+described
+, but not fully broken into checkboxes.
+So, being honest:
+You’re around 
+35–40% through the 
+documented
+ (Step 1–2) roadmap
+.
+For the 
+whole
+ “Triple A indie” vision (Steps 1–4 and beyond), I’d ballpark you at something like:
+~15–20% of the journey.
+Because:
+The 
+hard conceptual work
+ (vision, pillars, loop, tech choices) is mostly done.
+The 
+first proper vertical slice
+ is 
+well underway
+ and already playable.
+But the 
+big content ramp
+, extra zones, multiple questlines, audio, UX depth, accessibility, platform polish, etc., are still mostly ahead.
+4. How I’d summarise it to you
+If I had to put it in one line for you:
+You’ve moved from “toy prototype” to “real, replayable vertical-slice prototype” territory.
+ About one-third of the detailed vertical-slice task list is effectively done, and maybe one-fifth of the long-term ‘AAA indie’ dream.
+It 
+feels
+ simple right now because there’s only one big quest and one zone cluster – but what’s there is a 
+solid spine
+: combat, quests, trading, progression, UI, and world reactivity are already in place.
+If you want, next step we can:
+Pick 3–5 undone checkboxes from the doc that give the 
+biggest perceived jump in “oh this feels like a real game”
+, and line them up as the next mini-sprint.

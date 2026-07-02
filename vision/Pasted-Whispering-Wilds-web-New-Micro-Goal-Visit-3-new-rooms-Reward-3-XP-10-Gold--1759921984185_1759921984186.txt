@@ -1,0 +1,229 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Visit 3 new rooms
+   Reward: +3 XP, +10 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+You take the Rusty Key.
+🏆 Achievement Unlocked: First Steps - Take your first item
+> e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+🎯 Progress: Visit 3 new rooms (1/3)
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip' to skip the tutorial.
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+🎯 Progress: Visit 3 new rooms (2/3)
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+╔═══════════════════════════════════════════╗
+║   🎉 MICRO-GOAL COMPLETE!              ║
+╚═══════════════════════════════════════════╝
+✅ Visit 3 new rooms
+💫 +3 XP
+💰 +10 Gold
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+🎯 New Micro-Goal: Talk to 2 NPCs
+   Reward: +2 XP, +5 Gold
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> s
+Ranger Camp
+A tidy camp with a banked fire and supple bows.
+You see: Ranger
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  @  ? |
++---------------------+
+> e
+Trader's Post
+A makeshift counter piled with oddments. The Trader runs a shop here. (Type 'shop' to browse)
+You see: Trader
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  ·  @ |
++---------------------+
+> trade
+=== Trader's Shop ===
+Healing Potion - 15 gold: Restores 20 HP
+Bandages - 8 gold: Restores 10 HP
+Herbs - 5 gold: Crafting ingredient
+Lucky Charm - 50 gold: Increases crit chance by 5%
+Iron Dagger - 30 gold: Increases damage by 2
+Type 'buy <item>' to purchase (e.g., 'buy healing potion')
+> sell key
+You sold Rusty Key for 1 gold.
+> trade
+=== Trader's Shop ===
+Healing Potion - 15 gold: Restores 20 HP
+Bandages - 8 gold: Restores 10 HP
+Herbs - 5 gold: Crafting ingredient
+Lucky Charm - 50 gold: Increases crit chance by 5%
+Iron Dagger - 30 gold: Increases damage by 2
+=== Buyback (Items You Sold) ===
+Rusty Key - 1 gold
+Type 'buy <item>' to purchase (e.g., 'buy healing potion')
+> sell gold
+You don't have any 'gold' to sell.
+> sell bandages
+You sold Bandage for 4 gold.
+> hunt
+A Shadow Wisp emerges!
+(New entry added to your bestiary.)
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+The Shadow Wisp drops a herb.
+> trade
+=== Trader's Shop ===
+Healing Potion - 15 gold: Restores 20 HP
+Bandages - 8 gold: Restores 10 HP
+Herbs - 5 gold: Crafting ingredient
+Lucky Charm - 50 gold: Increases crit chance by 5%
+Iron Dagger - 30 gold: Increases damage by 2
+=== Buyback (Items You Sold) ===
+Rusty Key - 1 gold
+Bandage - 6 gold
+Type 'buy <item>' to purchase (e.g., 'buy healing potion')
+> sell herb
+You sold Herb for 2 gold.
+> rest
+You rest, but you're already at full health.
+> hunt
+A Shadow Wisp emerges!
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp misses!
+Shadow Wisp HP: 2/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+> hunt
+A Fen Serpent emerges!
+(New entry added to your bestiary.)
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent strikes you (-2 HP).
+Fen Serpent HP: 1/3
+> attack
+You hit the Fen Serpent (-2 HP).
+The Fen Serpent dissipates.
+(+1 XP)
+> rest
+You rest and recover 2 HP.
+> rest
+You rest, but you're already at full health.
+> hunt
+A Shadow Wisp emerges!
+> attack
+You miss the Shadow Wisp.
+The Shadow Wisp strikes you (-3 HP).
+Shadow Wisp HP: 4/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp strikes you (-1 HP).
+Shadow Wisp HP: 2/4
+> attack
+You miss the Shadow Wisp.
+The Shadow Wisp strikes you (-2 HP).
+Shadow Wisp HP: 2/4
+> attack
+You hit the Shadow Wisp (-2 HP).
+The Shadow Wisp dissipates.
+(+1 XP)
+> rest
+You rest and recover 2 HP.
+> map
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  ·  @ |
++---------------------+
+You are at: Trader's Post
+Legend: @ you, · visited, ? known (unvisited), blank = off-map
+> rest
+You rest and recover 2 HP.
+> rest
+You rest and recover 2 HP.
+> rest
+You rest, but you're already at full health.
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
++---------------------+
+| ? ? ? ? |
+| ? · · · · · ? |
+| ? ? ? · @ |
++---------------------+
+You are at: Trader's Post
+Legend: @ you, · visited, ? known
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+💰 Gold: 22
+Use 'help' command to update
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

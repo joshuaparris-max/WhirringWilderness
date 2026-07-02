@@ -1,0 +1,159 @@
+👇 Replit Prompt (copy–paste into Replit “Ask”)
+
+You’re working on Whispering Wilds v6 — a single-file web game that runs via PyScript/Pyodide inside index.html. It has:
+
+A command console, clickable text, minimap, quest/inventory/help panels
+
+Extension chaining via ext_handle_command and part*_post_init
+
+Deterministic RNG seeds (_p2/_p3/_p5 etc.), save/load to localStorage
+
+Built-in test command for smoke tests
+
+Your tasks:
+
+Project setup
+
+Unzip WhisperingWilds - Version 6.zip into the repo root.
+
+Create a simple static server (Node or Python) to serve index.html at http://localhost:5173/:
+
+Node: add dev script using vite or a tiny http-server; or
+
+Python: uvicorn/http.server.
+
+Add Playwright (Node) with TypeScript:
+
+npm init -y
+
+npm i -D playwright @playwright/test typescript
+
+npx playwright install --with-deps
+
+Configure playwright.config.ts to use Chromium, headed=false, baseURL http://localhost:5173.
+
+Non-breaking QA test suite
+Create these Playwright specs under tests/ and make them pass without changing public behaviours, function signatures, save keys, or extension chaining:
+
+tutorial.spec.ts
+Walk the tutorial end-to-end:
+
+look → take key → inv → map → n → quests
+
+Assert: UI prints expected lines; Rusty Key in inv; minimap shows @ moved; “Tutorial complete” banner appears.
+
+movement_combat_guard.spec.ts
+
+Force an encounter (or hunt) and assert moving is blocked during combat; after victory you can move.
+
+Assert attack 3 stops when enemy dies (partial repeat honoured).
+
+gathering_cooldown.spec.ts
+
+forage, then assert cooldown message; perform two non-gather actions (look, stats); forage succeeds again.
+
+rest should reset gather cooldown (message shows).
+
+crafting_and_use.spec.ts
+
+Give player herb x3 via console or helper; craft lesser potion works; use potion heals expected amount.
+
+craft bandage from fiber; use bandage heals correct amount.
+
+quests.spec.ts
+
+Caretaker: accept Heal the Grove, add herbs, turnin → gold/XP awarded and quest state becomes turned_in.
+
+Quests panel updates progress on each step.
+
+panels_minimap.spec.ts
+
+Move between rooms; assert side panels update quietly (map/quests/inv); toggling minimap preference persists in localStorage across reload.
+
+clickable_text.spec.ts
+
+Click a clickable item/NPC name; the input box autofills; pressing send runs the right command.
+
+save_load.spec.ts
+
+Set a non-default state (gold, mats, room); save; reload the page; load; assert state restored (including new mats if v6 added some).
+
+fuzz_console.spec.ts
+
+Generate 200 random/invalid commands (e.g., “forag”, “attack caretaker”, “take sanctum”); assert:
+
+no JS/Py errors in console,
+
+game prints a friendly error (e.g., “Unknown command” / “You can’t take Caretaker”),
+
+state doesn’t corrupt.
+
+golden_transcript.spec.ts
+
+Run a fixed transcript (the one the user shared) verbatim. Because RNG is seeded, compare output lines against a stored golden file but ignore timestamps and trailing whitespace. Update the golden only on intentional changes.
+
+Helpers & stability
+
+Add a tiny test harness module that exposes DOM helpers (type in #cmd, click #send, wait for #out to contain text).
+
+If the game code exposes DEBUG_* flags (e.g., DEBUG_COMBAT), enable in tests to make logs clearer.
+
+Do not rename or remove any existing fields/functions. If new state is needed for tests, initialise with safe defaults when missing.
+
+Bug fixing policy
+
+When a test fails, fix the smallest responsible area. Examples of likely fixes:
+
+Movement allowed during combat → block correctly and add test.
+
+Repeat counts not capped at 10 → enforce cap and test.
+
+use/drop for bandages/materials misroutes → normalise, add tests.
+
+Cooldown not resetting on rest → ensure reset + test.
+
+Panels not updating after move/inv change → call existing quiet refreshers.
+
+Keep save format and ext chain intact (ext_handle_command must keep delegating in order). Migrations must be additive only.
+
+Dev UX
+
+Add npm test to run all Playwright specs headless.
+
+Add a Git-style QA Report at qa/REPORT.md that summarises:
+
+test coverage list,
+
+failing tests found & fixes applied,
+
+any TODOs or flaky cases,
+
+instructions to run locally.
+
+Add qa/FIXLOG.md with a bullet per bug: symptom → root cause → code change → test added.
+
+Deliverables
+
+playwright.config.ts, tests/*.spec.ts, helpers.
+
+Minimal local server config + package.json scripts:
+
+"dev": "vite" (or http-server . -p 5173),
+
+"test": "playwright test".
+
+qa/REPORT.md, qa/FIXLOG.md.
+
+All tests green.
+
+Important invariants (do not break):
+
+Save/load data structure names and meanings.
+
+Existing commands’ semantics and text (unless a clear bug).
+
+Extension loading order and ext_handle_command chaining.
+
+Deterministic seeds for encounters/crafting where currently seeded.
+
+Finally, run the suite, fix everything it finds, and re-run until green. Keep changes minimal and compatible.

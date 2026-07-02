@@ -1,0 +1,193 @@
+Whispering Wilds Design Doc
+Pros/Fixed
+Old Feedback Fixes Implemented:
+UI improvements
+: auto-scroll in main output, clickable items/NPCs that auto-fill commands, pinned side panels (map, quests, inventory, help), and command history recall (?/?).
+Batch actions
+: numeric repetition added (e.g. “forage 5”).
+Crafting visibility
+: added recipes command to list 
+craftable
+ items.
+Quest UX
+: hints for turn-in requirements; quests panel shows progress and ready-to-turn-in status.
+Mini-map
+: displayed after move/go; separate map panel can be updated with map.
+Tutorial and tips
+: first-time tutorial, first-time tip system, and help reorganized.
+Bug fixes
+: caretaker dialogues fixed; help ordering corrected; lore now detects seen creatures; XP system with level progression and XP display added; bandages and consumables usable; drop/use work correctly; mine matters 
+soft-lock
+ fixed; Angler Aid no longer re-offers after completion.
+Combat updates
+: power strike implemented, and combat UI clarified.
+Hidden areas
+: descend/dive/climb commands connect to deep mine, lake depths, crystal cave, sunken shrine, and tower top.
+Economy balance
+: crafted healing potion renamed to “Lesser Potion” (8 HP) to distinguish from shop “Healing Potion” (20 HP); NPC conversation micro-goal counts unique NPCs; resource gathering adds cooldown; 
+armor
+ status shown in inventory/stats.
+Custom quick buttons
+: players can create custom buttons with labels and commands; buttons stored in local storage with append mode toggle.
+Caretaker
+ say dialogue no longer empty
+Can use 1 instead or as well as say 1
+Foraging, Harvesting, Mining, Fishing now chainable up to 10
+Inventory auto updates and has own 
+ui
+ element
+Mine matters quest now able to be completed
+Quests no longer re-offered while not available
+Bugs
+Notes say that multiple forages may trigger 
+encounters
+ but I've done 5 sets of 10 and had nothing.
+up arrow now no longer goes to latest command but instead second last command
+took first item after foraging a bunch and got treasure hunter, think 
+i
+ have 3 at most
+save function didn't seem to return anything and then load said no save found.
+Still couldn't get into that row 3 column 5 space. I assume that's where the hermit is. tried moving from both directions and climbing from both directions. 
+Couldn't find coal, tried mining a bunch of places and ended up with the pickaxe and 80 ore 
+Couldn't get pearls so 
+i
+ assumed that's what you dive for, do you need the torch? if so that 
+doesnt
+ make much sense as its water with a torch... 
+Couldn't find crystal shards
+Couldn't find anywhere to descend, sunken cellar has no passage down and mineshaft is collapsed
+Just got the talk to 2 
+npc's
+ a second time.
+craft iron pickaxe is craft pickaxe
+mine matters 
+didnt
+ detect the ore, could still hand in but said 0/2 when 
+i
+ had 42
+Craftable
+ healing potion heals 5, 
+buyable healing potion heals 20, 
+both same name
+both stack
+cant
+ buy or sell multiples
+finished 
+angler_aid
+ and got the 
+lorekeeper
+ achievement
+Craft no longer prompts you to use the recipe command
+In map 
+legend ?
+ = known. Needs to be Unknown
+Suggestions
+I'm feeling that at some stage people will miss things and will need a way to keep track of what has been done where. 
+It would be good in my opinion to have a function you can call that will list all possible actions and display them categorized into success, failed and untried for example:
+=History Sanctum 
+Success: Talk, Forage, Hunt, Take 
+Failed: Climb, Descend 
+Untried: Fish, Dive, Search, Unlock, Mine, Harvest
+this way it's still on the player to try everything but they can keep track of what they have and 
+havent
+ tried, you could even link the command to a book/ 
+jornal
+ they have to buy making it a 
+mid game
+ item
+mini map is useful but might be good to have a toggle, a tick box up where the map is saying something like "display map on move" 
+i'd
+ also love the option to summarize foraging/looting. The performed 10/10 is great for info and some people will like it being listed as 10 lines but if 
+possible
+ it would be nice if there was an option to display it like 
+Performed 10/10 
+Found: 
+5X herb 
+5X 
+fiber
+once 
+i
+ unlocked the power strike 
+i
+ never used attack again, also it seems to have 100% hit rate, the hit rate 
+isnt
+ bad but the power strike needs a cooldown or cost of some kind
+would be nice to be able to click the quest (like with items and 
+npcs
+) also clicking highlighted text replaces text not adds to it. not sure if this is bug or feature but usually 
+i
+ want to add the command not replace it.
+the screenshot above is me getting the micro goal quest, just finished it and got confused. maybe just a me issue but with the reward attached it made me thing it was rewarding me not spelling out a future reward
+Not clear if having 
+armor
+ is passive or needs to be equip somehow. 
+Took me a while to see the difference between potions and master bandages would suggest reducing the healing and the herb cost and making it a bandage that gives 2-3 hp, then combining the potion and the bandage into a master bandage that gives 8hp or something, gives each a clear use and sense of progression rather than feeling like you can farm and ignore one or the other.
+Might be good to have the harvest say "nothing to harvest here, x plant grows in x locations" this lets you expand 
+harvestables
+ much more easily.
+Summary of Previous Feedback and Corresponding Fixes
+What Jayden Liked:
+Engaging gameplay
+ – held his attention for more than 30 minutes.
+Map command
+ – very helpful for navigating.
+Command buttons
+ – quick access buttons made play easier.
+Quality-of-Life Suggestions:
+Better scrolling behavior
+ – auto-scroll with bottom text and a dedicated scroll bar instead of an ever-expanding page.
+Clickable commands/items
+ – clicking NPCs or items should auto-fill the appropriate command.
+Pin panels/messages
+ – pin map, quests, inventory, or help into separate columns for easy reference.
+Up-arrow history & batch actions
+ – ability to recall previous commands and batch commands (e.g., “forage 5”).
+Clearer crafting list
+ – show which items can be crafted.
+Map auto-update
+ – show map automatically after movement.
+Custom command buttons
+ – allow users to create their own quick command buttons.
+Gameplay Issues:
+Difficulty figuring out how to turn in quests and use bandages.
+Row 3 column 5 inaccessible.
+Caretaker dialogues (say options 2–4) were broken in some cases.
+Help commands were out of order.
+Lore command didn’t detect creatures.
+“
+xp
+” command missing; unclear purpose of XP.
+Bandages couldn’t be used even when present.
+Drop/use didn’t work consistently; mine matters quest didn’t detect ore.
+Angler Aid quest re-offered but couldn’t be re-accepted.
+Old Feedback Fixes Implemented:
+UI improvements
+: auto-scroll in main output, clickable items/NPCs that auto-fill commands, pinned side panels (map, quests, inventory, help), and command history recall (?/?).
+Batch actions
+: numeric repetition added (e.g. “forage 5”).
+Crafting visibility
+: added 
+recipes
+ command to list 
+craftable
+ items.
+Quest UX
+: hints for turn-in requirements; quests panel shows progress and ready-to-turn-in status.
+Mini-map
+: displayed after move/go; separate map panel can be updated with 
+map
+.
+Tutorial and tips
+: first-time tutorial, first-time tip system, and help reorganized.
+Bug fixes
+: caretaker dialogues fixed; help ordering corrected; lore now detects seen creatures; XP system with level progression and XP display added; bandages and consumables usable; drop/use work correctly; mine matters 
+soft-lock
+ fixed; Angler Aid no longer re-offers after completion.
+Combat updates
+: power strike implemented, and combat UI clarified.
+Hidden areas
+: descend/dive/climb commands connect to deep mine, lake depths, crystal cave, sunken shrine, and tower top.
+Economy balance
+: crafted healing potion renamed to “Lesser Potion” (8 HP) to distinguish from shop “Healing Potion” (20 HP); NPC conversation micro-goal counts unique NPCs; resource gathering adds cooldown; armor status shown in inventory/stats.
+Custom quick buttons
+: players can create custom buttons with labels and commands; buttons stored in local storage with append mode toggle.

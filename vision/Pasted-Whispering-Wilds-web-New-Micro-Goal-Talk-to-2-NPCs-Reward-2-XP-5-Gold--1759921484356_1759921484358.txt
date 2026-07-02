@@ -1,0 +1,112 @@
+Whispering Wilds web
+🎯 New Micro-Goal: Talk to 2 NPCs
+   Reward: +2 XP, +5 Gold
+╔═══════════════════════════════════════════╗
+║   🎓 WELCOME TO YOUR FIRST ADVENTURE!   ║
+╚═══════════════════════════════════════════╝
+This quick tutorial will teach you the basics (~90 seconds).
+You can skip it anytime by typing 'skip'.
+📍 Step 1: Look around
+Type: look
+Sanctum
+A quiet stone atrium with mossy pillars.
+Items here: Rusty Key
+You see: Caretaker
+Exits: e, n, s, w
+> take key
+You take the Rusty Key.
+> e
+East Gate
+An iron gate bars the way east. A keyhole glints.
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  @  ?  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+💡 Hint: Try the command shown in the tutorial step above.
+Or type 'skip' to skip the tutorial.
+Forest Path
+A winding path through whispering trees.
+Items here: Apple
+Exits: e, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  @  ?  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+Overgrown Verge
+Tall grass hints at wilder lands to the east.
+Exits: e, n, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  @  ?  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> e
+Whispering Wilds
+The wild lands teem with danger and chance.
+Exits: e, n, s, w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  @  ? |
+|    ?  ?     ?  ?  ? |
++---------------------+
+> s
+Ranger Camp
+A tidy camp with a banked fire and supple bows.
+You see: Ranger
+Exits: e, n
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  @  ? |
++---------------------+
+> e
+Trader's Post
+A makeshift counter piled with oddments. The Trader runs a shop here. (Type 'shop' to browse)
+You see: Trader
+Exits: w
+
+[Mini-Map]
++---------------------+
+|    ?  ?     ?  ?    |
+| ?  ·  ·  ·  ·  ·  ? |
+|    ?  ?     ?  ·  @ |
++---------------------+
+> sell key
+You sold Rusty Key for 1 gold.
+> sell bandage
+You sold Bandage for 4 gold.
+> inv
+Inventory: (empty)
+type: look, go n, forage, talk caretaker, help…
+Send
+help
+look
+inv
+stats
+Dev Mode
+Use 'map' command to update
+Heal the Grove: new
+Angler's Aid: new
+Mine Matters: new
+Hermit's Glow: new
+Crystal Power: new
+Ancient Secrets: new
+Summit View: new
+Empty
+Use 'help' command to update
+Runs fully in your browser via PyScript (no server needed). Text Size: Small Medium Large Export Save Import Save

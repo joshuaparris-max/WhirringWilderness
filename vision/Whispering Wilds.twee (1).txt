@@ -1,0 +1,338 @@
+:: StoryTitle
+Whispering Wilds
+
+
+:: StoryData
+{
+  "ifid": "A1F3D050-52E2-44A2-9F77-817B323EE03F",
+  "format": "Harlowe",
+  "format-version": "3.3.9",
+  "start": "Whispering Wilds Sanctum",
+  "zoom": 1
+}
+
+
+:: Credits {"position":"900,275","size":"100,100"}
+This is the **Whispering Wilds** early slice.  
+Next phase: NPCs, quests, deeper reactivity, and the Wilds’ personality.
+
+(link:"Return to start")[(goto:"Whispering Wilds Sanctum")]
+
+
+:: Gate - Failure {"position":"650,25","size":"100,100"}
+(set: $flags to it + (a:"gate_rejected"))
+(set: $log to it + (a:"Gate resisted."))
+
+The gate recoils from your touch. Your palm stings.
+
+''You’re not barred,'' something whispers. ''You’re being tested.''
+
+(link:"Try again, slower")[
+  (set: $skills to $skills + (dm:"SanctumRitual", $skills's "SanctumRitual" + 1))
+  (goto:"Gate - Skill Check")
+]
+
+(link:"Explore the Sanctum")[(goto:"Sanctum - Main Hall")]
+
+
+:: Gate - Skill Check {"position":"400,25","size":"100,100"}
+(set: $difficulty to 8)
+(set: $roll to (random:1,6) + (random:1,6))
+(set: $total to $roll + $skills's "SanctumRitual")
+
+Your breath tightens. The hollow is cold, like river-stone.
+
+(if: $total >= $difficulty)[
+  (goto:"Gate - Success")
+]
+(else:)[
+  (goto:"Gate - Failure")
+]
+
+
+:: Gate - Success {"position":"525,25","size":"100,100"}
+(set: $flags to it + (a:"gate_opened"))
+(set: $log to it + (a:"Gate opened successfully."))
+
+The gate accepts you.  
+Roots unwind. A soft sound, like gentle bone breaking.  
+Gold-green light spills through.
+
+(link:"Step through")[(goto:"Wilds - Threshold")]
+(link:"Listen longer")[(goto:"Wilds - Voices")]
+
+
+:: Passive Voices - Sanctum {"position":"150,25","size":"100,100"}
+(if: ($visited contains "Passive Voices - Sanctum") is false)[
+  (set: $visited to it + (a:"Passive Voices - Sanctum"))
+]
+
+(if: $skills's "EchoLore" >= 2)[
+  ''A faint hum in your skull: this gate was transplanted. Like a tooth into the wrong jaw.''
+]
+
+(if: $skills's "Oceansight" >= 1)[
+  ''The sea is not calm. It is waiting.''
+]
+
+(if: $skills's "FeralSense" >= 2)[
+  ''You feel eyes where there are none.''
+]
+
+
+:: Sanctum - Deep {"position":"525,150","size":"100,100"}
+(set: $flags to it + (a:"deep_sanctum"))
+
+An ash-painted stone circle. A bowl of grey water.  
+Your reflection lags by one second.
+
+(link:"Look into it")[(goto:"Sanctum - Reflection")]
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: Sanctum - Downstairs {"position":"150,150","size":"100,100"}
+The stairwell leads into cool black.  
+Midway down: a small door, slightly open.
+
+(link:"Enter the side room")[(goto:"Sanctum - Side Room")]
+(link:"Continue descending")[(goto:"Sanctum - Deep")]
+
+
+:: Sanctum - Icons {"position":"1150,25","size":"100,100"}
+Marks form an old spiral story:  
+**ocean → sanctum → wilds → fire → return**
+
+(if: $skills's "EchoLore" >= 2)[
+  ''These are instructions, not warnings.''
+]
+
+(link:"Trace the hollow-palm icon")[(goto:"Sanctum - Palm Vision")]
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: Sanctum - Journal {"position":"400,150","size":"100,100"}
+(set: $flags to it + (a:"read_journal"))
+
+''I’m not afraid of the Wilds.  
+I’m afraid of what I’ll become if I’m accepted.''
+
+(link:"Close the journal")[(goto:"Sanctum - Downstairs")]
+
+
+:: Sanctum - Main Hall {"position":"775,25","size":"100,100"}
+(set: $location to "Sanctum Hall")
+
+The main hall is a dome of timber and chalk-white stone.
+
+You see:  
+• a **table**  
+• a **stairwell**  
+• a **wall of icons**
+
+(link:"Inspect the table")[(goto:"Sanctum - Table")]
+(link:"Descend the stairwell")[(goto:"Sanctum - Downstairs")]
+(link:"Study the icons")[(goto:"Sanctum - Icons")]
+(link:"Return to the Gate")[(goto:"The Gate")]
+
+
+:: Sanctum - Note {"position":"1025,25","size":"100,100"}
+(set: $flags to it + (a:"read_note"))
+
+''If the Wilds speak to you, answer honestly.''  
+The handwriting feels familiar.
+
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: Sanctum - Palm Vision {"position":"25,150","size":"100,100"}
+(set: $traits to it + (a:"MarkedPalm"))
+(set: $flags to it + (a:"palm_marked"))
+
+Heat flashes through your hand. Recognition. Not memory — something deeper.
+
+**TRAIT UNLOCKED: Marked Palm**
+
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: Sanctum - Reflection {"position":"650,150","size":"100,100"}
+The reflection smiles late.  
+''Don’t bring your old name through the gate,'' it warns.
+
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: Sanctum - Side Room {"position":"275,150","size":"100,100"}
+A cot. A journal lying open.
+
+(link:"Read the journal")[(goto:"Sanctum - Journal")]
+(link:"Leave it")[(goto:"Sanctum - Downstairs")]
+
+
+:: Sanctum - Table {"position":"900,25","size":"100,100"}
+A cup. Two plates. One fork bent as if chewed.
+
+A note lies beneath the cup.
+
+(link:"Read the note")[(goto:"Sanctum - Note")]
+(link:"Back")[(goto:"Sanctum - Main Hall")]
+
+
+:: The Gate {"position":"275,25","size":"100,100"}
+(set: $location to "Gate")
+(set: $log to it + (a:"You approached the Gate."))
+
+The gate fills your vision — a ring of blackwood roots braided around iron that doesn’t rust.  
+No handle. Only a hollow where your palm seems to fit.
+
+(link: "Place your hand in the hollow")[(goto:"Gate - Skill Check")]
+(link: "Step back and explore instead")[(goto:"Sanctum - Main Hall")]
+(link: "Look once more at the ocean")[(goto:"Western Ocean - Lookout")]
+
+
+:: Western Ocean - Beach {"position":"900,150","size":"100,100"}
+(set: $flags to it + (a:"beach_seen"))
+
+A rusted locket lies on the sand. Inside: a pressed leaf.
+
+(if: $skills's "Oceansight" >= 2)[
+  ''This is not yours… but it wants to be.''
+]
+
+(link:"Take the locket")[
+  (set: $flags to it + (a:"took_locket"))
+  (goto:"Western Ocean - Beach After")
+]
+
+(link:"Leave it")[(goto:"Western Ocean - Beach After")]
+
+
+:: Western Ocean - Beach After {"position":"1025,150","size":"100,100"}
+The tide creeps in.
+
+(link:"Return to the Gate")[(goto:"The Gate")]
+(link:"Return to Sanctum")[(goto:"Sanctum - Main Hall")]
+
+
+:: Western Ocean - Lookout {"position":"775,150","size":"100,100"}
+(set: $location to "Ocean Lookout")
+
+The slate ocean churns. A dead tree leans inland.
+
+(link:"Climb to the beach")[(goto:"Western Ocean - Beach")]
+(link:"Return to Sanctum")[(goto:"Whispering Wilds Sanctum")]
+
+
+:: Whispering Wilds Sanctum {"position":"25,25","size":"100,100"}
+(set: $visited to (a:))
+(set: $flags to (a:))
+(set: $time to "late-afternoon")
+(set: $location to "Sanctum")
+
+(set: $stats to (dm:
+  "VIGOR", 3,
+  "INSIGHT", 3,
+  "GRACE", 3,
+  "WILD", 3
+))
+
+(set: $skills to (dm:
+  "FeralSense", 2,
+  "EchoLore", 2,
+  "QuietHand", 2,
+  "StormHeart", 2,
+  "Oceansight", 1,
+  "SanctumRitual", 1
+))
+
+(set: $traits to (a:))
+(set: $hp to 5)
+(set: $maxhp to 5)
+(set: $log to (a:))
+
+The **Sanctum** sits half-forgotten at the cliffline, a seam between **stone memory** and **wild breath**.  
+Salt wind threads through old cedar beams. A circular gate of root-and-iron waits in the far wall.
+
+You were meant to leave before dusk.  
+But the Sanctum has a way of holding people longer than they planned.
+
+(link: "Approach the Gate")[(goto: "The Gate")]
+(link: "Explore the Sanctum")[(goto: "Sanctum - Main Hall")]
+(link: "Step out to the Western Ocean")[(goto: "Western Ocean - Lookout")]
+
+(display: "Passive Voices - Sanctum")
+
+
+:: Wilds - First Clearing {"position":"150,275","size":"100,100"}
+(set: $flags to it + (a:"first_clearing"))
+
+A clearing opens like an eye.  
+At its center: a wooden pillar, grown not carved.
+
+(link:"Touch the pillar")[(goto:"Wilds - Pillar Check")]
+(link:"Inspect markings")[(goto:"Wilds - Pillar Inspect")]
+
+
+:: Wilds - Path One {"position":"775,275","size":"100,100"}
+A narrow path bends into fog.  
+Something ahead laughs softly — like a bird imitating a person.
+
+(link:"End demo")[(goto:"Credits")]
+
+
+:: Wilds - Pillar Check {"position":"400,275","size":"100,100"}
+(set: $difficulty to 7)
+(set: $roll to (random:1,6) + (random:1,6))
+(set: $total to $roll + $skills's "FeralSense")
+
+(if: $total >= $difficulty)[
+  (goto:"Wilds - Pillar Success")
+]
+(else:)[
+  (goto:"Wilds - Pillar Failure")
+]
+
+
+:: Wilds - Pillar Failure {"position":"650,275","size":"100,100"}
+(set: $flags to it + (a:"pillar_confused"))
+
+The Wilds stay silent.  
+Not rejecting — choosing not to answer.
+
+(link:"Move on")[(goto:"Wilds - Path One")]
+(link:"Return to the Gate")[(goto:"The Gate")]
+
+
+:: Wilds - Pillar Inspect {"position":"275,275","size":"100,100"}
+Marks spiral downward — not counting days, but **people**.
+
+(if: $traits contains "MarkedPalm")[ ''These scratches are recent.'' ]
+
+(link:"Touch it")[(goto:"Wilds - Pillar Check")]
+(link:"Back")[(goto:"Wilds - First Clearing")]
+
+
+:: Wilds - Pillar Success {"position":"525,275","size":"100,100"}
+(set: $flags to it + (a:"pillar_understood"))
+
+The moss lifts like hair in wind.  
+A pulse runs up your arm — direction, mood, permission.
+
+(link:"Follow the sensed path")[(goto:"Wilds - Path One")]
+(link:"Wait")[(goto:"Wilds - First Clearing")]
+
+
+:: Wilds - Threshold {"position":"1150,150","size":"100,100"}
+(set: $location to "Wilds Threshold")
+
+Stepping through changes the air — not temperature, **meaning**.
+
+(link:"Continue")[(goto:"Wilds - First Clearing")]
+
+
+:: Wilds - Voices {"position":"25,275","size":"100,100"}
+(if: $skills's "FeralSense" >= 2)[ ''Hunger whispers.'']
+(if: $skills's "EchoLore" >= 2)[ ''History murmurs.'']
+(if: $skills's "StormHeart" >= 2)[ ''Opportunity growls.'']
+
+(link:"Step through")[(goto:"Wilds - Threshold")]

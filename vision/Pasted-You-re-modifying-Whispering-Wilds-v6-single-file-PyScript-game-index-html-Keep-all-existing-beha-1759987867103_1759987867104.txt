@@ -1,0 +1,199 @@
+You’re modifying Whispering Wilds v6 (single-file PyScript game, index.html). Keep all existing behaviour intact (save format, commands, ext_handle_command chaining). Add a new extension Part 16 that introduces (1) typo-tolerant input and (2) selectable playstyles with balanced modifiers.
+
+Guardrails (do not break)
+
+No renames/removals of existing functions, keys, or text unless an obvious bug.
+
+Only add state; initialise defaults when missing (save-safe).
+
+Preserve _post_init_extensions ordering; chain handlers as existing parts do:
+
+Add part16_post_init(game) and p16_ext_handle_command(cmd,args,game).
+
+Keep PREV_EXT pattern and set ext_handle_command = p16_ext_handle_command at the end.
+
+1) Typo-tolerant input + aliases (robust parser wrapper)
+
+Implement a light input normaliser before dispatch:
+
+Use difflib.get_close_matches (stdlib) with a threshold:
+
+HIGH=0.90 → auto-correct silently.
+
+LOW=0.78 → print “Did you mean: <cmd>?” and run it.
+
+Canonicalise text: lower, trim, collapse spaces, convert fancy quotes, map common AU/UK spellings.
+
+Synonym map (both commands & verbs):
+
+go, walk, move, head → go
+
+grab, pick, snag → take
+
+bag, backpack, inventory → inv
+
+map, minimap, open map → map
+
+quests, tasks, missions → quests
+
+craft, make, brew, forge, cook, weave → craft
+
+fight, engage, battle → attack
+
+heal up, bandage → use bandage (special case: if item present)
+
+dirs: north/east/south/west/up/down accept prefixes (no, ea, …), plus u/d
+
+Fuzzy match items/NPCs in take/use/drop/talk against:
+
+items in room + inventory
+
+room NPCs
+
+If target confidence < LOW: keep current friendly “Unknown command” and add one best suggestion if any.
+
+Implementation notes
+
+Put all of this in Part 16; don’t edit base dispatch. In p16_ext_handle_command:
+
+Build KNOWN_CMDS from the real command table (existing verbs + new ones below).
+
+If cmd not known → normalise via synonyms → try fuzzy; rewrite (cmd,args) → then call prev(cmd,args,game).
+
+2) Playstyles (modes) with safe modifiers
+
+Add selectable modes that tweak rates (no hard locks). Store at game._p16 = { active_mode, modes, opts }.
+
+Modes (with balanced, modest modifiers)
+
+Explorer (default-friendly): encounter_rate -20%, xp +10%, auto_map=True
+
+Hunter: encounter_rate +25%, crit +5%, loot_materials +10%
+
+Crafter: gather_yield +15%, shop_prices -10%, craft_speed +1 (no UI delay)
+
+Pacifist: encounter_rate -35%, flee_chance +25%, no_kill_bonus +XP on quest turn-ins
+
+Merchant: sell_prices +20%, buy_prices -10%, random_trade_events enabled (simple flavour lines)
+
+Storyteller: flavour_text +, hint_rate +, combat_damage -10%
+
+Speedrunner: enable run timer + split markers (tutorial complete, first quest, reach wilds), text_minimal=True
+
+Hardcore (Ironwild): permadeath=True (on death → save cleared to Sanctum seed), xp +20%, loot +10%
+
+Cozy Forager: no death (faint → return to Sanctum with -2 gold), gather_yield +10%, encounter_rate -25%
+
+Hook points (non-intrusive):
+
+In encounter spawn (_p5_spawn): multiply rate by mode modifier.
+
+In player hit / enemy hit: scale damage with small multipliers.
+
+In gather (_p3_forage, _p7_cmd_* if present): yield bonus chance.
+
+In shop (if _p13 exists): price multipliers.
+
+In quest turnin: optional pacifist bonus.
+
+Add safe clamps so nothing goes below sensible mins or above caps.
+
+Commands (new)
+
+modes → list modes with brief description + highlight active.
+
+mode <name> → set active mode (free at Sanctum; elsewhere costs 5 gold to respec).
+
+mode info → show detailed modifiers for current mode.
+
+timer on/off (Speedrunner) → show small timer line in footer.
+
+hint on/off (Storyteller/Cozy) → toggle context tips after common mistakes.
+
+All commands must be funnelled through Part 16 and then fall back to prev.
+
+3) Optional smart macros (quality of life)
+
+Lightweight, off by default; toggled via opts:
+
+alias <short>=<command> (player-side custom aliases persisted to save).
+
+auto craft <item> → if missing mats, run a bounded gather loop that respects cooldowns, then craft once. Hard cap attempts (e.g., 12 actions) and print a summary.
+
+go to <place> → simple pathing across already-seen rooms using neighbours; no spoilers.
+
+4) Micro-goals that adapt to mode
+
+Extend your micro-goal system (if _p12 present). Otherwise, add a small tracker in _p16:
+
+Explorer: “Visit 5 new rooms”
+
+Hunter: “Defeat 3 creatures”
+
+Crafter: “Craft any 2 items”
+
+Pacifist: “Complete 2 quests with 0 kills”
+Rewards: tiny XP/gold (existing economy-safe).
+
+5) Accessibility & tone options
+
+verbosity low|normal|high (Speedrunner defaults low; Storyteller→high).
+
+safety on|off (Cozy: convert death to faint/return).
+
+Honour existing text-size controls; don’t change CSS.
+
+6) Tests (light additions)
+
+If Playwright exists, add/adjust:
+
+typos.spec.ts: frge→forage, tak key→take key, talk caretakr→talk caretaker (auto-correct or suggest+run).
+
+modes.spec.ts: switch between 3 modes; assert a numeric change (e.g., gather yield or encounter rate) across 20 actions using seeded RNG.
+
+auto_craft.spec.ts: auto craft bandage with 0 fiber should perform bounded gather+craft once.
+
+7) Acceptance criteria
+
+Existing saves load without errors; defaults set for _p16.
+
+All old commands behave the same; new features only extend.
+
+Typo tolerance fixes at least these examples without prompts: forag, tak key, invntory, go n, talk caretakr.
+
+modes lists 8 modes; switching works and modifiers clearly shown.
+
+No crashes when macros can’t complete (caps respected, friendly summary).
+
+Minimal additions to output unless verbosity is high or hints on.
+
+Implementation sketch (keep it concise in code)
+
+part16_post_init(game):
+
+game._p16 = { active_mode: 'Explorer', modes: {...}, opts: { hints: False, timer: False, safety: False }, aliases: {} }
+
+p16_ext_handle_command(cmd,args,game):
+
+Expand player aliases.
+
+Normalise & synonym map.
+
+Fuzzy match command; maybe rewrite cmd.
+
+Intercept modes|mode|alias|auto|go to|verbosity|timer|hint|safety; handle and return True.
+
+Otherwise call PREV_EXT and return.
+
+Tiny helper: closest(token, pool, hi=0.90, lo=0.78) -> (canon, conf) using difflib.
+
+Apply mode modifiers in wrappers only (don’t edit original functions). E.g., define _p16_apply_spawn_rate(rate) and call inside _p5_spawn via a small guard:
+
+rate = getattr(game, "_p16", {}).get("spawn_mod", lambda r: r)(base_rate)
+
+
+If you can’t touch Part 5, monkey-patch a thin wrapper in Part 16 that replaces _p5_spawn with a closure calling original then applying odds—keep behaviour identical when Explorer/default.
+
+End by printing once: ✅ Part 16 loaded: typo-tolerant input + playstyles.
+
+Please implement exactly this in Part 16, preserve compatibility, and keep changes focused and reversible.

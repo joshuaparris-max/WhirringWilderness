@@ -1,0 +1,96 @@
+Yes, proceed. This is QA + bug-fixing for an existing PyScript/Pyodide browser game, Whispering Wilds v6 (single-file index.html). Please do the work end-to-end — set up tests, run them, fix failures, and produce reports — without asking for further confirmation. Keep all changes minimal and backward-compatible.
+
+Scope & Constraints
+
+Do not change public command names/semantics, save keys, or the ext_handle_command chaining pattern.
+
+Additive migrations only; never rename or remove existing fields.
+
+Keep UI text stable unless it’s an obvious bug (spelling/wiring).
+
+Deterministic RNG seeding must remain intact.
+
+0) Bring game into the project
+
+If WhisperingWilds - Version 6.zip isn’t in the repo root, ask me to upload it once, then unzip to project root so index.html runs at /.
+
+Add a simple static server and scripts:
+
+// package.json scripts
+"dev": "http-server -c-1 -p 5173 .",
+"test": "playwright test"
+
+
+And install:
+
+npm init -y
+npm i -D http-server @playwright/test playwright typescript
+npx playwright install --with-deps
+
+1) Playwright config
+
+BaseURL http://localhost:5173
+
+Chromium only, headless in CI.
+
+Global helpers in tests/utils.ts: startGame(), run(cmd: string), expectOut(text|regex), waitForPanelUpdate(id) that types #cmd, clicks #send, and reads #out.
+
+2) Automated test suite (make these pass)
+
+Create tests/ specs:
+
+tutorial.spec.ts — run the tutorial (look → take key → inv → map → n → quests), assert Rusty Key in inv, tutorial complete banner appears.
+
+movement_combat_guard.spec.ts — trigger an encounter (hunt), assert movement blocked during combat, after victory you can move; attack 3 stops early when foe dies.
+
+gathering_cooldown.spec.ts — forage then see cooldown; two non-gather actions clear it; rest also clears cooldown (message shows).
+
+crafting_and_use.spec.ts — with herb x3 craft lesser potion and use potion heals expected amount; craft bandage from fiber; heal amounts correct.
+
+quests.spec.ts — accept Heal the Grove, add herbs, turnin rewards gold/XP; quest state = turned_in; Quests panel updates progress.
+
+panels_minimap.spec.ts — moving updates side panels quietly; minimap toggle persists in localStorage across reload.
+
+clickable_text.spec.ts — clicking a clickable item/NPC autofills input and runs correctly.
+
+save_load.spec.ts — change state, save, reload page, load, state restored (room, gold, mats).
+
+fuzz_console.spec.ts — 200 random/invalid commands (e.g., forag, attack caretaker, take sanctum) → no crashes, friendly errors, state intact.
+
+golden_transcript.spec.ts — run a fixed transcript (seeded) and compare to a golden file with whitespace/timestamp-insensitive compare. Only update golden on intentional output changes.
+
+3) Run tests → fix bugs
+
+Execute the suite. For each failure, apply the smallest fix that preserves behaviour and save compatibility. Typical fixes:
+
+movement correctly blocked during combat,
+
+repeat counts capped and stop early on kill,
+
+cooldowns reset on rest,
+
+panels refresh quietly after move/inv changes,
+
+use/drop routing for bandages/materials,
+
+clickable text autofill in both console and panels.
+
+Keep ext_handle_command delegation order intact. Initialise any new keys with safe defaults to protect older saves.
+
+4) Reports & docs
+
+Add qa/REPORT.md summarising: test list, failures found, fixes applied, remaining TODOs.
+
+Add qa/FIXLOG.md with bullets: symptom → root cause → code change → test added.
+
+Make npm test green.
+
+5) Acceptance criteria
+
+All 10 tests pass locally (npm run dev in one tab, npm test in another) and in Replit’s runner.
+
+No breaking changes to saves or command API.
+
+qa/REPORT.md and qa/FIXLOG.md present and up to date.
+
+Please proceed now and deliver the passing suite + fixes. If the zip isn’t present, prompt me once to upload it; otherwise don’t pause for questions.

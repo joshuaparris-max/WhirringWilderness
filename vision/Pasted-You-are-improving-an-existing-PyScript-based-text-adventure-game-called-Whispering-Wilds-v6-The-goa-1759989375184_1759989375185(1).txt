@@ -1,0 +1,128 @@
+You are improving an existing PyScript-based text adventure game called Whispering Wilds v6.
+The goal is to make the game more fun, flexible, and polished while keeping all old content, saves, and commands compatible.
+
+🧩 Scope of Work
+
+Implement the following 10 improvements across code, UI, sound, and story:
+
+1. Reduce Output Spam
+
+Detect duplicate tutorial or micro-goal messages and consolidate them into one line.
+
+Add non-blocking “toast” notifications (small floating messages) for level-ups, goals, and XP gains.
+
+Keep important story text in the main log, minor updates in a sidebar.
+
+2. Improve Command Flexibility
+
+Add synonym and typo-tolerant command parsing using fuzzy matching (e.g., Levenshtein or difflib similarity).
+
+Map alternative verbs (“grab”, “pick up”, “take”) and direction phrases (“walk north”, “move north”) to existing commands.
+
+Implement a fallback suggestion: “Did you mean ‘forage’?” when a command is close to an existing one.
+
+3. Tidy the UI
+
+Make the side panels collapsible/resizable (quests, inventory, map).
+
+Add a ‘Compact Mode’ toggle to hide all panels except the main console.
+
+Provide two built-in themes: “Dark Forest” (current) and “Light Meadow” with high contrast.
+
+4. Clarify Actions
+
+Add alias mappings (e.g., “dive” == “d”) and contextual tooltips.
+
+Improve error feedback: when a command fails, show why (e.g., “You can’t dive here, the water is shallow.”).
+
+Add color-coded hints for valid commands in each area.
+
+5. Add Sound & Music
+
+Implement background ambient music and environment-based sound effects (forest, water, combat).
+
+Add toggle in Settings panel: Sound On/Off.
+
+Play short success/failure jingles for quest completion and combat victories.
+
+6. Broaden the Story
+
+Introduce branching quests with dialogue choices that affect outcomes.
+
+Add moral or puzzle-based decisions (e.g., “Help the wounded wisp” vs. “Harvest its essence”).
+
+Include one new short storyline: “The Echo in the Grove” unlocking after the first 3 quests.
+
+7. Expand Bestiary & Encounters
+
+Add 5 new creature types with different attack styles, resistances, and drop tables.
+
+Introduce rare “mini-boss” encounters that appear after multiple hunts.
+
+Add a Bestiary Log UI panel that tracks discovered creatures and lore entries.
+
+8. Refine Gathering & Crafting
+
+Balance spawn tables: reduce fiber frequency, slightly boost herb and ore chances.
+
+Add region hints (“You notice herbs thrive near water”).
+
+Include alternative crafting recipes (e.g., 2 fiber + sap = bandage).
+
+Add quick-craft button for common recipes.
+
+9. Enhance Inventory Management
+
+Categorize inventory items (Materials, Consumables, Quest Items).
+
+Enable stacking and sorting by type, rarity, or weight.
+
+Add encumbrance system (optional toggle) — reduces mobility if carrying too much.
+
+Create a drop confirmation for rare items.
+
+10. Introduce Playstyles & Settings
+
+Add a mode selector at the start or in Settings:
+
+Explorer: story-focused, no death penalty.
+
+Hunter: frequent combat, better loot.
+
+Cozy: relaxed mode with auto-heal and soft ambient music.
+
+Add persistent settings for:
+
+Text size
+
+Log verbosity
+
+Toggle tutorial hints
+
+Sound/music
+
+🛠 Technical Notes
+
+Keep full backward compatibility for saves and quest progress.
+
+Preserve all existing NPCs, items, and maps.
+
+Use lightweight, free libraries for sound/music (e.g., howler.js or pydub if offline).
+
+Ensure game still runs fully client-side with PyScript.
+
+Refactor incrementally—no complete rewrite.
+
+📜 Deliverables
+
+Updated main game file (index.html + embedded PyScript).
+
+Updated CSS for new panels and themes.
+
+New sound assets folder (/assets/audio).
+
+CHANGELOG.md summarizing each feature.
+
+Optional: Add qa/tests folder for automated regression testing.
+
+Goal: Whispering Wilds v7 should feel cleaner, richer, and more immersive while staying true to its cozy, exploratory roots.

@@ -1,0 +1,508 @@
+Whispering Wilds Design Doc
+Pros/Fixed
+Old Feedback Fixes Implemented:
+UI improvements
+: auto-scroll in main output, clickable items/NPCs that auto-fill commands, pinned side panels (map, quests, inventory, help), and command history recall (?/?).
+Batch actions
+: numeric repetition added (e.g. “forage 5”).
+Crafting visibility
+: added recipes command to list craftable items.
+Quest UX
+: hints for turn-in requirements; quests panel shows progress and ready-to-turn-in status.
+Mini map
+: displayed after move/go; separate map panel can be updated with map.
+Tutorial and tips
+: first-time tutorial, first-time tip system, and help reorganized.
+Bug fixes
+: caretaker dialogues fixed; help ordering corrected; lore now detects seen creatures; XP system with level progression and XP display added; bandages and consumables usable; drop/use work correctly; mine matters 
+soft lock
+ fixed; Angler Aid no longer re-offers after completion.
+Combat updates
+: power strike implemented, and combat UI clarified.
+Hidden areas
+: descend/dive/climb commands connect to deep mine, lake depths, crystal cave, sunken shrine, and tower top.
+Economy balance
+: crafted healing potion renamed to “Lesser Potion” (8 HP) to distinguish from shop “Healing Potion” (20 HP); NPC conversation micro-goal counts unique NPCs; resource gathering adds cooldown; armor status shown in inventory/stats.
+Custom quick buttons
+: players can create custom buttons with labels and commands; buttons stored in local storage with append mode toggle.
+Caretakers
+ say dialogue no longer 
+empty.
+Can use 
+one
+ instead or as well as say 
+one.
+Foraging, Harvesting, Mining, Fishing now chainable up to 
+ten
+Inventory auto updates and has own 
+UI
+ 
+element.
+Mine matters quest now able to be 
+completed.
+Quests no longer re-offered while not 
+available.
+Bugs
+Notes say that multiple forages may trigger 
+encounters,
+ but 
+I have
+ done 
+five
+ sets of 
+ten
+ and had nothing.
+up arrow now no longer goes to latest command but instead second last 
+command.
+took first item after foraging a bunch and got treasure hunter, think 
+I
+ have 
+three
+ at 
+most.
+save function 
+did not
+ seem to return anything and then load said no save found.
+Still 
+could not
+ get into that row 
+three
+ column 5 space. I assume 
+that is
+ where the hermit is. tried moving from both directions and climbing from both directions. 
+Could not
+ find coal, tried mining a bunch of places and ended up with the pickaxe and 
+eighty
+ 
+ore.
+ 
+Could not
+ get pearls so 
+I
+ assumed 
+that is
+ what you dive for, do you need the torch? if so that 
+does not
+ make much sense as its water with a torch... 
+Could not
+ find crystal 
+shards.
+Could not
+ find anywhere to descend, sunken cellar has no passage down and mineshaft is 
+collapsed.
+Just got the talk to 
+two
+ npc's a second time.
+craft iron pickaxe is craft 
+pickaxe.
+mine matters 
+did not
+ detect the ore, could still hand in but said 0/2 when 
+I
+ had 
+forty-two.
+Craftable healing potion heals 
+five
+, 
+buyable healing potion heals 
+twenty
+, 
+both same name
+both stack
+cannot
+ buy or sell 
+multiples.
+finished angler_aid and got the lorekeeper 
+achievement.
+Craft no longer prompts you to use the recipe 
+command.
+In map 
+legend?
+ = known. Needs to be 
+Unknown.
+Suggestions
+I am
+ feeling that at some stage people will miss things and will need a way to keep track of what has been done where. 
+It would be good 
+to
+ have a function you can call that will list all 
+actions
+ and display them categorized into success, failed and untried for example:
+=History Sanctum 
+Success: Talk, Forage, Hunt, Take 
+Failed: Climb, Descend 
+Untried: Fish, Dive, Search, Unlock, Mine, Harvest
+this way 
+it is
+ still on the player to try 
+everything,
+ but they can keep track of what they have and 
+have not
+ tried, you could even link the command to a book/ 
+journal
+ they have to buy making it a 
+mid-game
+ 
+item.
+mini map is useful but might be good to have a toggle, a tick box up where the map is saying something like "display map on 
+move.”
+ 
+I would
+ also love the option to summarize foraging/looting. The performed 10/10 is great for info and some people will like it being listed as 
+ten
+ lines 
+but,
+ if 
+possible,
+ it would be nice if there was an option to display it like 
+Performed 10/10 
+Found: 
+Five times
+ herb 
+Five times
+ fiber
+once 
+I
+ unlocked the power 
+strike,
+ 
+I
+ never used attack again, also it 
+has
+ 100% hit rate, the hit rate 
+is not
+ 
+bad,
+ but the power strike needs a cooldown or cost of some 
+kind.
+would be nice to be able to click the quest (like with items and npcs) also clicking highlighted text replaces text not adds to it. not sure if this is bug or feature but 
+usually,
+ 
+I
+ want to add the command not replace it.
+the screenshot above is me getting the micro goal quest, just finished it and got confused. 
+just
+ a me issue but with the reward attached it made me thing it was rewarding me not spelling out a future 
+reward.
+Not clear if having armor is passive or needs to be equip somehow. 
+Took me a while to see the difference between potions and master bandages would suggest reducing the healing and the herb cost and making it a bandage that gives 2-3 hp, then combining the potion and the bandage into a master bandage that gives 8hp or something, gives each a clear use and sense of progression rather than feeling like you can farm and ignore one or the other.
+Might be good to have the harvest say "nothing to harvest here, x plant grows in x locations" this lets you expand harvestables much more easily.
+Summary of Previous Feedback and Corresponding Fixes
+What Jayden Liked:
+Engaging gameplay
+ – held his attention for more than 30 minutes.
+Map command
+ – very helpful for navigating.
+Command buttons
+ – quick access buttons made play easier.
+Quality-of-Life Suggestions:
+Better scrolling behavior
+ – auto-scroll with bottom text and a dedicated scroll bar instead of an ever-expanding page.
+Clickable commands/items
+ – clicking NPCs or items should auto-fill the appropriate command.
+Pin panels/messages
+ – pin map, quests, inventory, or help into separate columns for easy reference.
+Up-arrow history & batch actions
+ – ability to recall previous commands and batch commands (e.g., “forage 5”).
+Clearer crafting list
+ – show which items can be crafted.
+Map auto-update
+ – show map automatically after movement.
+Custom command buttons
+ – allow users to create their own quick command buttons.
+Gameplay Issues:
+Difficulty figuring out how to turn in quests and use bandages.
+Row 3 column 5 inaccessible.
+Caretaker dialogues (say options 2–4) were broken in some cases.
+Help commands were out of order.
+Lore command didn’t detect creatures.
+“xp” command missing; unclear purpose of XP.
+Bandages couldn’t be used even when present.
+Drop/use didn’t work consistently; mine matters quest didn’t detect ore.
+Angler Aid quest re-offered but couldn’t be re-accepted.
+Old Feedback Fixes Implemented:
+UI improvements
+: auto-scroll in main output, clickable items/NPCs that auto-fill commands, pinned side panels (map, quests, inventory, help), and command history recall (?/?).
+Batch actions
+: numeric repetition added (e.g. “forage 5”).
+Crafting visibility
+: added 
+recipes
+ command to list craftable items.
+Quest UX
+: hints for turn-in requirements; quests panel shows progress and ready-to-turn-in status.
+Mini map
+: displayed after move/go; separate map panel can be updated with 
+map
+.
+Tutorial and tips
+: first-time tutorial, first-time tip system, and help reorganized.
+Bug fixes
+: caretaker dialogues fixed; help ordering corrected; lore now detects seen creatures; XP system with level progression and XP display added; bandages and consumables usable; drop/use work correctly; mine matters 
+soft lock
+ fixed; Angler Aid no longer re-offers after completion.
+Combat updates
+: power strike implemented, and combat UI clarified.
+Hidden areas
+: descend/dive/climb commands connect to deep mine, lake depths, crystal cave, sunken shrine, and tower top.
+Economy balance
+: crafted healing potion renamed to “Lesser Potion” (8 HP) to distinguish from shop “Healing Potion” (20 HP); NPC conversation micro-goal counts unique NPCs; resource gathering adds cooldown; armor status shown in inventory/stats.
+Custom quick buttons
+: players can create custom buttons with labels and commands; buttons stored in local storage with append mode toggle.
+Here is
+ a summary of Jayden’s feedback from earlier versions of 
+Whispering Wilds
+ and the corresponding fixes or remaining items based on the most recent game code (
+index.html
+) and design documents. Where possible, 
+I have
+ compared Jayden’s comments directly against the latest implementation to determine whether a fix has been applied.
+1. General Impressions
+Jayden’s feedback:
+The game was engaging and held attention for over 30?minutes.
+The map command and quick-command buttons were especially useful.
+Some commands lacked guidance or feedback when invalid.
+Overall UI and UX felt rough around the edges in early builds.
+Addressed:
+The UI was overhauled: a polished layout with collapsible panels and better fonts.
+A mini-map now auto-updates after each move, with a “Display map on move” toggle to control it (implemented with 
+wilds_show_minimap
+).
+Command buttons have been redesigned; you can now define custom quick buttons with a smaller delete “X” and they auto-execute when clicked (the code calls 
+document.getElementById('send').click()
+ on button press).
+Remaining/Pending:
+A clearer distinction between descriptive text (flavor) and interactable objects could further reduce confusion when attempting to harvest scenery.
+2. Quality
+of
+Life and Enhancement Requests
+<w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblCellSpacing w:w="15" w:type="dxa"/><w:tblCellMar><w:top w:w="15" w:type="dxa"/><w:left w:w="15" w:type="dxa"/><w:bottom w:w="15" w:type="dxa"/><w:right w:w="15" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="2921"/><w:gridCol w:w="1540"/><w:gridCol w:w="4899"/></w:tblGrid><w:tr w:rsidR="0028106E" w:rsidRPr="0028106E" w14:paraId="7BEB7609" w14:textId="77777777" w:rsidTr="0028106E"><w:trPr><w:tblHeader/><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="11D0C87A" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Feedback
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="11A7B183" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Implemented?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6951A31D" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Notes
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="131C23B2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Auto
+scroll when printing output; avoid endless page growth
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="399210D9" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="339D1C9D" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>The console now auto
+scrolls; history is preserved in a scrollable area rather than continuously appending to an ever
+longer page.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="45BD7E45" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Click a command/item/event to auto-fill the command
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="11A20419" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0F83DD32" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Highlighted clickable text now fills the command line; a localStorage option allows “append mode” so clicking can append or replace current text.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5CEB71D1" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Pin messages or panels separately
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4F7A4B0C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="219DE952" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>The side panels (Map, Quests, Inventory, Help) can be expanded/collapsed and remain visible. A map toggle exists to auto-display after moving.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="7E31E8E6" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:lastRenderedPageBreak/><w:t>Up
+arrow history recall and numeric repetition (“forage 5”)
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5BC0C8BF" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0DE237B5" w14:textId="71C29ADC" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">Command history keys 
+work:
+ numeric repetition is capped at 10 and integrated with new summarisation.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="55B28C9C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Recipes command to see craftable items
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="3DC92E90" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6A0C27BF" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The 
+recipes
+ command shows both basic and advanced crafting recipes, with clickable commands to craft those items.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="795A953E" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Quest hints (e.g., “Heal the Grove” hand
+in guidance)
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="231C722C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1554C533" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Dialogue and quest system improved; caretaker and other NPCs now offer quest hints and instructions.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="461C0190" w14:textId="486D01BF" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Auto
+update map box after 
+moving
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="3B74C190" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="09327966" w14:textId="6E92A2BC" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="00B34332" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Mini map
+ automatically refreshes after moving. 
+There is
+ also a checkbox to disable the auto-update.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5D289168" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Summarise repetitive actions (“forage 10” summarises result)
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="785F2B4E" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="760D3815" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">There is a 
+batch-summary
+ toggle; when enabled, repeated actions summarise the materials found (e.g., “Found: 5 herb, 5 fiber”).
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0FE52A44" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Track success/failed/untried actions
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="65933D8E" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5CAD5C08" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">A new 
+history
+ command logs player actions by room, grouping them into 
+Success
+, 
+Failed
+, and 
+Untried
+ categories.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6CCCA9C2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>More distinctive icons on the world map
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="02997763" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5485B767" w14:textId="1FFE9A62" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The code still uses 
+@
+ for the current room, 
+·
+ for visited, 
+and?
+ for unknown. 
+Changing?
+ to 
+Unknown
+ or adding unique symbols for special locations has not been implemented.
+3. Bug Fixes and Broken Features
+<w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblCellSpacing w:w="15" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:left w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:right w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="auto"/></w:tblBorders><w:tblCellMar><w:top w:w="15" w:type="dxa"/><w:left w:w="15" w:type="dxa"/><w:bottom w:w="15" w:type="dxa"/><w:right w:w="15" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/></w:tblPr><w:tblGrid><w:gridCol w:w="2173"/><w:gridCol w:w="1560"/><w:gridCol w:w="5617"/></w:tblGrid><w:tr w:rsidR="0028106E" w:rsidRPr="0028106E" w14:paraId="3002DD56" w14:textId="77777777" w:rsidTr="00340741"><w:trPr><w:tblHeader/><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0F51C02F" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Bug / Issue
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4E468225" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Implemented?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="01FBB2B1" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="center"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Evidence
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="78F1E616" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Caretaker dialogue options (“say 3”, “say 4”) broken
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="7314D386" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0103AD80" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Dialog handling was rewritten with more robust mapping; options no longer refer to non-existent actions.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="464A602F" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Herb dialogue broken
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="2E58C579" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1E9C77BE" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Dialogue options about herbs now work and are contextually shown only when appropriate.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6F9B79C4" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Help commands listed in reverse order
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="3A9B529C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="73BCEEA1" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Help topics are grouped logically and sorted alphabetically.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="65FE06CE" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>XP command missing / no leveling system
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5D57EEB1" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="116CDEAF" w14:textId="01143487" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">XP is visible in the 
+stats
+ 
+panel,
+ leveling triggers HP and damage bonuses. 
+xp
+ or 
+exp
+ shows current XP, XP to next level and progress percentage.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="72986AAC" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Bandages “not found”
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5C41416B" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4E77864E" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Inventory logic now correctly detects bandages (both item and bandage count).
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="69EF9726" w14:textId="0C170E46" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:lastRenderedPageBreak/><w:t xml:space="preserve">Drop/use 
+did not
+ work, causing Mine Matters quest 
+soft lock
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="27867C00" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6D4FD4C1" w14:textId="56CBDA79" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">Inventory operations were rewritten; dropping or using materials now update both the room and inventory correctly, preventing 
+soft locks
+.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1DF26EC3" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Angler Aid quest gets re
+offered by Trader but cannot be re
+accepted
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="7890024F" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="47B577E0" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Quest state transitions were fixed. Once turned in, the Trader no longer offers the quest again.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6EDB95A2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Random encounters after multiple forages never triggered
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="79084E46" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4EAFDF52" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Harvesting now tracks a streak counter and triggers a minor encounter after 3–10 successful harvests with a 60% chance.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="2FE9B7E2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Treasure Hunter achievement triggers after very few items
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="3440374A" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1E95D1B9" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The 
+treasure_hunter
+ achievement now counts unique pickups rather than awarding on the first or second item.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0B27AE12" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Up
+arrow recall bug shows second
+last command
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0C4DA802" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1A33026F" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>The history index logic still resets in a way that sometimes selects the second-last command first; this remains unresolved.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0C928820" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Save/load broken
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6C7CE500" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0E6A25BE" w14:textId="67A45161" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The code writes to 
+localStorage['wilds_save']
+ and reads it back. In some browser contexts it works, but Jayden reported a “no save found” error. The logic 
+has not
+ changed; this may still be a problem if localStorage 
+does not
+ persist across sessions.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5F45092C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Row 3 Column 5 inaccessible; Hermit unreachable
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="767DB65F" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4FCA4F19" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The new 
+part7_post_init
+ links all Wilds areas (Hut, Tower, Camp, Post, Lake, Mine) correctly. However, players might still miss the path. Jayden’s report suggests this cell might still be unreachable in practice.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5D95C481" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Coal, pearls, crystal shards unobtainable
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="55A069BF" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="060598E9" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Although deep mine, lake depths and sunken shrine exist in code, the fix simply re
+linked them. Without proper hints or items (e.g., torch vs. dive), players still struggle to reach those zones.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4FCD3C2D" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Lorekeeper achievement triggers incorrectly when finishing Angler Aid
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="0F8A6457" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4B3816DA" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The code may still award 
+lore_keeper
+ when you complete a quest; likely a logic bug remains.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1C4F50F2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Craft ‘armor’ vs. ‘craft leather armor’
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="29E118A0" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="3B7A7B41" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">The advanced crafting now recognises both 
+craft armor
+ and 
+craft leather armor
+ as aliases.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="33548F31" w14:textId="7F48F76D" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:lastRenderedPageBreak/><w:t xml:space="preserve">Mining 
+does not
+ detect ore for Mine Matters
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="4E061235" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="59F55910" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">Quest progress uses 
+_p6_fmt_progress
+ to count ore from both materials and inventory. The hand
+in logic now correctly checks ore stock before setting the state to completed.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="60C300EC" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Buy/sell multiples not supported
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="34073FD1" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+/
+??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="152805DA" w14:textId="46AB3C2D" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">Reworked shop code 
+manages
+ repeated buys, but selling multiples may still be limited to one item at a time.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="1AAF9FC7" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Power Strike lacks cooldown
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="5E915D4C" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>?
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="09B51BCE" w14:textId="74F837D4" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t xml:space="preserve">A 
+three
+turn cooldown is enforced after each Power Strike, and the skill appears in your 
+skills
+ listing.
+<w:trPr><w:tblCellSpacing w:w="15" w:type="dxa"/></w:trPr><w:tc><w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="6DEA6701" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:b/><w:bCs/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Fisherman yields lorekeeper achievement
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="547E7DA2" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Segoe UI Emoji" w:eastAsia="Times New Roman" w:hAnsi="Segoe UI Emoji" w:cs="Segoe UI Emoji"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>??
+<w:tcPr><w:tcW w:w="0" w:type="auto"/><w:vAlign w:val="center"/><w:hideMark/></w:tcPr><w:p w14:paraId="13A69BD4" w14:textId="77777777" w:rsidR="0028106E" w:rsidRPr="0028106E" w:rsidRDefault="0028106E" w:rsidP="0028106E"><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr></w:pPr><w:r w:rsidRPr="0028106E"><w:rPr><w:rFonts w:ascii="Times New Roman" w:eastAsia="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman"/><w:sz w:val="24"/><w:szCs w:val="24"/><w:lang w:val="en-AU"/></w:rPr><w:t>Code still awards Lorekeeper for finishing Angler Aid, which suggests a lingering bug.
+4. Additional Enhancements Added in the Latest Version
+Mini-map toggle
+ at the top of the Map panel (
+wilds_show_minimap
+).
+Batch-summary toggle
+ for repeated actions (
+wilds_batch_summary
+).
+Custom command buttons
+ that auto-execute and have a smaller delete button.
+Action-history feature
+ accessible via 
+history
+, which lists success, failed, and untried actions per room.
+NPC talk-tracking fix:
+ micro-goals now require talking to two different NPCs, not the same one twice (tracked with 
+npcs_talked_to
+ set).
+Resource-gathering cooldowns:
+ 
+forage
+, 
+fish
+ and 
+mine
+ commands now enforce a two-action cooldown and provide a cooldown timer.
+Improved armor UI:
+ stats and inventory panels display leather armor as “
+???
+ Leather Armor (equipped, -25 % damage)” to clarify it is passive.
+Summarised resource reporting
+ and better crafting guidance (help text clarifies you craft a lesser potion rather than a generic healing potion).
+Summary
+Many of Jayden’s requests and bug reports have been addressed:
+ the UI is more polished, commands are more intuitive, the map auto
+updates (with a toggle), repeated actions can be summarised, and the quest and crafting systems have been refined. Hidden areas (deep mine, sunken shrine, tower top, lake depths) are linked into the world map, though players might still need clearer hints or items to access them. Unique NPC tracking, resource
+gathering cooldowns and micro
+goal tracking have improved gameplay balance.
+However, a few issues remain:
+The command-history up
+arrow still sometimes starts at the second
+last command.
+Saving/loading through 
+localStorage
+ remains unreliable in some cases.
+Some rare resources (coal, pearls, crystal shards) and hidden rooms are still hard to find in practice.
+The Lorekeeper achievement and mine
+detection bugs may still manifest in edge cases.
+Map legend still labels unknown spaces 
+as?
+ with “known
+;”
+ might confuse players wanting a separate “unknown” symbol.
+On balance, the latest version implements nearly all of Jayden’s suggested fixes, with only a handful of edge cases and future enhancements still open.
