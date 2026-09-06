@@ -23,3 +23,14 @@ dist-ssr
 *.sln
 *.sw?
 
+
+# Large artefacts and parallel copies swept in by accident
+*.zip
+*.docx
+AdventureWildsWhisper/
+WhirringWildernessv28/
+ChatGPT Checkin*/
+# LifeHub's generate_directory_indexes.py leaks listings into this repo
+src/**/index.html
+Cursor Specific Tasks*
+docs/index.html
