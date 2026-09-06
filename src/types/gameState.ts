@@ -6,6 +6,8 @@
  */
 
 import type { LogEntry } from './log';
+export type { LogEntry };
+
 
 /**
  * Valid location identifiers in the game world.
