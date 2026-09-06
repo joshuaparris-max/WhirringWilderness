@@ -4,15 +4,23 @@ Ranked by value. Every item was observed in the codebase, not guessed.
 Baseline: 9,579 LOC TypeScript, `tsc` and `eslint` clean, build 49 modules
 / 209KB (64KB gzipped).
 
-## 1. There are no tests
+## 1. There are no tests — DONE
+
+`vitest@2` is installed and `npm test` runs 20 tests across content
+integrity and progression. Mutation-verified: pointing a trade reward at a
+non-existent item fails with a named assertion. Remaining engine areas
+(actions, encounters, persistence, quests) are still uncovered.
+
+<details><summary>original entry</summary>
 
 A 9,579-line game with a real engine (`actions`, `encounters`,
 `progression`, `persistence`, `quests`) had no test framework at all.
 `vitest@2` is now installed (v5 requires vite 6; this project is on vite
 5.4.21). Start with content-integrity tests — the equivalent checks in
 Sword Chronicles caught real referential bugs.
+</details>
 
-## 2. Content referential integrity is unchecked
+## 2. Content referential integrity is unchecked — DONE
 
 `items.ts`, `creatures.ts`, `npcs.ts`, `quests.ts`, `shop.ts` and
 `locations.ts` cross-reference each other by string id with nothing
