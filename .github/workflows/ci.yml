@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci || npm install
+      - name: Typecheck
+        run: npx tsc --noEmit
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Vite entry must not be a directory listing
+        run: |
+          if grep -q 'generate_directory_indexes' index.html; then
+            echo "::error::index.html was overwritten by LifeHub's index generator"
+            exit 1
+          fi
+          grep -q 'src/main' index.html \
+            || { echo "::error::index.html has no module entry point"; exit 1; }
